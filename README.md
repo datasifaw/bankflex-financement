@@ -8,7 +8,7 @@ Ce projet est développé à des fins pédagogiques pour mettre en pratique le d
 
 ## 🖥️ Aperçu de l'application
 
-![Aperçu de l'interface BankFlex](images/BankFlex-financement.png)
+![Aperçu de l'interface BankFlex]()
 
 *Maquette prévisionnelle de l'interface BankFlex — le rendu final pourra évoluer.*
 
