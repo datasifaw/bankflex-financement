@@ -18,18 +18,112 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
         rel="stylesheet"
     >
+
+    <style>
+        body {
+            background-color: #f4f7fc;
+            margin: 0;
+        }
+
+        /* Barre de navigation */
+        .topbar {
+            background-color: #102a50;
+            min-height: 76px;
+        }
+
+        /* Organisation de la page */
+        .app-layout {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* Menu latéral */
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: linear-gradient(
+                180deg,
+                #102a50,
+                #091d3b
+            );
+            padding: 20px 12px;
+        }
+
+        .sidebar-title {
+            color: #8daed8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px 15px 15px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #e1e9f5;
+            padding: 13px 16px;
+            margin-bottom: 6px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .sidebar-link i {
+            font-size: 20px;
+        }
+
+        .sidebar-link.active {
+            background-color: #3266ac;
+            color: white;
+            font-weight: 600;
+        }
+
+        .sidebar-link:not(.active) {
+            opacity: 0.85;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        /* Adaptation mobile */
+        @media (max-width: 767px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .sidebar nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar-link {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-    <!-- Barre de navigation principale -->
-    <header
-        class="navbar navbar-dark px-4 py-3"
-        style="background-color: #102a50;"
-    >
+    <!-- Barre de navigation -->
+    <header class="navbar navbar-dark topbar px-4 py-3">
         <div class="container-fluid">
 
-            <!-- Logo et nom -->
             <div class="d-flex align-items-center gap-3">
 
                 <i
@@ -47,7 +141,6 @@
 
             </div>
 
-            <!-- Notifications -->
             <div class="text-white fs-4">
                 <i class="bi bi-bell"></i>
             </div>
@@ -55,19 +148,66 @@
         </div>
     </header>
 
-    <!-- Contenu principal -->
-    <main class="container-fluid p-4">
+    <!-- Structure principale -->
+    <div class="app-layout">
 
-        <h2 class="fw-bold">
-            Bienvenue sur BankFlex
-        </h2>
+        <!-- Menu latéral -->
+        <aside class="sidebar">
 
-        <p class="text-secondary">
-            Simulez le financement de vos biens
-            en toute transparence.
-        </p>
+            <p class="sidebar-title">Navigation</p>
 
-    </main>
+            <nav aria-label="Navigation principale">
+
+                <a href="#accueil" class="sidebar-link active">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>Accueil</span>
+                </a>
+
+                <div class="sidebar-link">
+                    <i class="bi bi-calculator"></i>
+                    <span>Simulations</span>
+                </div>
+
+                <div class="sidebar-link">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Historique</span>
+                </div>
+
+                <div class="sidebar-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Biens</span>
+                </div>
+
+                <div class="sidebar-link">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Rapports</span>
+                </div>
+
+                <div class="sidebar-link">
+                    <i class="bi bi-gear"></i>
+                    <span>Paramètres</span>
+                </div>
+
+            </nav>
+
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="main-content" id="accueil">
+
+            <h2 class="fw-bold">
+                <i class="bi bi-house-door me-2 text-primary"></i>
+                Bienvenue sur BankFlex
+            </h2>
+
+            <p class="text-secondary">
+                Simulez le financement de vos biens
+                en toute transparence.
+            </p>
+
+        </main>
+
+    </div>
 
 </body>
 </html>
