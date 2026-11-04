@@ -15,6 +15,7 @@ const path = require("path");
 const mysql = require("mysql2/promise");
 
 const app = express();
+
 const PORT = Number(process.env.PORT) || 3000;
 
 // ============================================
@@ -37,9 +38,9 @@ const db = mysql.createPool({
 
 app.use(express.json());
 
-app.use(express.static(
-    path.join(__dirname, "public")
-));
+app.use(
+    express.static(path.join(__dirname, "public"))
+);
 
 // ============================================
 // 4. POLITIQUE COMMERCIALE
@@ -47,7 +48,6 @@ app.use(express.static(
 
 const TAUX_MARGE = 0.075;
 
-// Convertir un montant en centimes
 function convertirEnCentimes(valeur) {
 
     const texte = String(valeur ?? "").trim();
@@ -67,13 +67,12 @@ function convertirEnCentimes(valeur) {
         : null;
 }
 
-// Convertir des centimes en euros
 function convertirEnEuros(centimes) {
     return (centimes / 100).toFixed(2);
 }
 
 // ============================================
-// 5. API POST - ENREGISTRER UNE SIMULATION
+// 5. API POST - ENREGISTRER
 // ============================================
 
 app.post("/api/simulations", async (req, res) => {
@@ -205,7 +204,7 @@ app.post("/api/simulations", async (req, res) => {
 });
 
 // ============================================
-// 6. API GET - HISTORIQUE DES SIMULATIONS
+// 6. API GET - HISTORIQUE
 // ============================================
 
 app.get("/api/simulations", async (req, res) => {
@@ -315,18 +314,17 @@ app.get("/api/simulations/:id", async (req, res) => {
 });
 
 // ============================================
-// 8. NOUVELLE API DELETE - SUPPRIMER PAR ID
+// 8. NOUVELLE API PUT - MODIFIER PAR ID
 // ============================================
 
-app.delete("/api/simulations/:id", async (req, res) => {
+app.put("/api/simulations/:id", async (req, res) => {
 
     try {
 
-        // Récupérer l'identifiant depuis l'URL
+        // 1. Vérifier l'identifiant
         const idTexte = req.params.id;
         const id = Number(idTexte);
 
-        // Vérifier que l'identifiant est valide
         if (
             !/^[1-9]\d*$/.test(idTexte) ||
             !Number.isSafeInteger(id) ||
@@ -337,7 +335,168 @@ app.delete("/api/simulations/:id", async (req, res) => {
             });
         }
 
-        // Supprimer uniquement la simulation demandée
+        // 2. Récupérer les nouvelles informations
+        const {
+            bien,
+            prix_achat,
+            duree_mois,
+            apport_initial = 0
+        } = req.body || {};
+
+        const prix = convertirEnCentimes(prix_achat);
+        const apport = convertirEnCentimes(apport_initial);
+        const duree = Number(duree_mois);
+
+        // 3. Valider les champs
+        if (
+            typeof bien !== "string" ||
+            bien.trim().length === 0 ||
+            bien.trim().length > 150
+        ) {
+            return res.status(400).json({
+                message: "Le nom du bien est invalide."
+            });
+        }
+
+        if (
+            prix === null ||
+            prix <= 0 ||
+            prix > 100000000000
+        ) {
+            return res.status(400).json({
+                message: "Le prix d'achat est invalide."
+            });
+        }
+
+        if (
+            !Number.isInteger(duree) ||
+            duree < 1 ||
+            duree > 360
+        ) {
+            return res.status(400).json({
+                message: "La durée doit être comprise entre 1 et 360 mois."
+            });
+        }
+
+        // 4. Recalculer les montants côté serveur
+        const marge = Math.round(prix * TAUX_MARGE);
+
+        const prixTotal = prix + marge;
+
+        if (
+            apport === null ||
+            apport < 0 ||
+            apport > prixTotal
+        ) {
+            return res.status(400).json({
+                message: "L'apport initial est invalide."
+            });
+        }
+
+        const montantRestant = prixTotal - apport;
+
+        const mensualite = Math.round(
+            montantRestant / duree
+        );
+
+        // 5. Modifier la simulation dans MySQL
+        const requeteModification = `
+            UPDATE simulations
+            SET
+                bien = ?,
+                prix_achat = ?,
+                marge_commerciale = ?,
+                prix_total = ?,
+                apport_initial = ?,
+                duree_mois = ?,
+                mensualite = ?
+            WHERE id = ?
+        `;
+
+        const valeurs = [
+            bien.trim(),
+            convertirEnEuros(prix),
+            convertirEnEuros(marge),
+            convertirEnEuros(prixTotal),
+            convertirEnEuros(apport),
+            duree,
+            convertirEnEuros(mensualite),
+            id
+        ];
+
+        await db.execute(
+            requeteModification,
+            valeurs
+        );
+
+        // 6. Relire la simulation après modification
+        const requeteLecture = `
+            SELECT
+                id,
+                bien,
+                prix_achat,
+                marge_commerciale,
+                prix_total,
+                apport_initial,
+                duree_mois,
+                mensualite,
+                date_creation
+            FROM simulations
+            WHERE id = ?
+        `;
+
+        const [simulations] = await db.execute(
+            requeteLecture,
+            [id]
+        );
+
+        // Une simulation inexistante retourne 404
+        if (simulations.length === 0) {
+            return res.status(404).json({
+                message: "Simulation introuvable."
+            });
+        }
+
+        // 7. Retourner les valeurs enregistrées
+        res.status(200).json({
+            message: "Simulation modifiée avec succès.",
+            simulation: simulations[0]
+        });
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur de modification :",
+            erreur.code || "Erreur inconnue"
+        );
+
+        res.status(500).json({
+            message: "Impossible de modifier la simulation."
+        });
+    }
+});
+
+// ============================================
+// 9. API DELETE - SUPPRIMER PAR ID
+// ============================================
+
+app.delete("/api/simulations/:id", async (req, res) => {
+
+    try {
+
+        const idTexte = req.params.id;
+        const id = Number(idTexte);
+
+        if (
+            !/^[1-9]\d*$/.test(idTexte) ||
+            !Number.isSafeInteger(id) ||
+            id > 2147483647
+        ) {
+            return res.status(400).json({
+                message: "Identifiant de simulation invalide."
+            });
+        }
+
         const requete = `
             DELETE FROM simulations
             WHERE id = ?
@@ -348,14 +507,12 @@ app.delete("/api/simulations/:id", async (req, res) => {
             [id]
         );
 
-        // Vérifier si une ligne a réellement été supprimée
         if (resultat.affectedRows === 0) {
             return res.status(404).json({
                 message: "Simulation introuvable."
             });
         }
 
-        // Confirmer la suppression
         res.status(200).json({
             message: "Simulation supprimée avec succès.",
             id: id
@@ -375,7 +532,7 @@ app.delete("/api/simulations/:id", async (req, res) => {
 });
 
 // ============================================
-// 9. API GET - STATISTIQUES DU DASHBOARD
+// 10. API GET - STATISTIQUES
 // ============================================
 
 app.get("/api/statistiques", async (req, res) => {
@@ -431,7 +588,7 @@ app.get("/api/statistiques", async (req, res) => {
 });
 
 // ============================================
-// 10. DÉMARRAGE DU SERVEUR
+// 11. DÉMARRAGE DU SERVEUR
 // ============================================
 
 async function demarrerServeur() {
