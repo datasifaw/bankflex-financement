@@ -4,19 +4,24 @@
  * Node.js + Express + MySQL
  */
 
-// 1. Charger la configuration
+// ============================================
+// 1. CONFIGURATION
+// ============================================
+
 require("dotenv").config();
 
-// 2. Importer les modules
 const express = require("express");
 const path = require("path");
 const mysql = require("mysql2/promise");
 
-// 3. Initialiser Express
 const app = express();
+
 const PORT = Number(process.env.PORT) || 3000;
 
-// 4. Connexion MySQL
+// ============================================
+// 2. CONNEXION MYSQL
+// ============================================
+
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT) || 3306,
@@ -27,14 +32,20 @@ const db = mysql.createPool({
     connectionLimit: 10
 });
 
-// 5. Configuration Express
+// ============================================
+// 3. CONFIGURATION EXPRESS
+// ============================================
+
 app.use(express.json());
 
 app.use(express.static(
     path.join(__dirname, "public")
 ));
 
-// 6. Politique commerciale
+// ============================================
+// 4. POLITIQUE COMMERCIALE
+// ============================================
+
 const TAUX_MARGE = 0.075;
 
 // Convertir un montant en centimes
@@ -57,13 +68,13 @@ function convertirEnCentimes(valeur) {
         : null;
 }
 
-// Convertir les centimes en euros
+// Convertir des centimes en euros
 function convertirEnEuros(centimes) {
     return (centimes / 100).toFixed(2);
 }
 
 // ============================================
-// API POST - ENREGISTRER UNE SIMULATION
+// 5. API POST - ENREGISTRER UNE SIMULATION
 // ============================================
 
 app.post("/api/simulations", async (req, res) => {
@@ -81,7 +92,7 @@ app.post("/api/simulations", async (req, res) => {
         const apport = convertirEnCentimes(apport_initial);
         const duree = Number(duree_mois);
 
-        // Validation du nom du bien
+        // Vérifier le nom du bien
         if (
             typeof bien !== "string" ||
             bien.trim().length === 0 ||
@@ -92,7 +103,7 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Validation du prix
+        // Vérifier le prix
         if (
             prix === null ||
             prix <= 0 ||
@@ -103,7 +114,7 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Validation de la durée
+        // Vérifier la durée
         if (
             !Number.isInteger(duree) ||
             duree < 1 ||
@@ -114,15 +125,14 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calcul de la marge commerciale
+        // Calculer la marge commerciale
         const marge = Math.round(
             prix * TAUX_MARGE
         );
 
-        // Prix total de revente
         const prixTotal = prix + marge;
 
-        // Validation de l'apport
+        // Vérifier l'apport
         if (
             apport === null ||
             apport < 0 ||
@@ -133,8 +143,9 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calcul des mensualités
+        // Calculer la mensualité
         const montantRestant = prixTotal - apport;
+
         const mensualite = Math.round(
             montantRestant / duree
         );
@@ -142,7 +153,7 @@ app.post("/api/simulations", async (req, res) => {
         const derniereEcheance =
             montantRestant - mensualite * (duree - 1);
 
-        // Requête SQL
+        // Requête SQL INSERT
         const requete = `
             INSERT INTO simulations (
                 bien,
@@ -171,7 +182,6 @@ app.post("/api/simulations", async (req, res) => {
             valeurs
         );
 
-        // Réponse JSON
         res.status(201).json({
             message: "Simulation enregistrée avec succès.",
             simulation: {
@@ -203,14 +213,13 @@ app.post("/api/simulations", async (req, res) => {
 });
 
 // ============================================
-// API GET - HISTORIQUE DES SIMULATIONS
+// 6. API GET - HISTORIQUE DES SIMULATIONS
 // ============================================
 
 app.get("/api/simulations", async (req, res) => {
 
     try {
 
-        // Récupérer les 20 dernières simulations
         const requete = `
             SELECT
                 id,
@@ -227,10 +236,8 @@ app.get("/api/simulations", async (req, res) => {
             LIMIT 20
         `;
 
-        // Exécuter la requête SQL
         const [simulations] = await db.query(requete);
 
-        // Retourner les données au format JSON
         res.status(200).json({
             message: "Historique récupéré avec succès.",
             total: simulations.length,
@@ -251,7 +258,65 @@ app.get("/api/simulations", async (req, res) => {
 });
 
 // ============================================
-// DÉMARRAGE DU SERVEUR
+// 7. API GET - STATISTIQUES DU DASHBOARD
+// ============================================
+
+app.get("/api/statistiques", async (req, res) => {
+
+    try {
+
+        // Calculer les statistiques depuis MySQL
+        const requete = `
+            SELECT
+                COUNT(*) AS nombre_simulations,
+
+                COALESCE(
+                    ROUND(AVG(mensualite), 2),
+                    0
+                ) AS mensualite_moyenne,
+
+                COALESCE(
+                    ROUND(AVG(marge_commerciale), 2),
+                    0
+                ) AS marge_moyenne
+
+            FROM simulations
+        `;
+
+        const [resultat] = await db.query(requete);
+
+        const statistiques = resultat[0];
+
+        // Envoyer les statistiques au navigateur
+        res.status(200).json({
+            message: "Statistiques récupérées avec succès.",
+            statistiques: {
+                nombre_simulations:
+                    Number(statistiques.nombre_simulations),
+
+                mensualite_moyenne:
+                    Number(statistiques.mensualite_moyenne),
+
+                marge_moyenne:
+                    Number(statistiques.marge_moyenne)
+            }
+        });
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur des statistiques :",
+            erreur.code || "Erreur inconnue"
+        );
+
+        res.status(500).json({
+            message: "Impossible de récupérer les statistiques."
+        });
+    }
+});
+
+// ============================================
+// 8. DÉMARRAGE DU SERVEUR
 // ============================================
 
 async function demarrerServeur() {
