@@ -26,19 +26,19 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Barre supérieure */
+        /* BARRE SUPÉRIEURE */
         .topbar {
             background-color: #102a50;
             min-height: 76px;
         }
 
-        /* Organisation de l'application */
+        /* ORGANISATION */
         .app-layout {
             display: flex;
             min-height: calc(100vh - 76px);
         }
 
-        /* Menu latéral */
+        /* MENU LATÉRAL */
         .sidebar {
             width: 250px;
             flex-shrink: 0;
@@ -78,18 +78,19 @@
             font-weight: 600;
         }
 
-        .sidebar-link:not(.active) {
-            opacity: 0.85;
+        a.sidebar-link:hover {
+            background-color: #254b80;
+            color: white;
         }
 
-        /* Contenu */
+        /* CONTENU PRINCIPAL */
         .main-content {
             flex: 1;
             min-width: 0;
             padding: 30px;
         }
 
-        /* Cartes */
+        /* CARTES */
         .dashboard-card {
             background: white;
             border: 1px solid #e4eaf3;
@@ -107,7 +108,7 @@
             padding: 24px;
         }
 
-        /* Formulaire */
+        /* FORMULAIRE */
         .form-label {
             color: #263b58;
             font-weight: 600;
@@ -132,7 +133,7 @@
             border-color: #bfd5f5;
         }
 
-        /* Boutons */
+        /* BOUTONS */
         .btn-bankflex {
             background-color: #183b70;
             border: 1px solid #183b70;
@@ -161,7 +162,7 @@
             color: #102a50;
         }
 
-        /* Résultats */
+        /* RÉSULTATS */
         .result-box {
             background-color: #f1f6fe;
             border: 1px solid #dce8f8;
@@ -192,7 +193,47 @@
             color: white;
         }
 
-        /* Mobile */
+        /* HISTORIQUE MYSQL */
+        .historique-table {
+            width: 100%;
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .historique-table thead th {
+            background-color: #f1f5fb;
+            color: #526580;
+            font-weight: 700;
+            padding: 15px;
+            white-space: nowrap;
+        }
+
+        .historique-table tbody td {
+            padding: 16px 15px;
+            vertical-align: middle;
+            border-color: #edf0f5;
+        }
+
+        .historique-table tbody tr:hover td {
+            background-color: #f8fbff;
+        }
+
+        .historique-table .bien-name {
+            color: #183b70;
+            font-weight: 600;
+        }
+
+        .badge-mensualite {
+            display: inline-block;
+            color: #183b70;
+            background-color: #e8f1ff;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* VERSION MOBILE */
         @media (max-width: 767px) {
             .app-layout {
                 flex-direction: column;
@@ -220,6 +261,10 @@
             .topbar .subtitle {
                 display: none;
             }
+
+            .card-content {
+                padding: 16px;
+            }
         }
     </style>
 </head>
@@ -231,7 +276,6 @@
         <div class="container-fluid">
 
             <div class="d-flex align-items-center gap-3">
-
                 <i
                     class="bi bi-bar-chart-fill fs-3"
                     style="color: #60a5fa;"
@@ -244,7 +288,6 @@
                 <span class="subtitle text-white-50 border-start ps-3">
                     Financement à prix fixe
                 </span>
-
             </div>
 
             <div class="text-white fs-4">
@@ -254,7 +297,7 @@
         </div>
     </header>
 
-    <!-- APPLICATION -->
+    <!-- STRUCTURE DE L'APPLICATION -->
     <div class="app-layout">
 
         <!-- MENU LATÉRAL -->
@@ -269,15 +312,15 @@
                     <span>Accueil</span>
                 </a>
 
-                <div class="sidebar-link">
+                <a href="#simulation" class="sidebar-link">
                     <i class="bi bi-calculator"></i>
                     <span>Simulations</span>
-                </div>
+                </a>
 
-                <div class="sidebar-link">
+                <a href="#historique" class="sidebar-link">
                     <i class="bi bi-clock-history"></i>
                     <span>Historique</span>
-                </div>
+                </a>
 
                 <div class="sidebar-link">
                     <i class="bi bi-box-seam"></i>
@@ -295,14 +338,13 @@
                 </div>
 
             </nav>
-
         </aside>
 
         <!-- CONTENU PRINCIPAL -->
         <main class="main-content" id="accueil">
 
+            <!-- TITRE -->
             <div class="mb-4">
-
                 <h2 class="fw-bold">
                     <i class="bi bi-calculator me-2 text-primary"></i>
                     Simulateur de financement
@@ -312,10 +354,10 @@
                     Simulez le financement d'un bien avec une
                     marge commerciale fixe et transparente.
                 </p>
-
             </div>
 
-            <div class="row g-4">
+            <!-- FORMULAIRE ET RÉSULTATS -->
+            <div class="row g-4" id="simulation">
 
                 <!-- FORMULAIRE -->
                 <div class="col-xl-5">
@@ -333,9 +375,7 @@
 
                             <form id="simulationForm">
 
-                                <!-- Bien -->
                                 <div class="mb-3">
-
                                     <label for="bien" class="form-label">
                                         Bien à financer *
                                     </label>
@@ -348,12 +388,9 @@
                                         maxlength="150"
                                         required
                                     >
-
                                 </div>
 
-                                <!-- Prix -->
                                 <div class="mb-3">
-
                                     <label for="prixAchat" class="form-label">
                                         Prix d'achat (€) *
                                     </label>
@@ -368,12 +405,9 @@
                                         step="0.01"
                                         required
                                     >
-
                                 </div>
 
-                                <!-- Marge automatique -->
                                 <div class="mb-3">
-
                                     <label for="marge" class="form-label">
                                         Marge commerciale (€)
                                     </label>
@@ -387,15 +421,12 @@
 
                                     <small class="text-secondary">
                                         <i class="bi bi-lock-fill me-1"></i>
-                                        Calcul automatique selon la politique
-                                        commerciale de l'établissement (7,5 %).
+                                        Marge automatique de 7,5 %
+                                        définie par l'établissement.
                                     </small>
-
                                 </div>
 
-                                <!-- Durée -->
                                 <div class="mb-3">
-
                                     <label for="duree" class="form-label">
                                         Durée (mois) *
                                     </label>
@@ -410,12 +441,9 @@
                                         step="1"
                                         required
                                     >
-
                                 </div>
 
-                                <!-- Apport -->
                                 <div class="mb-4">
-
                                     <label for="apport" class="form-label">
                                         Apport initial (€)
                                     </label>
@@ -428,10 +456,9 @@
                                         min="0"
                                         step="0.01"
                                     >
-
                                 </div>
 
-                                <!-- Messages -->
+                                <!-- MESSAGES -->
                                 <div
                                     id="messageStatut"
                                     class="alert d-none"
@@ -439,7 +466,7 @@
                                     aria-live="polite"
                                 ></div>
 
-                                <!-- Boutons -->
+                                <!-- BOUTONS -->
                                 <div class="d-flex flex-wrap gap-2">
 
                                     <button
@@ -462,16 +489,14 @@
                                 </div>
 
                                 <p class="text-secondary small mt-3 mb-0">
-                                    Simulation indicative utilisant
+                                    Simulation indicative avec
                                     des données fictives.
                                 </p>
 
                             </form>
 
                         </div>
-
                     </section>
-
                 </div>
 
                 <!-- RÉSULTATS -->
@@ -490,110 +515,166 @@
 
                             <div class="row g-3">
 
-                                <!-- Prix d'achat -->
                                 <div class="col-md-6">
                                     <div class="result-box">
-
                                         <p class="result-label">
                                             Prix d'achat
                                         </p>
-
                                         <p class="result-value" id="resultPrix">
                                             —
                                         </p>
-
                                     </div>
                                 </div>
 
-                                <!-- Marge -->
                                 <div class="col-md-6">
                                     <div class="result-box">
-
                                         <p class="result-label">
                                             Marge commerciale fixe
                                         </p>
-
                                         <p class="result-value" id="resultMarge">
                                             —
                                         </p>
-
                                     </div>
                                 </div>
 
-                                <!-- Total -->
                                 <div class="col-md-6">
                                     <div class="result-box">
-
                                         <p class="result-label">
                                             Prix total de revente
                                         </p>
-
                                         <p class="result-value" id="resultTotal">
                                             —
                                         </p>
-
                                     </div>
                                 </div>
 
-                                <!-- Mensualité -->
                                 <div class="col-md-6">
                                     <div class="result-box monthly-box">
-
                                         <p class="result-label">
                                             Mensualité estimée
                                         </p>
-
                                         <p
                                             class="result-value"
                                             id="resultMensualite"
                                         >
                                             —
                                         </p>
-
                                     </div>
                                 </div>
 
                             </div>
 
-                            <!-- Synthèse -->
+                            <!-- SYNTHÈSE -->
                             <div class="alert alert-primary mt-4 mb-0">
-
                                 <h6 class="fw-bold">
                                     <i class="bi bi-info-circle me-2"></i>
                                     Synthèse du financement
                                 </h6>
 
                                 <p id="synthese" class="mb-0">
-                                    Renseignez les champs du formulaire
-                                    pour calculer votre simulation.
+                                    Renseignez les champs pour
+                                    calculer votre simulation.
                                 </p>
-
                             </div>
 
                             <p class="text-secondary small mt-3 mb-0">
-                                La dernière échéance peut être ajustée
+                                La dernière échéance pourra être ajustée
                                 pour tenir compte des arrondis.
                             </p>
 
                         </div>
-
                     </section>
-
                 </div>
 
             </div>
 
-        </main>
+            <!-- HISTORIQUE DES SIMULATIONS -->
+            <section class="dashboard-card" id="historique">
 
+                <div class="card-heading d-flex flex-wrap
+                            align-items-center justify-content-between gap-3">
+
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            <i class="bi bi-clock-history text-primary me-2"></i>
+                            Simulations récentes
+                        </h5>
+
+                        <small class="text-secondary">
+                            Les 20 dernières simulations enregistrées
+                            dans MySQL
+                        </small>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="btnActualiser"
+                        class="btn btn-outline-bankflex"
+                    >
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        Actualiser
+                    </button>
+
+                </div>
+
+                <div class="card-content">
+
+                    <!-- ÉTAT DE CHARGEMENT / ERREURS -->
+                    <div
+                        id="messageHistorique"
+                        class="alert alert-info"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        Chargement de l'historique...
+                    </div>
+
+                    <!-- TABLEAU -->
+                    <div class="table-responsive">
+
+                        <table class="table historique-table">
+
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Bien financé</th>
+                                    <th>Prix d'achat</th>
+                                    <th>Marge</th>
+                                    <th>Prix total</th>
+                                    <th>Durée</th>
+                                    <th>Mensualité</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tableauHistorique">
+                                <!-- Rempli automatiquement par JavaScript -->
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <p
+                        id="nombreSimulations"
+                        class="small text-secondary mt-3 mb-0"
+                    ></p>
+
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <!-- JAVASCRIPT -->
     <script>
 
-        // Politique commerciale de démonstration
+        // ========================================
+        // CONFIGURATION ET ÉLÉMENTS HTML
+        // ========================================
+
         const TAUX_MARGE = 0.075;
 
-        // Éléments du formulaire
         const formulaire = document.getElementById("simulationForm");
         const bienInput = document.getElementById("bien");
         const prixInput = document.getElementById("prixAchat");
@@ -602,33 +683,38 @@
         const margeInput = document.getElementById("marge");
 
         const btnEnregistrer = document.getElementById("btnEnregistrer");
-        const messageStatut = document.getElementById("messageStatut");
+        const btnActualiser = document.getElementById("btnActualiser");
 
-        // Format monétaire français
+        const messageStatut = document.getElementById("messageStatut");
+        const messageHistorique = document.getElementById("messageHistorique");
+
+        const tableauHistorique =
+            document.getElementById("tableauHistorique");
+
+        const nombreSimulations =
+            document.getElementById("nombreSimulations");
+
+        let enregistrementEnCours = false;
+
         const formatEuro = new Intl.NumberFormat("fr-FR", {
             style: "currency",
             currency: "EUR"
         });
 
-        // Afficher un message
+        // ========================================
+        // FONCTIONS UTILITAIRES
+        // ========================================
+
         function afficherMessage(message, type) {
-
             messageStatut.textContent = message;
-
-            messageStatut.className =
-                `alert alert-${type}`;
-
+            messageStatut.className = `alert alert-${type}`;
         }
 
-        // Effacer les messages
         function effacerMessage() {
-
             messageStatut.textContent = "";
             messageStatut.className = "alert d-none";
-
         }
 
-        // Convertir un montant en centimes
         function enCentimes(valeur) {
 
             const texte = String(valeur).trim();
@@ -646,17 +732,38 @@
             return Number.isSafeInteger(centimes)
                 ? centimes
                 : null;
-
         }
 
-        // Convertir les centimes en euros
-        function enEuros(centimes) {
+        function formatMontant(valeur) {
 
-            return centimes / 100;
+            const nombre = Number(valeur);
 
+            return Number.isFinite(nombre)
+                ? formatEuro.format(nombre)
+                : "—";
         }
 
-        // Calculer la simulation
+        function formatDate(valeur) {
+
+            if (!valeur) return "—";
+
+            const date = new Date(valeur);
+
+            if (Number.isNaN(date.getTime())) {
+                return "—";
+            }
+
+            return date.toLocaleDateString("fr-FR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+        }
+
+        // ========================================
+        // CALCUL DE LA SIMULATION
+        // ========================================
+
         function calculerSimulation() {
 
             const bien = bienInput.value.trim();
@@ -664,7 +771,6 @@
             const apport = enCentimes(apportInput.value || "0");
             const duree = Number(dureeInput.value);
 
-            // Validation
             if (
                 !formulaire.checkValidity() ||
                 !bien ||
@@ -680,73 +786,59 @@
                 return null;
             }
 
-            // Marge commerciale calculée en centimes
-            const marge = Math.round(
-                prix * TAUX_MARGE
-            );
-
-            // Total de revente
+            const marge = Math.round(prix * TAUX_MARGE);
             const total = prix + marge;
 
             if (apport > total) {
                 return null;
             }
 
-            // Mensualité estimée
             const mensualite = Math.round(
                 (total - apport) / duree
             );
 
-            // Mettre à jour la marge non modifiable
-            margeInput.value = formatEuro.format(
-                enEuros(marge)
-            );
+            margeInput.value = formatMontant(marge / 100);
 
-            // Mettre à jour les cartes
             document.getElementById("resultPrix").textContent =
-                formatEuro.format(enEuros(prix));
+                formatMontant(prix / 100);
 
             document.getElementById("resultMarge").textContent =
-                formatEuro.format(enEuros(marge));
+                formatMontant(marge / 100);
 
             document.getElementById("resultTotal").textContent =
-                formatEuro.format(enEuros(total));
+                formatMontant(total / 100);
 
             document.getElementById("resultMensualite").textContent =
-                formatEuro.format(enEuros(mensualite));
+                formatMontant(mensualite / 100);
 
-            // Synthèse
             document.getElementById("synthese").textContent =
                 `Pour "${bien}", le prix d'achat est de ` +
-                `${formatEuro.format(enEuros(prix))}. ` +
+                `${formatMontant(prix / 100)}. ` +
                 `La marge commerciale est de ` +
-                `${formatEuro.format(enEuros(marge))}. ` +
+                `${formatMontant(marge / 100)}. ` +
                 `Le prix total de revente est de ` +
-                `${formatEuro.format(enEuros(total))}. ` +
-                `Après un apport de ` +
-                `${formatEuro.format(enEuros(apport))}, ` +
+                `${formatMontant(total / 100)}. ` +
+                `Après un apport de ${formatMontant(apport / 100)}, ` +
                 `le paiement est réparti sur ${duree} mois, ` +
                 `soit une mensualité estimée de ` +
-                `${formatEuro.format(enEuros(mensualite))}.`;
+                `${formatMontant(mensualite / 100)}.`;
 
-            // Données utilisées par l'API
             return {
                 bien: bien,
                 prix_achat: (prix / 100).toFixed(2),
                 duree_mois: duree,
                 apport_initial: (apport / 100).toFixed(2)
             };
-
         }
 
-        // Réinitialiser les résultats si la saisie est invalide
         function actualiserSimulation() {
 
             effacerMessage();
 
             const simulation = calculerSimulation();
 
-            btnEnregistrer.disabled = !simulation;
+            btnEnregistrer.disabled =
+                enregistrementEnCours || !simulation;
 
             if (!simulation) {
 
@@ -763,52 +855,160 @@
 
                 document.getElementById("synthese").textContent =
                     "Veuillez renseigner des valeurs valides.";
-
             }
-
         }
 
-        // Calcul au clic
+        // ========================================
+        // BOUTON CALCULER
+        // ========================================
+
         formulaire.addEventListener("submit", function(event) {
 
             event.preventDefault();
-
             actualiserSimulation();
 
-            if (!btnEnregistrer.disabled) {
-
+            if (calculerSimulation()) {
                 afficherMessage(
                     "Simulation calculée. Vous pouvez l'enregistrer.",
                     "info"
                 );
-
             } else {
-
                 afficherMessage(
                     "Veuillez corriger les informations du formulaire.",
                     "danger"
                 );
-
             }
-
         });
 
-        // Recalcul pendant la saisie
         [
             bienInput,
             prixInput,
             dureeInput,
             apportInput
         ].forEach(champ => {
-
             champ.addEventListener("input", actualiserSimulation);
-
         });
 
-        // ENREGISTRER DANS MYSQL
+        // ========================================
+        // CHARGER L'HISTORIQUE DEPUIS MYSQL
+        // ========================================
+
+        async function chargerHistorique() {
+
+            btnActualiser.disabled = true;
+
+            messageHistorique.className = "alert alert-info";
+            messageHistorique.textContent =
+                "Chargement des simulations...";
+
+            try {
+
+                // Appeler notre API GET
+                const reponse = await fetch("/api/simulations");
+
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+                    throw new Error(
+                        resultat.message ||
+                        "Erreur de récupération."
+                    );
+                }
+
+                const simulations = resultat.simulations;
+
+                if (!Array.isArray(simulations)) {
+                    throw new Error(
+                        "Format de réponse inattendu."
+                    );
+                }
+
+                // Vider l'ancien tableau
+                tableauHistorique.replaceChildren();
+
+                // Cas où la base est vide
+                if (simulations.length === 0) {
+
+                    messageHistorique.className =
+                        "alert alert-secondary";
+
+                    messageHistorique.textContent =
+                        "Aucune simulation enregistrée pour le moment.";
+
+                    nombreSimulations.textContent =
+                        "0 simulation affichée";
+
+                    return;
+                }
+
+                // Masquer le message de chargement
+                messageHistorique.className = "d-none";
+
+                // Construire une ligne par simulation
+                simulations.forEach(simulation => {
+
+                    const ligne = document.createElement("tr");
+
+                    const colonnes = [
+                        simulation.id,
+                        simulation.bien,
+                        formatMontant(simulation.prix_achat),
+                        formatMontant(simulation.marge_commerciale),
+                        formatMontant(simulation.prix_total),
+                        `${simulation.duree_mois} mois`,
+                        formatMontant(simulation.mensualite),
+                        formatDate(simulation.date_creation)
+                    ];
+
+                    colonnes.forEach((valeur, index) => {
+
+                        const cellule = document.createElement("td");
+                        cellule.textContent = valeur ?? "—";
+
+                        if (index === 1) {
+                            cellule.classList.add("bien-name");
+                        }
+
+                        // Style spécial pour la mensualité
+                        if (index === 6) {
+
+                            const badge = document.createElement("span");
+
+                            badge.className = "badge-mensualite";
+                            badge.textContent = valeur;
+
+                            cellule.replaceChildren(badge);
+                        }
+
+                        ligne.appendChild(cellule);
+                    });
+
+                    tableauHistorique.appendChild(ligne);
+                });
+
+                nombreSimulations.textContent =
+                    `${simulations.length} simulation(s) affichée(s)`;
+
+            } catch (erreur) {
+
+                messageHistorique.className = "alert alert-danger";
+
+                messageHistorique.textContent =
+                    "Impossible de charger l'historique : " +
+                    erreur.message;
+
+            } finally {
+
+                btnActualiser.disabled = false;
+            }
+        }
+
+        // ========================================
+        // ENREGISTRER UNE SIMULATION
+        // ========================================
+
         btnEnregistrer.addEventListener("click", async function() {
 
-            // Vérifier les valeurs une dernière fois
             const simulation = calculerSimulation();
 
             if (!simulation) {
@@ -821,7 +1021,7 @@
                 return;
             }
 
-            // Empêcher plusieurs clics pendant l'enregistrement
+            enregistrementEnCours = true;
             btnEnregistrer.disabled = true;
 
             const texteOriginal = btnEnregistrer.innerHTML;
@@ -830,7 +1030,6 @@
 
             try {
 
-                // Envoyer la simulation au backend
                 const reponse = await fetch("/api/simulations", {
 
                     method: "POST",
@@ -840,32 +1039,25 @@
                     },
 
                     body: JSON.stringify(simulation)
-
                 });
 
-                // Lire la réponse du serveur
                 const resultat = await reponse.json();
 
                 if (!reponse.ok) {
-
                     throw new Error(
                         resultat.message ||
                         "Erreur lors de l'enregistrement."
                     );
-
                 }
 
-                // Confirmation
                 afficherMessage(
                     `Simulation n°${resultat.simulation.id} ` +
                     `enregistrée avec succès dans MySQL !`,
                     "success"
                 );
 
-                console.log(
-                    "Simulation enregistrée :",
-                    resultat.simulation
-                );
+                // Mettre à jour automatiquement le tableau
+                await chargerHistorique();
 
             } catch (erreur) {
 
@@ -877,17 +1069,24 @@
 
             } finally {
 
+                enregistrementEnCours = false;
                 btnEnregistrer.innerHTML = texteOriginal;
-
-                btnEnregistrer.disabled =
-                    !calculerSimulation();
-
+                btnEnregistrer.disabled = !calculerSimulation();
             }
-
         });
 
-        // Calcul initial au chargement
+        // ========================================
+        // BOUTON ACTUALISER L'HISTORIQUE
+        // ========================================
+
+        btnActualiser.addEventListener("click", chargerHistorique);
+
+        // ========================================
+        // INITIALISATION
+        // ========================================
+
         actualiserSimulation();
+        chargerHistorique();
 
     </script>
 
