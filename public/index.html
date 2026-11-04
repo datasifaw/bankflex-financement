@@ -22,9 +22,9 @@
     >
 
     <style>
-        /* ===============================
+        /* =====================================
            STYLE GÉNÉRAL
-        =============================== */
+        ===================================== */
 
         body {
             margin: 0;
@@ -42,9 +42,9 @@
             min-height: calc(100vh - 76px);
         }
 
-        /* ===============================
+        /* =====================================
            MENU LATÉRAL
-        =============================== */
+        ===================================== */
 
         .sidebar {
             width: 250px;
@@ -89,9 +89,9 @@
             color: white;
         }
 
-        /* ===============================
+        /* =====================================
            STATISTIQUES
-        =============================== */
+        ===================================== */
 
         .sidebar-stats {
             margin-top: 30px;
@@ -131,9 +131,9 @@
             margin: 8px 4px;
         }
 
-        /* ===============================
-           CONTENU ET CARTES
-        =============================== */
+        /* =====================================
+           CONTENU PRINCIPAL
+        ===================================== */
 
         .main-content {
             flex: 1;
@@ -158,9 +158,9 @@
             padding: 24px;
         }
 
-        /* ===============================
+        /* =====================================
            FORMULAIRE
-        =============================== */
+        ===================================== */
 
         .form-label {
             color: #263b58;
@@ -187,9 +187,9 @@
             font-weight: 700;
         }
 
-        /* ===============================
+        /* =====================================
            BOUTONS
-        =============================== */
+        ===================================== */
 
         .btn-bankflex {
             background: #183b70;
@@ -219,9 +219,9 @@
             color: #102a50;
         }
 
-        /* ===============================
+        /* =====================================
            RÉSULTATS
-        =============================== */
+        ===================================== */
 
         .result-box {
             background: #f1f6fe;
@@ -252,9 +252,9 @@
             color: white;
         }
 
-        /* ===============================
+        /* =====================================
            RECHERCHE ET FILTRES
-        =============================== */
+        ===================================== */
 
         .filtres-historique {
             background: #f8faff;
@@ -264,9 +264,9 @@
             margin-bottom: 22px;
         }
 
-        /* ===============================
-           HISTORIQUE
-        =============================== */
+        /* =====================================
+           HISTORIQUE MYSQL
+        ===================================== */
 
         .historique-table {
             width: 100%;
@@ -304,9 +304,21 @@
             white-space: nowrap;
         }
 
-        /* ===============================
-           NOUVEAU : FENÊTRE DE DÉTAILS
-        =============================== */
+        /* NOUVEAU : BOUTONS D'ACTION */
+
+        .actions-simulation {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 8px;
+        }
+
+        .actions-simulation .btn {
+            white-space: nowrap;
+        }
+
+        /* =====================================
+           FENÊTRE DE DÉTAILS
+        ===================================== */
 
         .details-card {
             background: #f5f8fd;
@@ -341,20 +353,43 @@
             color: white;
         }
 
-        .modal-header {
+        .modal-header-bankflex {
             background: #102a50;
             color: white;
         }
 
-        .modal-header .btn-close {
+        .modal-header-bankflex .btn-close {
             filter: invert(1) grayscale(100%);
         }
 
-        /* ===============================
-           RESPONSIVE
-        =============================== */
+        /* =====================================
+           NOUVEAU : FENÊTRE DE SUPPRESSION
+        ===================================== */
+
+        .suppression-icon {
+            width: 64px;
+            height: 64px;
+            background: #fff0f0;
+            color: #dc3545;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            margin: 0 auto 20px;
+        }
+
+        .suppression-description {
+            color: #5e6b7c;
+            line-height: 1.6;
+        }
+
+        /* =====================================
+           VERSION MOBILE
+        ===================================== */
 
         @media (max-width: 767px) {
+
             .app-layout {
                 flex-direction: column;
             }
@@ -372,7 +407,7 @@
             .sidebar-stats {
                 display: grid;
                 grid-template-columns:
-                    repeat(auto-fit, minmax(180px, 1fr));
+                    repeat(auto-fit, minmax(180px,1fr));
                 gap: 10px;
             }
 
@@ -402,14 +437,16 @@
 
 <body>
 
-    <!-- ===============================
+    <!-- =====================================
          BARRE SUPÉRIEURE
-    =============================== -->
+    ===================================== -->
 
     <header class="navbar navbar-dark topbar px-4 py-3">
+
         <div class="container-fluid">
 
             <div class="d-flex align-items-center gap-3">
+
                 <i class="bi bi-bar-chart-fill fs-3"
                    style="color: #60a5fa;"></i>
 
@@ -420,6 +457,7 @@
                 <span class="subtitle text-white-50 border-start ps-3">
                     Financement à prix fixe
                 </span>
+
             </div>
 
             <div class="text-white fs-4">
@@ -427,13 +465,14 @@
             </div>
 
         </div>
+
     </header>
 
     <div class="app-layout">
 
-        <!-- ===============================
+        <!-- =====================================
              MENU LATÉRAL
-        =============================== -->
+        ===================================== -->
 
         <aside class="sidebar">
 
@@ -474,6 +513,7 @@
             </nav>
 
             <!-- STATISTIQUES MYSQL -->
+
             <section class="sidebar-stats">
 
                 <p class="sidebar-title">
@@ -504,21 +544,25 @@
                     <p class="stat-value" id="statsMarge">—</p>
                 </div>
 
-                <p class="stats-etat" id="statsEtat"
-                   role="status" aria-live="polite">
+                <p id="statsEtat"
+                   class="stats-etat"
+                   role="status"
+                   aria-live="polite">
                     Chargement des statistiques...
                 </p>
 
             </section>
+
         </aside>
 
-        <!-- ===============================
+        <!-- =====================================
              CONTENU PRINCIPAL
-        =============================== -->
+        ===================================== -->
 
         <main class="main-content" id="accueil">
 
             <div class="mb-4">
+
                 <h2 class="fw-bold">
                     <i class="bi bi-calculator me-2 text-primary"></i>
                     Simulateur de financement
@@ -528,12 +572,17 @@
                     Simulez le financement d'un bien avec une
                     marge commerciale fixe et transparente.
                 </p>
+
             </div>
 
-            <!-- SIMULATION -->
+            <!-- =================================
+                 FORMULAIRE ET RÉSULTATS
+            ================================= -->
+
             <div class="row g-4" id="simulation">
 
                 <!-- FORMULAIRE -->
+
                 <div class="col-xl-5">
 
                     <section class="dashboard-card">
@@ -550,6 +599,7 @@
                             <form id="simulationForm">
 
                                 <div class="mb-3">
+
                                     <label for="bien" class="form-label">
                                         Bien à financer *
                                     </label>
@@ -562,9 +612,11 @@
                                         maxlength="150"
                                         required
                                     >
+
                                 </div>
 
                                 <div class="mb-3">
+
                                     <label for="prixAchat" class="form-label">
                                         Prix d'achat (€) *
                                     </label>
@@ -579,9 +631,11 @@
                                         step="0.01"
                                         required
                                     >
+
                                 </div>
 
                                 <div class="mb-3">
+
                                     <label for="marge" class="form-label">
                                         Marge commerciale (€)
                                     </label>
@@ -598,9 +652,11 @@
                                         Marge automatique de 7,5 %
                                         définie par l'établissement.
                                     </small>
+
                                 </div>
 
                                 <div class="mb-3">
+
                                     <label for="duree" class="form-label">
                                         Durée (mois) *
                                     </label>
@@ -615,9 +671,11 @@
                                         step="1"
                                         required
                                     >
+
                                 </div>
 
                                 <div class="mb-4">
+
                                     <label for="apport" class="form-label">
                                         Apport initial (€)
                                     </label>
@@ -630,6 +688,7 @@
                                         min="0"
                                         step="0.01"
                                     >
+
                                 </div>
 
                                 <div id="messageStatut"
@@ -640,15 +699,19 @@
 
                                 <div class="d-flex flex-wrap gap-2">
 
-                                    <button type="submit"
-                                            class="btn btn-bankflex">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-bankflex"
+                                    >
                                         <i class="bi bi-calculator me-2"></i>
                                         Calculer
                                     </button>
 
-                                    <button type="button"
-                                            id="btnEnregistrer"
-                                            class="btn btn-outline-bankflex">
+                                    <button
+                                        type="button"
+                                        id="btnEnregistrer"
+                                        class="btn btn-outline-bankflex"
+                                    >
                                         <i class="bi bi-floppy me-2"></i>
                                         Enregistrer
                                     </button>
@@ -656,17 +719,20 @@
                                 </div>
 
                                 <p class="text-secondary small mt-3 mb-0">
-                                    Simulation indicative avec des
-                                    données fictives.
+                                    Simulation indicative utilisant
+                                    des données fictives.
                                 </p>
 
                             </form>
 
                         </div>
+
                     </section>
+
                 </div>
 
                 <!-- RÉSULTATS -->
+
                 <div class="col-xl-7">
 
                     <section class="dashboard-card">
@@ -687,7 +753,8 @@
                                         <p class="result-label">
                                             Prix d'achat
                                         </p>
-                                        <p class="result-value" id="resultPrix">
+                                        <p class="result-value"
+                                           id="resultPrix">
                                             —
                                         </p>
                                     </div>
@@ -698,7 +765,8 @@
                                         <p class="result-label">
                                             Marge commerciale fixe
                                         </p>
-                                        <p class="result-value" id="resultMarge">
+                                        <p class="result-value"
+                                           id="resultMarge">
                                             —
                                         </p>
                                     </div>
@@ -709,7 +777,8 @@
                                         <p class="result-label">
                                             Prix total de revente
                                         </p>
-                                        <p class="result-value" id="resultTotal">
+                                        <p class="result-value"
+                                           id="resultTotal">
                                             —
                                         </p>
                                     </div>
@@ -730,6 +799,7 @@
                             </div>
 
                             <div class="alert alert-primary mt-4 mb-0">
+
                                 <h6 class="fw-bold">
                                     <i class="bi bi-info-circle me-2"></i>
                                     Synthèse du financement
@@ -739,6 +809,7 @@
                                     Renseignez les champs pour
                                     calculer votre simulation.
                                 </p>
+
                             </div>
 
                             <p class="text-secondary small mt-3 mb-0">
@@ -747,13 +818,16 @@
                             </p>
 
                         </div>
+
                     </section>
+
                 </div>
+
             </div>
 
-            <!-- ===============================
-                 HISTORIQUE
-            =============================== -->
+            <!-- =================================
+                 HISTORIQUE MYSQL
+            ================================= -->
 
             <section class="dashboard-card" id="historique">
 
@@ -762,6 +836,7 @@
                             justify-content-between gap-3">
 
                     <div>
+
                         <h5 class="fw-bold mb-1">
                             <i class="bi bi-clock-history text-primary me-2"></i>
                             Simulations récentes
@@ -771,23 +846,30 @@
                             Les 20 dernières simulations enregistrées
                             dans MySQL
                         </small>
+
                     </div>
 
-                    <button type="button"
-                            id="btnActualiser"
-                            class="btn btn-outline-bankflex">
+                    <button
+                        type="button"
+                        id="btnActualiser"
+                        class="btn btn-outline-bankflex"
+                    >
                         <i class="bi bi-arrow-clockwise me-2"></i>
                         Actualiser
                     </button>
+
                 </div>
 
                 <div class="card-content">
 
                     <!-- RECHERCHE ET FILTRES -->
+
                     <div class="filtres-historique">
+
                         <div class="row g-3">
 
                             <div class="col-md-7">
+
                                 <label for="rechercheBien"
                                        class="form-label">
                                     <i class="bi bi-search me-1"></i>
@@ -800,17 +882,21 @@
                                     class="form-control"
                                     placeholder="Ex. : voiture, ordinateur..."
                                 >
+
                             </div>
 
                             <div class="col-md-5">
+
                                 <label for="filtreDuree"
                                        class="form-label">
                                     <i class="bi bi-funnel me-1"></i>
                                     Filtrer par durée
                                 </label>
 
-                                <select id="filtreDuree"
-                                        class="form-select">
+                                <select
+                                    id="filtreDuree"
+                                    class="form-select"
+                                >
                                     <option value="toutes">
                                         Toutes les durées
                                     </option>
@@ -824,6 +910,7 @@
                                         Plus de 36 mois
                                     </option>
                                 </select>
+
                             </div>
 
                         </div>
@@ -831,12 +918,24 @@
                         <small class="text-secondary d-block mt-2">
                             Recherche parmi les 20 dernières simulations.
                         </small>
+
                     </div>
 
-                    <div id="messageHistorique"
-                         class="alert alert-info"
-                         role="status"
-                         aria-live="polite">
+                    <!-- NOUVEAU : MESSAGE APRÈS ACTION -->
+
+                    <div
+                        id="messageActionHistorique"
+                        class="alert d-none"
+                        role="status"
+                        aria-live="polite"
+                    ></div>
+
+                    <div
+                        id="messageHistorique"
+                        class="alert alert-info"
+                        role="status"
+                        aria-live="polite"
+                    >
                         Chargement de l'historique...
                     </div>
 
@@ -862,22 +961,26 @@
                             </tbody>
 
                         </table>
+
                     </div>
 
-                    <p id="nombreSimulations"
-                       class="small text-secondary mt-3 mb-0"
-                       aria-live="polite">
-                    </p>
+                    <p
+                        id="nombreSimulations"
+                        class="small text-secondary mt-3 mb-0"
+                        aria-live="polite"
+                    ></p>
 
                 </div>
+
             </section>
 
         </main>
+
     </div>
 
-    <!-- ===============================
-         NOUVEAU : FENÊTRE MODALE DÉTAILS
-    =============================== -->
+    <!-- =====================================
+         MODALE : VOIR LES DÉTAILS
+    ===================================== -->
 
     <div class="modal fade"
          id="modalDetails"
@@ -889,13 +992,10 @@
 
             <div class="modal-content">
 
-                <!-- EN-TÊTE -->
-                <div class="modal-header">
+                <div class="modal-header modal-header-bankflex">
 
                     <h5 class="modal-title fw-bold"
                         id="titreModalDetails">
-
-                        <i class="bi bi-file-earmark-text me-2"></i>
                         Détails de la simulation
                     </h5>
 
@@ -903,18 +1003,19 @@
                         type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
-                        aria-label="Fermer">
-                    </button>
+                        aria-label="Fermer"
+                    ></button>
 
                 </div>
 
-                <!-- CONTENU -->
                 <div class="modal-body p-4">
 
-                    <div id="messageDetails"
-                         class="alert alert-info"
-                         role="status"
-                         aria-live="polite">
+                    <div
+                        id="messageDetails"
+                        class="alert alert-info"
+                        role="status"
+                        aria-live="polite"
+                    >
                         Chargement des détails...
                     </div>
 
@@ -984,7 +1085,6 @@
 
                         </div>
 
-                        <!-- RÉCAPITULATIF -->
                         <div class="details-recap mt-4">
 
                             <div class="row g-3">
@@ -994,9 +1094,7 @@
                                         Prix total de revente
                                     </p>
                                     <div class="details-value fs-4"
-                                         id="detailTotal">
-                                        —
-                                    </div>
+                                         id="detailTotal">—</div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -1004,63 +1102,179 @@
                                         Mensualité estimée
                                     </p>
                                     <div class="details-value fs-4"
-                                         id="detailMensualite">
-                                        —
-                                    </div>
+                                         id="detailMensualite">—</div>
                                 </div>
 
                             </div>
+
                         </div>
 
                         <p class="text-secondary small mt-3 mb-0">
-                            Simulation indicative réalisée
-                            à partir de données fictives.
+                            Simulation indicative réalisée à partir
+                            de données fictives.
                         </p>
 
                     </div>
 
                 </div>
 
-                <!-- PIED DE FENÊTRE -->
                 <div class="modal-footer">
 
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
                         Fermer
                     </button>
 
                 </div>
 
             </div>
+
         </div>
+
     </div>
 
-    <!-- Bootstrap JavaScript -->
+    <!-- =====================================
+         NOUVEAU : MODALE DE CONFIRMATION
+         DE SUPPRESSION
+    ===================================== -->
+
+    <div
+        class="modal fade"
+        id="modalSuppression"
+        tabindex="-1"
+        aria-labelledby="titreModalSuppression"
+        aria-hidden="true"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+    >
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5
+                        class="modal-title fw-bold"
+                        id="titreModalSuppression"
+                    >
+                        Confirmer la suppression
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fermer"
+                        id="btnFermerSuppression"
+                    ></button>
+
+                </div>
+
+                <div class="modal-body text-center p-4">
+
+                    <div class="suppression-icon">
+                        <i class="bi bi-trash3"></i>
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Supprimer cette simulation ?
+                    </h5>
+
+                    <p
+                        class="suppression-description mt-3"
+                        id="texteConfirmationSuppression"
+                    >
+                        Voulez-vous vraiment supprimer
+                        cette simulation ?
+                    </p>
+
+                    <div class="alert alert-warning text-start">
+
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+
+                        <strong>Attention :</strong>
+                        cette suppression est définitive
+                        dans la base MySQL.
+
+                    </div>
+
+                    <div
+                        id="messageErreurSuppression"
+                        class="alert alert-danger d-none"
+                        role="alert"
+                    ></div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="btnAnnulerSuppression"
+                        data-bs-dismiss="modal"
+                    >
+                        Annuler
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        id="btnConfirmerSuppression"
+                    >
+                        <i class="bi bi-trash3 me-2"></i>
+                        Supprimer définitivement
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================
+         BOOTSTRAP JAVASCRIPT
+    ===================================== -->
+
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
 
-    <!-- ===============================
+    <!-- =====================================
          JAVASCRIPT BANKFLEX
-    =============================== -->
+    ===================================== -->
 
     <script>
 
-        // ====================================
+        // =====================================
         // 1. CONFIGURATION
-        // ====================================
+        // =====================================
 
         const TAUX_MARGE = 0.075;
 
         const formulaire =
             document.getElementById("simulationForm");
 
-        const bienInput = document.getElementById("bien");
-        const prixInput = document.getElementById("prixAchat");
-        const dureeInput = document.getElementById("duree");
-        const apportInput = document.getElementById("apport");
-        const margeInput = document.getElementById("marge");
+        const bienInput =
+            document.getElementById("bien");
+
+        const prixInput =
+            document.getElementById("prixAchat");
+
+        const dureeInput =
+            document.getElementById("duree");
+
+        const apportInput =
+            document.getElementById("apport");
+
+        const margeInput =
+            document.getElementById("marge");
 
         const btnEnregistrer =
             document.getElementById("btnEnregistrer");
@@ -1080,20 +1294,33 @@
         const nombreSimulations =
             document.getElementById("nombreSimulations");
 
-        // Statistiques
-        const statsTotal = document.getElementById("statsTotal");
-        const statsMensualite = document.getElementById("statsMensualite");
-        const statsMarge = document.getElementById("statsMarge");
-        const statsEtat = document.getElementById("statsEtat");
+        const messageActionHistorique =
+            document.getElementById("messageActionHistorique");
 
-        // Filtres
+        // Statistiques
+
+        const statsTotal =
+            document.getElementById("statsTotal");
+
+        const statsMensualite =
+            document.getElementById("statsMensualite");
+
+        const statsMarge =
+            document.getElementById("statsMarge");
+
+        const statsEtat =
+            document.getElementById("statsEtat");
+
+        // Recherche et filtres
+
         const rechercheBien =
             document.getElementById("rechercheBien");
 
         const filtreDuree =
             document.getElementById("filtreDuree");
 
-        // Fenêtre de détails
+        // Modale des détails
+
         const modalDetailsElement =
             document.getElementById("modalDetails");
 
@@ -1106,27 +1333,90 @@
         const contenuDetails =
             document.getElementById("contenuDetails");
 
+        // NOUVEAU : modale de suppression
+
+        const modalSuppressionElement =
+            document.getElementById("modalSuppression");
+
+        const modalSuppression =
+            new bootstrap.Modal(modalSuppressionElement);
+
+        const texteConfirmationSuppression =
+            document.getElementById(
+                "texteConfirmationSuppression"
+            );
+
+        const messageErreurSuppression =
+            document.getElementById(
+                "messageErreurSuppression"
+            );
+
+        const btnConfirmerSuppression =
+            document.getElementById(
+                "btnConfirmerSuppression"
+            );
+
+        const btnAnnulerSuppression =
+            document.getElementById(
+                "btnAnnulerSuppression"
+            );
+
+        const btnFermerSuppression =
+            document.getElementById(
+                "btnFermerSuppression"
+            );
+
+        // Mémoire temporaire
+
         let simulationsCache = [];
+
         let enregistrementEnCours = false;
 
-        const formatEuro = new Intl.NumberFormat("fr-FR", {
-            style: "currency",
-            currency: "EUR"
-        });
+        // Simulation sélectionnée pour suppression
 
-        // ====================================
+        let simulationASupprimer = null;
+
+        let suppressionEnCours = false;
+
+        const formatEuro =
+            new Intl.NumberFormat("fr-FR", {
+                style: "currency",
+                currency: "EUR"
+            });
+
+        // =====================================
         // 2. FONCTIONS UTILITAIRES
-        // ====================================
+        // =====================================
 
         function afficherMessage(message, type) {
+
             messageStatut.textContent = message;
+
             messageStatut.className =
                 `alert alert-${type}`;
         }
 
         function effacerMessage() {
+
             messageStatut.textContent = "";
+
             messageStatut.className = "alert d-none";
+        }
+
+        function afficherMessageAction(message, type) {
+
+            messageActionHistorique.textContent = message;
+
+            messageActionHistorique.className =
+                `alert alert-${type}`;
+        }
+
+        function effacerMessageAction() {
+
+            messageActionHistorique.textContent = "";
+
+            messageActionHistorique.className =
+                "alert d-none";
         }
 
         function enCentimes(valeur) {
@@ -1160,7 +1450,9 @@
 
         function formatDate(valeur) {
 
-            if (!valeur) return "—";
+            if (!valeur) {
+                return "—";
+            }
 
             const date = new Date(valeur);
 
@@ -1180,18 +1472,25 @@
                 .trim();
         }
 
-        // ====================================
+        // =====================================
         // 3. CALCUL DE LA SIMULATION
-        // ====================================
+        // =====================================
 
         function calculerSimulation() {
 
             const bien = bienInput.value.trim();
-            const prix = enCentimes(prixInput.value);
+
+            const prix = enCentimes(
+                prixInput.value
+            );
+
             const apport = enCentimes(
                 apportInput.value || "0"
             );
-            const duree = Number(dureeInput.value);
+
+            const duree = Number(
+                dureeInput.value
+            );
 
             if (
                 !formulaire.checkValidity() ||
@@ -1209,7 +1508,7 @@
             }
 
             const marge = Math.round(
-                prix * 75 / 1000
+                prix * TAUX_MARGE
             );
 
             const total = prix + marge;
@@ -1225,19 +1524,29 @@
             margeInput.value =
                 formatMontant(marge / 100);
 
-            document.getElementById("resultPrix").textContent =
+            document.getElementById(
+                "resultPrix"
+            ).textContent =
                 formatMontant(prix / 100);
 
-            document.getElementById("resultMarge").textContent =
+            document.getElementById(
+                "resultMarge"
+            ).textContent =
                 formatMontant(marge / 100);
 
-            document.getElementById("resultTotal").textContent =
+            document.getElementById(
+                "resultTotal"
+            ).textContent =
                 formatMontant(total / 100);
 
-            document.getElementById("resultMensualite").textContent =
+            document.getElementById(
+                "resultMensualite"
+            ).textContent =
                 formatMontant(mensualite / 100);
 
-            document.getElementById("synthese").textContent =
+            document.getElementById(
+                "synthese"
+            ).textContent =
                 `Pour "${bien}", le prix d'achat est de ` +
                 `${formatMontant(prix / 100)}. ` +
                 `La marge commerciale est de ` +
@@ -1246,8 +1555,9 @@
                 `${formatMontant(total / 100)}. ` +
                 `Après un apport de ` +
                 `${formatMontant(apport / 100)}, ` +
-                `le paiement est réparti sur ${duree} mois, ` +
-                `soit une mensualité estimée de ` +
+                `le paiement est réparti sur ` +
+                `${duree} mois, soit une mensualité ` +
+                `estimée de ` +
                 `${formatMontant(mensualite / 100)}.`;
 
             return {
@@ -1277,18 +1587,23 @@
                     "resultTotal",
                     "resultMensualite"
                 ].forEach(id => {
-                    document.getElementById(id).textContent =
-                        "—";
+
+                    document.getElementById(
+                        id
+                    ).textContent = "—";
+
                 });
 
-                document.getElementById("synthese").textContent =
+                document.getElementById(
+                    "synthese"
+                ).textContent =
                     "Veuillez renseigner des valeurs valides.";
             }
         }
 
-        // ====================================
+        // =====================================
         // 4. STATISTIQUES MYSQL
-        // ====================================
+        // =====================================
 
         async function chargerStatistiques() {
 
@@ -1297,12 +1612,14 @@
 
             try {
 
-                const reponse =
-                    await fetch("/api/statistiques");
+                const reponse = await fetch(
+                    "/api/statistiques"
+                );
 
                 const resultat = await reponse.json();
 
                 if (!reponse.ok) {
+
                     throw new Error(
                         resultat.message ||
                         "Erreur de récupération."
@@ -1313,9 +1630,15 @@
 
                 if (
                     !stats ||
-                    !Number.isFinite(stats.nombre_simulations) ||
-                    !Number.isFinite(stats.mensualite_moyenne) ||
-                    !Number.isFinite(stats.marge_moyenne)
+                    !Number.isFinite(
+                        stats.nombre_simulations
+                    ) ||
+                    !Number.isFinite(
+                        stats.mensualite_moyenne
+                    ) ||
+                    !Number.isFinite(
+                        stats.marge_moyenne
+                    )
                 ) {
                     throw new Error(
                         "Statistiques invalides."
@@ -1323,13 +1646,18 @@
                 }
 
                 statsTotal.textContent =
-                    stats.nombre_simulations.toLocaleString("fr-FR");
+                    stats.nombre_simulations
+                        .toLocaleString("fr-FR");
 
                 statsMensualite.textContent =
-                    formatMontant(stats.mensualite_moyenne);
+                    formatMontant(
+                        stats.mensualite_moyenne
+                    );
 
                 statsMarge.textContent =
-                    formatMontant(stats.marge_moyenne);
+                    formatMontant(
+                        stats.marge_moyenne
+                    );
 
                 statsEtat.textContent =
                     "Données actualisées depuis MySQL.";
@@ -1339,20 +1667,24 @@
                 statsEtat.textContent =
                     "Impossible de charger les statistiques.";
 
-                console.error(erreur.message);
+                console.error(
+                    "Erreur statistiques :",
+                    erreur.message
+                );
             }
         }
 
-        // ====================================
-        // 5. FILTRER L'HISTORIQUE
-        // ====================================
+        // =====================================
+        // 5. FILTRER ET AFFICHER L'HISTORIQUE
+        // =====================================
 
         function afficherHistoriqueFiltre() {
 
             const recherche =
                 normaliser(rechercheBien.value);
 
-            const dureeChoisie = filtreDuree.value;
+            const dureeChoisie =
+                filtreDuree.value;
 
             const simulationsFiltrees =
                 simulationsCache.filter(simulation => {
@@ -1381,41 +1713,62 @@
                         correspondDuree = duree > 36;
                     }
 
-                    return correspondNom && correspondDuree;
+                    return (
+                        correspondNom &&
+                        correspondDuree
+                    );
                 });
 
             tableauHistorique.replaceChildren();
 
             if (simulationsFiltrees.length === 0) {
 
-                const ligne = document.createElement("tr");
-                const cellule = document.createElement("td");
+                const ligne =
+                    document.createElement("tr");
+
+                const cellule =
+                    document.createElement("td");
 
                 cellule.colSpan = 9;
+
                 cellule.className =
                     "text-center text-secondary py-4";
 
                 cellule.textContent =
-                    "Aucune simulation ne correspond à votre recherche.";
+                    simulationsCache.length === 0
+                        ? "Aucune simulation enregistrée."
+                        : "Aucune simulation ne correspond à votre recherche.";
 
                 ligne.appendChild(cellule);
+
                 tableauHistorique.appendChild(ligne);
 
             } else {
 
                 simulationsFiltrees.forEach(simulation => {
 
-                    const ligne = document.createElement("tr");
+                    const ligne =
+                        document.createElement("tr");
 
                     const colonnes = [
                         simulation.id,
                         simulation.bien,
-                        formatMontant(simulation.prix_achat),
-                        formatMontant(simulation.marge_commerciale),
-                        formatMontant(simulation.prix_total),
+                        formatMontant(
+                            simulation.prix_achat
+                        ),
+                        formatMontant(
+                            simulation.marge_commerciale
+                        ),
+                        formatMontant(
+                            simulation.prix_total
+                        ),
                         `${simulation.duree_mois} mois`,
-                        formatMontant(simulation.mensualite),
-                        formatDate(simulation.date_creation)
+                        formatMontant(
+                            simulation.mensualite
+                        ),
+                        formatDate(
+                            simulation.date_creation
+                        )
                     ];
 
                     colonnes.forEach((valeur, index) => {
@@ -1423,34 +1776,56 @@
                         const cellule =
                             document.createElement("td");
 
-                        cellule.textContent = valeur ?? "—";
+                        cellule.textContent =
+                            valeur ?? "—";
 
                         if (index === 1) {
-                            cellule.classList.add("bien-name");
+                            cellule.classList.add(
+                                "bien-name"
+                            );
                         }
 
                         if (index === 6) {
 
                             const badge =
-                                document.createElement("span");
+                                document.createElement(
+                                    "span"
+                                );
 
-                            badge.className = "badge-mensualite";
+                            badge.className =
+                                "badge-mensualite";
+
                             badge.textContent = valeur;
 
-                            cellule.replaceChildren(badge);
+                            cellule.replaceChildren(
+                                badge
+                            );
                         }
 
                         ligne.appendChild(cellule);
+
                     });
 
-                    // NOUVEAU : BOUTON VOIR
+                    // =================================
+                    // NOUVEAU : COLONNE ACTIONS
+                    // =================================
+
                     const celluleActions =
                         document.createElement("td");
+
+                    const groupeActions =
+                        document.createElement("div");
+
+                    groupeActions.className =
+                        "actions-simulation";
+
+                    // BOUTON VOIR
 
                     const boutonVoir =
                         document.createElement("button");
 
                     boutonVoir.type = "button";
+
                     boutonVoir.className =
                         "btn btn-sm btn-outline-primary";
 
@@ -1461,14 +1836,62 @@
                         `Voir les détails de la simulation ${simulation.id}`
                     );
 
-                    boutonVoir.addEventListener("click", () => {
-                        afficherDetails(simulation.id);
-                    });
+                    boutonVoir.addEventListener(
+                        "click",
+                        () => {
+                            afficherDetails(
+                                simulation.id
+                            );
+                        }
+                    );
 
-                    celluleActions.appendChild(boutonVoir);
-                    ligne.appendChild(celluleActions);
+                    // BOUTON SUPPRIMER
 
-                    tableauHistorique.appendChild(ligne);
+                    const boutonSupprimer =
+                        document.createElement("button");
+
+                    boutonSupprimer.type = "button";
+
+                    boutonSupprimer.className =
+                        "btn btn-sm btn-outline-danger";
+
+                    boutonSupprimer.textContent =
+                        "Supprimer";
+
+                    boutonSupprimer.setAttribute(
+                        "aria-label",
+                        `Supprimer la simulation ${simulation.id}`
+                    );
+
+                    boutonSupprimer.addEventListener(
+                        "click",
+                        () => {
+                            ouvrirConfirmationSuppression(
+                                simulation
+                            );
+                        }
+                    );
+
+                    groupeActions.appendChild(
+                        boutonVoir
+                    );
+
+                    groupeActions.appendChild(
+                        boutonSupprimer
+                    );
+
+                    celluleActions.appendChild(
+                        groupeActions
+                    );
+
+                    ligne.appendChild(
+                        celluleActions
+                    );
+
+                    tableauHistorique.appendChild(
+                        ligne
+                    );
+
                 });
             }
 
@@ -1477,9 +1900,9 @@
                 `${simulationsCache.length} simulations récentes`;
         }
 
-        // ====================================
-        // 6. CHARGER L'HISTORIQUE MYSQL
-        // ====================================
+        // =====================================
+        // 6. CHARGER L'HISTORIQUE DEPUIS MYSQL
+        // =====================================
 
         async function chargerHistorique() {
 
@@ -1493,25 +1916,30 @@
 
             try {
 
-                const reponse =
-                    await fetch("/api/simulations");
+                const reponse = await fetch(
+                    "/api/simulations"
+                );
 
                 const resultat = await reponse.json();
 
                 if (!reponse.ok) {
+
                     throw new Error(
                         resultat.message ||
                         "Erreur de récupération."
                     );
                 }
 
-                if (!Array.isArray(resultat.simulations)) {
+                if (!Array.isArray(
+                    resultat.simulations
+                )) {
                     throw new Error(
                         "Format de réponse inattendu."
                     );
                 }
 
-                simulationsCache = resultat.simulations;
+                simulationsCache =
+                    resultat.simulations;
 
                 if (simulationsCache.length === 0) {
 
@@ -1523,7 +1951,8 @@
 
                 } else {
 
-                    messageHistorique.className = "d-none";
+                    messageHistorique.className =
+                        "d-none";
                 }
 
                 afficherHistoriqueFiltre();
@@ -1543,28 +1972,29 @@
             }
         }
 
-        // ====================================
-        // 7. NOUVEAU : AFFICHER LES DÉTAILS
-        // ====================================
+        // =====================================
+        // 7. VOIR LES DÉTAILS
+        // =====================================
 
         async function afficherDetails(id) {
 
-            // Réinitialiser la fenêtre
             contenuDetails.classList.add("d-none");
 
-            messageDetails.className = "alert alert-info";
+            messageDetails.className =
+                "alert alert-info";
+
             messageDetails.textContent =
                 "Chargement des détails...";
 
-            document.getElementById("titreModalDetails").textContent =
+            document.getElementById(
+                "titreModalDetails"
+            ).textContent =
                 `Détails de la simulation n° ${id}`;
 
-            // Ouvrir la fenêtre Bootstrap
             modalDetails.show();
 
             try {
 
-                // Appel de notre API GET par ID
                 const reponse = await fetch(
                     `/api/simulations/${id}`
                 );
@@ -1572,48 +2002,81 @@
                 const resultat = await reponse.json();
 
                 if (!reponse.ok) {
+
                     throw new Error(
                         resultat.message ||
                         "Impossible de charger les détails."
                     );
                 }
 
-                const simulation = resultat.simulation;
+                const simulation =
+                    resultat.simulation;
 
                 if (!simulation) {
+
                     throw new Error(
                         "Simulation introuvable."
                     );
                 }
 
-                // Afficher les informations récupérées
-                document.getElementById("detailBien").textContent =
+                document.getElementById(
+                    "detailBien"
+                ).textContent =
                     simulation.bien;
 
-                document.getElementById("detailDate").textContent =
-                    formatDate(simulation.date_creation);
+                document.getElementById(
+                    "detailDate"
+                ).textContent =
+                    formatDate(
+                        simulation.date_creation
+                    );
 
-                document.getElementById("detailPrix").textContent =
-                    formatMontant(simulation.prix_achat);
+                document.getElementById(
+                    "detailPrix"
+                ).textContent =
+                    formatMontant(
+                        simulation.prix_achat
+                    );
 
-                document.getElementById("detailMarge").textContent =
-                    formatMontant(simulation.marge_commerciale);
+                document.getElementById(
+                    "detailMarge"
+                ).textContent =
+                    formatMontant(
+                        simulation.marge_commerciale
+                    );
 
-                document.getElementById("detailApport").textContent =
-                    formatMontant(simulation.apport_initial);
+                document.getElementById(
+                    "detailApport"
+                ).textContent =
+                    formatMontant(
+                        simulation.apport_initial
+                    );
 
-                document.getElementById("detailDuree").textContent =
+                document.getElementById(
+                    "detailDuree"
+                ).textContent =
                     `${simulation.duree_mois} mois`;
 
-                document.getElementById("detailTotal").textContent =
-                    formatMontant(simulation.prix_total);
+                document.getElementById(
+                    "detailTotal"
+                ).textContent =
+                    formatMontant(
+                        simulation.prix_total
+                    );
 
-                document.getElementById("detailMensualite").textContent =
-                    formatMontant(simulation.mensualite);
+                document.getElementById(
+                    "detailMensualite"
+                ).textContent =
+                    formatMontant(
+                        simulation.mensualite
+                    );
 
-                // Afficher le contenu
-                messageDetails.className = "d-none";
-                contenuDetails.classList.remove("d-none");
+                messageDetails.className =
+                    "d-none";
+
+                contenuDetails.classList.remove(
+                    "d-none"
+                );
 
             } catch (erreur) {
 
@@ -1626,31 +2089,159 @@
             }
         }
 
-        // ====================================
-        // 8. BOUTON CALCULER
-        // ====================================
+        // =====================================
+        // 8. NOUVEAU : OUVRIR LA CONFIRMATION
+        // =====================================
 
-        formulaire.addEventListener("submit", function(event) {
+        function ouvrirConfirmationSuppression(simulation) {
 
-            event.preventDefault();
+            // Mémoriser la simulation sélectionnée
 
-            actualiserSimulation();
+            simulationASupprimer = {
+                id: simulation.id,
+                bien: simulation.bien
+            };
 
-            if (calculerSimulation()) {
+            // Réinitialiser les messages
 
-                afficherMessage(
-                    "Simulation calculée. Vous pouvez l'enregistrer.",
-                    "info"
-                );
+            messageErreurSuppression.textContent = "";
 
-            } else {
+            messageErreurSuppression.className =
+                "alert alert-danger d-none";
 
-                afficherMessage(
-                    "Veuillez corriger les informations.",
-                    "danger"
-                );
+            // Afficher le bien et son ID
+
+            texteConfirmationSuppression.textContent =
+                `Vous allez supprimer la simulation ` +
+                `n° ${simulation.id} : ` +
+                `"${simulation.bien}". ` +
+                `Voulez-vous continuer ?`;
+
+            // Ouvrir la fenêtre de confirmation
+
+            modalSuppression.show();
+        }
+
+        // =====================================
+        // 9. NOUVEAU : SUPPRIMER DANS MYSQL
+        // =====================================
+
+        async function confirmerSuppression() {
+
+            if (
+                suppressionEnCours ||
+                !simulationASupprimer
+            ) {
+                return;
             }
-        });
+
+            const id =
+                simulationASupprimer.id;
+
+            suppressionEnCours = true;
+
+            // Désactiver les boutons pendant l'opération
+
+            btnConfirmerSuppression.disabled = true;
+            btnAnnulerSuppression.disabled = true;
+            btnFermerSuppression.disabled = true;
+
+            const texteOriginal =
+                btnConfirmerSuppression.innerHTML;
+
+            btnConfirmerSuppression.textContent =
+                "Suppression...";
+
+            try {
+
+                // Appel de notre API DELETE
+
+                const reponse = await fetch(
+                    `/api/simulations/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+
+                    throw new Error(
+                        resultat.message ||
+                        "Impossible de supprimer la simulation."
+                    );
+                }
+
+                // Fermer la fenêtre de confirmation
+
+                modalSuppression.hide();
+
+                // Afficher le message de réussite
+
+                afficherMessageAction(
+                    `La simulation n° ${id} ` +
+                    `a été supprimée avec succès.`,
+                    "success"
+                );
+
+                // Mettre à jour l'historique et les statistiques
+
+                await Promise.all([
+                    chargerHistorique(),
+                    chargerStatistiques()
+                ]);
+
+            } catch (erreur) {
+
+                messageErreurSuppression.className =
+                    "alert alert-danger";
+
+                messageErreurSuppression.textContent =
+                    erreur.message ||
+                    "Une erreur est survenue.";
+            } finally {
+
+                suppressionEnCours = false;
+
+                btnConfirmerSuppression.innerHTML =
+                    texteOriginal;
+
+                btnConfirmerSuppression.disabled = false;
+                btnAnnulerSuppression.disabled = false;
+                btnFermerSuppression.disabled = false;
+            }
+        }
+
+        // =====================================
+        // 10. BOUTON CALCULER
+        // =====================================
+
+        formulaire.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                actualiserSimulation();
+
+                if (calculerSimulation()) {
+
+                    afficherMessage(
+                        "Simulation calculée. " +
+                        "Vous pouvez l'enregistrer.",
+                        "info"
+                    );
+
+                } else {
+
+                    afficherMessage(
+                        "Veuillez corriger les informations.",
+                        "danger"
+                    );
+                }
+            }
+        );
 
         [
             bienInput,
@@ -1665,89 +2256,107 @@
             );
         });
 
-        // ====================================
-        // 9. BOUTON ENREGISTRER
-        // ====================================
+        // =====================================
+        // 11. BOUTON ENREGISTRER
+        // =====================================
 
-        btnEnregistrer.addEventListener("click", async function() {
+        btnEnregistrer.addEventListener(
+            "click",
+            async function() {
 
-            if (enregistrementEnCours) return;
-
-            const simulation = calculerSimulation();
-
-            if (!simulation) {
-
-                afficherMessage(
-                    "Données invalides.",
-                    "danger"
-                );
-
-                return;
-            }
-
-            enregistrementEnCours = true;
-            btnEnregistrer.disabled = true;
-
-            const texteOriginal = btnEnregistrer.innerHTML;
-
-            btnEnregistrer.textContent =
-                "Enregistrement...";
-
-            try {
-
-                const reponse = await fetch("/api/simulations", {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(simulation)
-                });
-
-                const resultat = await reponse.json();
-
-                if (!reponse.ok) {
-                    throw new Error(
-                        resultat.message ||
-                        "Erreur d'enregistrement."
-                    );
+                if (enregistrementEnCours) {
+                    return;
                 }
 
-                afficherMessage(
-                    `Simulation n°${resultat.simulation.id} ` +
-                    `enregistrée avec succès !`,
-                    "success"
-                );
+                const simulation =
+                    calculerSimulation();
 
-                await Promise.all([
-                    chargerHistorique(),
-                    chargerStatistiques()
-                ]);
+                if (!simulation) {
 
-            } catch (erreur) {
+                    afficherMessage(
+                        "Données invalides.",
+                        "danger"
+                    );
 
-                afficherMessage(
-                    erreur.message ||
-                    "Connexion au serveur impossible.",
-                    "danger"
-                );
+                    return;
+                }
 
-            } finally {
+                enregistrementEnCours = true;
 
-                enregistrementEnCours = false;
+                btnEnregistrer.disabled = true;
 
-                btnEnregistrer.innerHTML = texteOriginal;
+                const texteOriginal =
+                    btnEnregistrer.innerHTML;
 
-                btnEnregistrer.disabled =
-                    !calculerSimulation();
+                btnEnregistrer.textContent =
+                    "Enregistrement...";
+
+                try {
+
+                    const reponse = await fetch(
+                        "/api/simulations",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify(
+                                simulation
+                            )
+                        }
+                    );
+
+                    const resultat =
+                        await reponse.json();
+
+                    if (!reponse.ok) {
+
+                        throw new Error(
+                            resultat.message ||
+                            "Erreur d'enregistrement."
+                        );
+                    }
+
+                    afficherMessage(
+                        `Simulation n°${resultat.simulation.id} ` +
+                        `enregistrée avec succès !`,
+                        "success"
+                    );
+
+                    effacerMessageAction();
+
+                    await Promise.all([
+                        chargerHistorique(),
+                        chargerStatistiques()
+                    ]);
+
+                } catch (erreur) {
+
+                    afficherMessage(
+                        erreur.message ||
+                        "Connexion au serveur impossible.",
+                        "danger"
+                    );
+
+                } finally {
+
+                    enregistrementEnCours = false;
+
+                    btnEnregistrer.innerHTML =
+                        texteOriginal;
+
+                    btnEnregistrer.disabled =
+                        !calculerSimulation();
+                }
             }
-        });
+        );
 
-        // ====================================
-        // 10. RECHERCHE ET FILTRES
-        // ====================================
+        // =====================================
+        // 12. ÉVÉNEMENTS RECHERCHE ET FILTRES
+        // =====================================
 
         rechercheBien.addEventListener(
             "input",
@@ -1759,24 +2368,50 @@
             afficherHistoriqueFiltre
         );
 
-        // ====================================
-        // 11. ACTUALISATION
-        // ====================================
+        // =====================================
+        // 13. NOUVEAU : CONFIRMATION DE DELETE
+        // =====================================
 
-        btnActualiser.addEventListener("click", async function() {
+        btnConfirmerSuppression.addEventListener(
+            "click",
+            confirmerSuppression
+        );
 
-            await Promise.all([
-                chargerHistorique(),
-                chargerStatistiques()
-            ]);
-        });
+        // Oublier la sélection après fermeture
 
-        // ====================================
-        // 12. INITIALISATION
-        // ====================================
+        modalSuppressionElement.addEventListener(
+            "hidden.bs.modal",
+            function() {
+
+                if (!suppressionEnCours) {
+                    simulationASupprimer = null;
+                }
+            }
+        );
+
+        // =====================================
+        // 14. BOUTON ACTUALISER
+        // =====================================
+
+        btnActualiser.addEventListener(
+            "click",
+            async function() {
+
+                await Promise.all([
+                    chargerHistorique(),
+                    chargerStatistiques()
+                ]);
+            }
+        );
+
+        // =====================================
+        // 15. INITIALISATION
+        // =====================================
 
         actualiserSimulation();
+
         chargerHistorique();
+
         chargerStatistiques();
 
     </script>

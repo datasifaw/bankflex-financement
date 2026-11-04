@@ -91,7 +91,6 @@ app.post("/api/simulations", async (req, res) => {
         const apport = convertirEnCentimes(apport_initial);
         const duree = Number(duree_mois);
 
-        // Vérifier le nom du bien
         if (
             typeof bien !== "string" ||
             bien.trim().length === 0 ||
@@ -102,7 +101,6 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Vérifier le prix
         if (
             prix === null ||
             prix <= 0 ||
@@ -113,7 +111,6 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Vérifier la durée
         if (
             !Number.isInteger(duree) ||
             duree < 1 ||
@@ -124,14 +121,12 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calculer la marge commerciale
         const marge = Math.round(
             prix * TAUX_MARGE
         );
 
         const prixTotal = prix + marge;
 
-        // Vérifier l'apport
         if (
             apport === null ||
             apport < 0 ||
@@ -142,7 +137,6 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calculer les mensualités
         const montantRestant = prixTotal - apport;
 
         const mensualite = Math.round(
@@ -152,7 +146,6 @@ app.post("/api/simulations", async (req, res) => {
         const derniereEcheance =
             montantRestant - mensualite * (duree - 1);
 
-        // Requête SQL INSERT
         const requete = `
             INSERT INTO simulations (
                 bien,
@@ -257,18 +250,16 @@ app.get("/api/simulations", async (req, res) => {
 });
 
 // ============================================
-// 7. NOUVELLE API GET - DÉTAILS PAR ID
+// 7. API GET - DÉTAILS PAR ID
 // ============================================
 
 app.get("/api/simulations/:id", async (req, res) => {
 
     try {
 
-        // Récupérer l'identifiant dans l'URL
         const idTexte = req.params.id;
         const id = Number(idTexte);
 
-        // Vérifier que l'identifiant est valide
         if (
             !/^[1-9]\d*$/.test(idTexte) ||
             !Number.isSafeInteger(id) ||
@@ -279,7 +270,6 @@ app.get("/api/simulations/:id", async (req, res) => {
             });
         }
 
-        // Rechercher la simulation dans MySQL
         const requete = `
             SELECT
                 id,
@@ -300,14 +290,12 @@ app.get("/api/simulations/:id", async (req, res) => {
             [id]
         );
 
-        // Vérifier si la simulation existe
         if (simulations.length === 0) {
             return res.status(404).json({
                 message: "Simulation introuvable."
             });
         }
 
-        // Retourner les détails au navigateur
         res.status(200).json({
             message: "Détails récupérés avec succès.",
             simulation: simulations[0]
@@ -327,7 +315,67 @@ app.get("/api/simulations/:id", async (req, res) => {
 });
 
 // ============================================
-// 8. API GET - STATISTIQUES DU DASHBOARD
+// 8. NOUVELLE API DELETE - SUPPRIMER PAR ID
+// ============================================
+
+app.delete("/api/simulations/:id", async (req, res) => {
+
+    try {
+
+        // Récupérer l'identifiant depuis l'URL
+        const idTexte = req.params.id;
+        const id = Number(idTexte);
+
+        // Vérifier que l'identifiant est valide
+        if (
+            !/^[1-9]\d*$/.test(idTexte) ||
+            !Number.isSafeInteger(id) ||
+            id > 2147483647
+        ) {
+            return res.status(400).json({
+                message: "Identifiant de simulation invalide."
+            });
+        }
+
+        // Supprimer uniquement la simulation demandée
+        const requete = `
+            DELETE FROM simulations
+            WHERE id = ?
+        `;
+
+        const [resultat] = await db.execute(
+            requete,
+            [id]
+        );
+
+        // Vérifier si une ligne a réellement été supprimée
+        if (resultat.affectedRows === 0) {
+            return res.status(404).json({
+                message: "Simulation introuvable."
+            });
+        }
+
+        // Confirmer la suppression
+        res.status(200).json({
+            message: "Simulation supprimée avec succès.",
+            id: id
+        });
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur de suppression :",
+            erreur.code || "Erreur inconnue"
+        );
+
+        res.status(500).json({
+            message: "Impossible de supprimer la simulation."
+        });
+    }
+});
+
+// ============================================
+// 9. API GET - STATISTIQUES DU DASHBOARD
 // ============================================
 
 app.get("/api/statistiques", async (req, res) => {
@@ -383,7 +431,7 @@ app.get("/api/statistiques", async (req, res) => {
 });
 
 // ============================================
-// 9. DÉMARRAGE DU SERVEUR
+// 10. DÉMARRAGE DU SERVEUR
 // ============================================
 
 async function demarrerServeur() {
