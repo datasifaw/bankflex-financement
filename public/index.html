@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,7 @@
             min-height: 76px;
         }
 
-        /* ORGANISATION */
+        /* STRUCTURE PRINCIPALE */
         .app-layout {
             display: flex;
             min-height: calc(100vh - 76px);
@@ -43,7 +44,9 @@
             width: 250px;
             flex-shrink: 0;
             background: linear-gradient(
-                180deg, #102a50, #091d3b
+                180deg,
+                #102a50,
+                #091d3b
             );
             padding: 20px 12px;
         }
@@ -65,7 +68,6 @@
             margin-bottom: 6px;
             border-radius: 9px;
             text-decoration: none;
-            font-size: 16px;
         }
 
         .sidebar-link i {
@@ -83,6 +85,46 @@
             color: white;
         }
 
+        /* NOUVELLES CARTES STATISTIQUES */
+        .sidebar-stats {
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background-color: #253f66;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 17px;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .stat-card-header i {
+            color: #93c5fd;
+            font-size: 22px;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .stats-etat {
+            color: #b8cae3;
+            font-size: 12px;
+            margin: 8px 4px;
+        }
+
         /* CONTENU PRINCIPAL */
         .main-content {
             flex: 1;
@@ -90,7 +132,7 @@
             padding: 30px;
         }
 
-        /* CARTES */
+        /* CARTES PRINCIPALES */
         .dashboard-card {
             background: white;
             border: 1px solid #e4eaf3;
@@ -203,7 +245,6 @@
         .historique-table thead th {
             background-color: #f1f5fb;
             color: #526580;
-            font-weight: 700;
             padding: 15px;
             white-space: nowrap;
         }
@@ -211,14 +252,13 @@
         .historique-table tbody td {
             padding: 16px 15px;
             vertical-align: middle;
-            border-color: #edf0f5;
         }
 
         .historique-table tbody tr:hover td {
             background-color: #f8fbff;
         }
 
-        .historique-table .bien-name {
+        .bien-name {
             color: #183b70;
             font-weight: 600;
         }
@@ -249,9 +289,22 @@
                 gap: 5px;
             }
 
-            .sidebar-link {
-                font-size: 14px;
-                padding: 10px;
+            .sidebar-stats {
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(180px, 1fr)
+                );
+                gap: 10px;
+            }
+
+            .sidebar-stats .sidebar-title,
+            .sidebar-stats .stats-etat {
+                grid-column: 1 / -1;
+            }
+
+            .stat-card {
+                margin-bottom: 0;
             }
 
             .main-content {
@@ -271,11 +324,12 @@
 
 <body>
 
-    <!-- BARRE DE NAVIGATION -->
+    <!-- HEADER BANKFLEX -->
     <header class="navbar navbar-dark topbar px-4 py-3">
         <div class="container-fluid">
 
             <div class="d-flex align-items-center gap-3">
+
                 <i
                     class="bi bi-bar-chart-fill fs-3"
                     style="color: #60a5fa;"
@@ -288,6 +342,7 @@
                 <span class="subtitle text-white-50 border-start ps-3">
                     Financement à prix fixe
                 </span>
+
             </div>
 
             <div class="text-white fs-4">
@@ -297,7 +352,6 @@
         </div>
     </header>
 
-    <!-- STRUCTURE DE L'APPLICATION -->
     <div class="app-layout">
 
         <!-- MENU LATÉRAL -->
@@ -309,42 +363,97 @@
 
                 <a href="#accueil" class="sidebar-link active">
                     <i class="bi bi-house-door-fill"></i>
-                    <span>Accueil</span>
+                    Accueil
                 </a>
 
                 <a href="#simulation" class="sidebar-link">
                     <i class="bi bi-calculator"></i>
-                    <span>Simulations</span>
+                    Simulations
                 </a>
 
                 <a href="#historique" class="sidebar-link">
                     <i class="bi bi-clock-history"></i>
-                    <span>Historique</span>
+                    Historique
                 </a>
 
                 <div class="sidebar-link">
                     <i class="bi bi-box-seam"></i>
-                    <span>Biens</span>
+                    Biens
                 </div>
 
                 <div class="sidebar-link">
                     <i class="bi bi-bar-chart"></i>
-                    <span>Rapports</span>
+                    Rapports
                 </div>
 
                 <div class="sidebar-link">
                     <i class="bi bi-gear"></i>
-                    <span>Paramètres</span>
+                    Paramètres
                 </div>
 
             </nav>
+
+            <!-- STATISTIQUES MYSQL -->
+            <section class="sidebar-stats">
+
+                <p class="sidebar-title">
+                    Statistiques BankFlex
+                </p>
+
+                <!-- Nombre total -->
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <i class="bi bi-files"></i>
+                        <span>Nombre de simulations</span>
+                    </div>
+
+                    <p class="stat-value" id="statsTotal">
+                        —
+                    </p>
+                </div>
+
+                <!-- Mensualité moyenne -->
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <i class="bi bi-wallet2"></i>
+                        <span>Mensualité moyenne</span>
+                    </div>
+
+                    <p class="stat-value" id="statsMensualite">
+                        —
+                    </p>
+                </div>
+
+                <!-- Marge moyenne -->
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        <span>Marge moyenne</span>
+                    </div>
+
+                    <p class="stat-value" id="statsMarge">
+                        —
+                    </p>
+                </div>
+
+                <p
+                    class="stats-etat"
+                    id="statsEtat"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Chargement des statistiques...
+                </p>
+
+            </section>
+
         </aside>
 
         <!-- CONTENU PRINCIPAL -->
         <main class="main-content" id="accueil">
 
-            <!-- TITRE -->
             <div class="mb-4">
+
                 <h2 class="fw-bold">
                     <i class="bi bi-calculator me-2 text-primary"></i>
                     Simulateur de financement
@@ -354,6 +463,7 @@
                     Simulez le financement d'un bien avec une
                     marge commerciale fixe et transparente.
                 </p>
+
             </div>
 
             <!-- FORMULAIRE ET RÉSULTATS -->
@@ -458,7 +568,6 @@
                                     >
                                 </div>
 
-                                <!-- MESSAGES -->
                                 <div
                                     id="messageStatut"
                                     class="alert d-none"
@@ -466,7 +575,6 @@
                                     aria-live="polite"
                                 ></div>
 
-                                <!-- BOUTONS -->
                                 <div class="d-flex flex-wrap gap-2">
 
                                     <button
@@ -489,7 +597,7 @@
                                 </div>
 
                                 <p class="text-secondary small mt-3 mb-0">
-                                    Simulation indicative avec
+                                    Simulation indicative utilisant
                                     des données fictives.
                                 </p>
 
@@ -497,6 +605,7 @@
 
                         </div>
                     </section>
+
                 </div>
 
                 <!-- RÉSULTATS -->
@@ -564,8 +673,8 @@
 
                             </div>
 
-                            <!-- SYNTHÈSE -->
                             <div class="alert alert-primary mt-4 mb-0">
+
                                 <h6 class="fw-bold">
                                     <i class="bi bi-info-circle me-2"></i>
                                     Synthèse du financement
@@ -575,24 +684,26 @@
                                     Renseignez les champs pour
                                     calculer votre simulation.
                                 </p>
+
                             </div>
 
                             <p class="text-secondary small mt-3 mb-0">
-                                La dernière échéance pourra être ajustée
+                                La dernière échéance peut être ajustée
                                 pour tenir compte des arrondis.
                             </p>
 
                         </div>
                     </section>
+
                 </div>
 
             </div>
 
-            <!-- HISTORIQUE DES SIMULATIONS -->
+            <!-- HISTORIQUE -->
             <section class="dashboard-card" id="historique">
 
                 <div class="card-heading d-flex flex-wrap
-                            align-items-center justify-content-between gap-3">
+                    align-items-center justify-content-between gap-3">
 
                     <div>
                         <h5 class="fw-bold mb-1">
@@ -601,8 +712,8 @@
                         </h5>
 
                         <small class="text-secondary">
-                            Les 20 dernières simulations enregistrées
-                            dans MySQL
+                            Les 20 dernières simulations
+                            enregistrées dans MySQL
                         </small>
                     </div>
 
@@ -619,7 +730,6 @@
 
                 <div class="card-content">
 
-                    <!-- ÉTAT DE CHARGEMENT / ERREURS -->
                     <div
                         id="messageHistorique"
                         class="alert alert-info"
@@ -629,7 +739,6 @@
                         Chargement de l'historique...
                     </div>
 
-                    <!-- TABLEAU -->
                     <div class="table-responsive">
 
                         <table class="table historique-table">
@@ -648,7 +757,6 @@
                             </thead>
 
                             <tbody id="tableauHistorique">
-                                <!-- Rempli automatiquement par JavaScript -->
                             </tbody>
 
                         </table>
@@ -661,16 +769,18 @@
                     ></p>
 
                 </div>
+
             </section>
 
         </main>
+
     </div>
 
     <!-- JAVASCRIPT -->
     <script>
 
         // ========================================
-        // CONFIGURATION ET ÉLÉMENTS HTML
+        // CONFIGURATION
         // ========================================
 
         const TAUX_MARGE = 0.075;
@@ -687,12 +797,14 @@
 
         const messageStatut = document.getElementById("messageStatut");
         const messageHistorique = document.getElementById("messageHistorique");
+        const tableauHistorique = document.getElementById("tableauHistorique");
+        const nombreSimulations = document.getElementById("nombreSimulations");
 
-        const tableauHistorique =
-            document.getElementById("tableauHistorique");
-
-        const nombreSimulations =
-            document.getElementById("nombreSimulations");
+        // Éléments des statistiques
+        const statsTotal = document.getElementById("statsTotal");
+        const statsMensualite = document.getElementById("statsMensualite");
+        const statsMarge = document.getElementById("statsMarge");
+        const statsEtat = document.getElementById("statsEtat");
 
         let enregistrementEnCours = false;
 
@@ -716,7 +828,6 @@
         }
 
         function enCentimes(valeur) {
-
             const texte = String(valeur).trim();
 
             if (!/^\d+(\.\d{1,2})?$/.test(texte)) {
@@ -735,7 +846,6 @@
         }
 
         function formatMontant(valeur) {
-
             const nombre = Number(valeur);
 
             return Number.isFinite(nombre)
@@ -744,7 +854,6 @@
         }
 
         function formatDate(valeur) {
-
             if (!valeur) return "—";
 
             const date = new Date(valeur);
@@ -753,11 +862,7 @@
                 return "—";
             }
 
-            return date.toLocaleDateString("fr-FR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            });
+            return date.toLocaleDateString("fr-FR");
         }
 
         // ========================================
@@ -765,7 +870,6 @@
         // ========================================
 
         function calculerSimulation() {
-
             const bien = bienInput.value.trim();
             const prix = enCentimes(prixInput.value);
             const apport = enCentimes(apportInput.value || "0");
@@ -789,9 +893,7 @@
             const marge = Math.round(prix * TAUX_MARGE);
             const total = prix + marge;
 
-            if (apport > total) {
-                return null;
-            }
+            if (apport > total) return null;
 
             const mensualite = Math.round(
                 (total - apport) / duree
@@ -832,7 +934,6 @@
         }
 
         function actualiserSimulation() {
-
             effacerMessage();
 
             const simulation = calculerSimulation();
@@ -841,7 +942,6 @@
                 enregistrementEnCours || !simulation;
 
             if (!simulation) {
-
                 margeInput.value = "";
 
                 [
@@ -859,38 +959,70 @@
         }
 
         // ========================================
-        // BOUTON CALCULER
+        // NOUVEAU : STATISTIQUES DEPUIS MYSQL
         // ========================================
 
-        formulaire.addEventListener("submit", function(event) {
+        async function chargerStatistiques() {
 
-            event.preventDefault();
-            actualiserSimulation();
+            statsEtat.textContent =
+                "Chargement des statistiques...";
 
-            if (calculerSimulation()) {
-                afficherMessage(
-                    "Simulation calculée. Vous pouvez l'enregistrer.",
-                    "info"
-                );
-            } else {
-                afficherMessage(
-                    "Veuillez corriger les informations du formulaire.",
-                    "danger"
+            try {
+
+                // Appeler notre nouvelle API
+                const reponse = await fetch("/api/statistiques");
+
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+                    throw new Error(
+                        resultat.message ||
+                        "Erreur de récupération."
+                    );
+                }
+
+                const statistiques = resultat.statistiques;
+
+                if (
+                    !statistiques ||
+                    !Number.isFinite(statistiques.nombre_simulations) ||
+                    !Number.isFinite(statistiques.mensualite_moyenne) ||
+                    !Number.isFinite(statistiques.marge_moyenne)
+                ) {
+                    throw new Error(
+                        "Statistiques invalides."
+                    );
+                }
+
+                // Afficher le nombre total de simulations
+                statsTotal.textContent =
+                    statistiques.nombre_simulations.toLocaleString("fr-FR");
+
+                // Afficher la mensualité moyenne
+                statsMensualite.textContent =
+                    formatMontant(statistiques.mensualite_moyenne);
+
+                // Afficher la marge moyenne
+                statsMarge.textContent =
+                    formatMontant(statistiques.marge_moyenne);
+
+                statsEtat.textContent =
+                    "Données actualisées depuis MySQL.";
+
+            } catch (erreur) {
+
+                statsEtat.textContent =
+                    "Impossible de charger les statistiques.";
+
+                console.error(
+                    "Erreur statistiques :",
+                    erreur.message
                 );
             }
-        });
-
-        [
-            bienInput,
-            prixInput,
-            dureeInput,
-            apportInput
-        ].forEach(champ => {
-            champ.addEventListener("input", actualiserSimulation);
-        });
+        }
 
         // ========================================
-        // CHARGER L'HISTORIQUE DEPUIS MYSQL
+        // HISTORIQUE MYSQL
         // ========================================
 
         async function chargerHistorique() {
@@ -903,7 +1035,6 @@
 
             try {
 
-                // Appeler notre API GET
                 const reponse = await fetch("/api/simulations");
 
                 const resultat = await reponse.json();
@@ -923,17 +1054,15 @@
                     );
                 }
 
-                // Vider l'ancien tableau
                 tableauHistorique.replaceChildren();
 
-                // Cas où la base est vide
                 if (simulations.length === 0) {
 
                     messageHistorique.className =
                         "alert alert-secondary";
 
                     messageHistorique.textContent =
-                        "Aucune simulation enregistrée pour le moment.";
+                        "Aucune simulation enregistrée.";
 
                     nombreSimulations.textContent =
                         "0 simulation affichée";
@@ -941,10 +1070,8 @@
                     return;
                 }
 
-                // Masquer le message de chargement
                 messageHistorique.className = "d-none";
 
-                // Construire une ligne par simulation
                 simulations.forEach(simulation => {
 
                     const ligne = document.createElement("tr");
@@ -963,15 +1090,14 @@
                     colonnes.forEach((valeur, index) => {
 
                         const cellule = document.createElement("td");
+
                         cellule.textContent = valeur ?? "—";
 
                         if (index === 1) {
                             cellule.classList.add("bien-name");
                         }
 
-                        // Style spécial pour la mensualité
                         if (index === 6) {
-
                             const badge = document.createElement("span");
 
                             badge.className = "badge-mensualite";
@@ -1004,20 +1130,52 @@
         }
 
         // ========================================
-        // ENREGISTRER UNE SIMULATION
+        // BOUTON CALCULER
+        // ========================================
+
+        formulaire.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            actualiserSimulation();
+
+            if (calculerSimulation()) {
+                afficherMessage(
+                    "Simulation calculée. Vous pouvez l'enregistrer.",
+                    "info"
+                );
+            } else {
+                afficherMessage(
+                    "Veuillez corriger les informations.",
+                    "danger"
+                );
+            }
+        });
+
+        [
+            bienInput,
+            prixInput,
+            dureeInput,
+            apportInput
+        ].forEach(champ => {
+            champ.addEventListener("input", actualiserSimulation);
+        });
+
+        // ========================================
+        // BOUTON ENREGISTRER
         // ========================================
 
         btnEnregistrer.addEventListener("click", async function() {
 
+            if (enregistrementEnCours) return;
+
             const simulation = calculerSimulation();
 
             if (!simulation) {
-
                 afficherMessage(
-                    "Impossible d'enregistrer : données invalides.",
+                    "Données invalides.",
                     "danger"
                 );
-
                 return;
             }
 
@@ -1025,19 +1183,15 @@
             btnEnregistrer.disabled = true;
 
             const texteOriginal = btnEnregistrer.innerHTML;
-
             btnEnregistrer.textContent = "Enregistrement...";
 
             try {
 
                 const reponse = await fetch("/api/simulations", {
-
                     method: "POST",
-
                     headers: {
                         "Content-Type": "application/json"
                     },
-
                     body: JSON.stringify(simulation)
                 });
 
@@ -1046,18 +1200,21 @@
                 if (!reponse.ok) {
                     throw new Error(
                         resultat.message ||
-                        "Erreur lors de l'enregistrement."
+                        "Erreur d'enregistrement."
                     );
                 }
 
                 afficherMessage(
                     `Simulation n°${resultat.simulation.id} ` +
-                    `enregistrée avec succès dans MySQL !`,
+                    `enregistrée avec succès !`,
                     "success"
                 );
 
-                // Mettre à jour automatiquement le tableau
-                await chargerHistorique();
+                // Actualiser l'historique ET les statistiques
+                await Promise.all([
+                    chargerHistorique(),
+                    chargerStatistiques()
+                ]);
 
             } catch (erreur) {
 
@@ -1076,17 +1233,26 @@
         });
 
         // ========================================
-        // BOUTON ACTUALISER L'HISTORIQUE
+        // BOUTON ACTUALISER
         // ========================================
 
-        btnActualiser.addEventListener("click", chargerHistorique);
+        btnActualiser.addEventListener("click", async function() {
+
+            await Promise.all([
+                chargerHistorique(),
+                chargerStatistiques()
+            ]);
+        });
 
         // ========================================
-        // INITIALISATION
+        // INITIALISATION BANKFLEX
         // ========================================
 
         actualiserSimulation();
+
         chargerHistorique();
+
+        chargerStatistiques();
 
     </script>
 
