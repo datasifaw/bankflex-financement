@@ -15,7 +15,6 @@ const path = require("path");
 const mysql = require("mysql2/promise");
 
 const app = express();
-
 const PORT = Number(process.env.PORT) || 3000;
 
 // ============================================
@@ -143,7 +142,7 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calculer la mensualité
+        // Calculer les mensualités
         const montantRestant = prixTotal - apport;
 
         const mensualite = Math.round(
@@ -258,14 +257,83 @@ app.get("/api/simulations", async (req, res) => {
 });
 
 // ============================================
-// 7. API GET - STATISTIQUES DU DASHBOARD
+// 7. NOUVELLE API GET - DÉTAILS PAR ID
+// ============================================
+
+app.get("/api/simulations/:id", async (req, res) => {
+
+    try {
+
+        // Récupérer l'identifiant dans l'URL
+        const idTexte = req.params.id;
+        const id = Number(idTexte);
+
+        // Vérifier que l'identifiant est valide
+        if (
+            !/^[1-9]\d*$/.test(idTexte) ||
+            !Number.isSafeInteger(id) ||
+            id > 2147483647
+        ) {
+            return res.status(400).json({
+                message: "Identifiant de simulation invalide."
+            });
+        }
+
+        // Rechercher la simulation dans MySQL
+        const requete = `
+            SELECT
+                id,
+                bien,
+                prix_achat,
+                marge_commerciale,
+                prix_total,
+                apport_initial,
+                duree_mois,
+                mensualite,
+                date_creation
+            FROM simulations
+            WHERE id = ?
+        `;
+
+        const [simulations] = await db.execute(
+            requete,
+            [id]
+        );
+
+        // Vérifier si la simulation existe
+        if (simulations.length === 0) {
+            return res.status(404).json({
+                message: "Simulation introuvable."
+            });
+        }
+
+        // Retourner les détails au navigateur
+        res.status(200).json({
+            message: "Détails récupérés avec succès.",
+            simulation: simulations[0]
+        });
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur de consultation :",
+            erreur.code || "Erreur inconnue"
+        );
+
+        res.status(500).json({
+            message: "Impossible de consulter la simulation."
+        });
+    }
+});
+
+// ============================================
+// 8. API GET - STATISTIQUES DU DASHBOARD
 // ============================================
 
 app.get("/api/statistiques", async (req, res) => {
 
     try {
 
-        // Calculer les statistiques depuis MySQL
         const requete = `
             SELECT
                 COUNT(*) AS nombre_simulations,
@@ -287,7 +355,6 @@ app.get("/api/statistiques", async (req, res) => {
 
         const statistiques = resultat[0];
 
-        // Envoyer les statistiques au navigateur
         res.status(200).json({
             message: "Statistiques récupérées avec succès.",
             statistiques: {
@@ -316,7 +383,7 @@ app.get("/api/statistiques", async (req, res) => {
 });
 
 // ============================================
-// 8. DÉMARRAGE DU SERVEUR
+// 9. DÉMARRAGE DU SERVEUR
 // ============================================
 
 async function demarrerServeur() {
