@@ -22,9 +22,9 @@
     >
 
     <style>
-        /* =====================================
+        /* ==================================
            STYLE GÉNÉRAL
-        ===================================== */
+        ================================== */
 
         body {
             margin: 0;
@@ -42,15 +42,15 @@
             min-height: calc(100vh - 76px);
         }
 
-        /* =====================================
-           MENU LATÉRAL
-        ===================================== */
+        /* MENU LATÉRAL */
 
         .sidebar {
             width: 250px;
             flex-shrink: 0;
             background: linear-gradient(
-                180deg, #102a50, #091d3b
+                180deg,
+                #102a50,
+                #091d3b
             );
             padding: 20px 12px;
         }
@@ -89,9 +89,7 @@
             color: white;
         }
 
-        /* =====================================
-           STATISTIQUES
-        ===================================== */
+        /* STATISTIQUES */
 
         .sidebar-stats {
             margin-top: 30px;
@@ -131,9 +129,7 @@
             margin: 8px 4px;
         }
 
-        /* =====================================
-           CONTENU PRINCIPAL
-        ===================================== */
+        /* CONTENU PRINCIPAL */
 
         .main-content {
             flex: 1;
@@ -158,9 +154,7 @@
             padding: 24px;
         }
 
-        /* =====================================
-           FORMULAIRE
-        ===================================== */
+        /* FORMULAIRES */
 
         .form-label {
             color: #263b58;
@@ -187,9 +181,7 @@
             font-weight: 700;
         }
 
-        /* =====================================
-           BOUTONS
-        ===================================== */
+        /* BOUTONS */
 
         .btn-bankflex {
             background: #183b70;
@@ -219,9 +211,7 @@
             color: #102a50;
         }
 
-        /* =====================================
-           RÉSULTATS
-        ===================================== */
+        /* RÉSULTATS */
 
         .result-box {
             background: #f1f6fe;
@@ -252,9 +242,7 @@
             color: white;
         }
 
-        /* =====================================
-           RECHERCHE ET FILTRES
-        ===================================== */
+        /* RECHERCHE ET FILTRES */
 
         .filtres-historique {
             background: #f8faff;
@@ -264,9 +252,7 @@
             margin-bottom: 22px;
         }
 
-        /* =====================================
-           HISTORIQUE MYSQL
-        ===================================== */
+        /* HISTORIQUE MYSQL */
 
         .historique-table {
             width: 100%;
@@ -304,21 +290,17 @@
             white-space: nowrap;
         }
 
-        /* NOUVEAU : BOUTONS D'ACTION */
-
         .actions-simulation {
             display: flex;
             flex-wrap: nowrap;
-            gap: 8px;
+            gap: 7px;
         }
 
         .actions-simulation .btn {
             white-space: nowrap;
         }
 
-        /* =====================================
-           FENÊTRE DE DÉTAILS
-        ===================================== */
+        /* FENÊTRE DE DÉTAILS */
 
         .details-card {
             background: #f5f8fd;
@@ -362,9 +344,7 @@
             filter: invert(1) grayscale(100%);
         }
 
-        /* =====================================
-           NOUVEAU : FENÊTRE DE SUPPRESSION
-        ===================================== */
+        /* FENÊTRE DE SUPPRESSION */
 
         .suppression-icon {
             width: 64px;
@@ -384,9 +364,28 @@
             line-height: 1.6;
         }
 
-        /* =====================================
-           VERSION MOBILE
-        ===================================== */
+        /* NOUVEAU : MODIFICATION */
+
+        .modification-resume {
+            background: #edf4ff;
+            border: 1px solid #d3e4ff;
+            border-radius: 10px;
+            padding: 17px;
+        }
+
+        .modification-resume-label {
+            color: #526580;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .modification-resume-valeur {
+            color: #183b70;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        /* VERSION MOBILE */
 
         @media (max-width: 767px) {
 
@@ -407,7 +406,7 @@
             .sidebar-stats {
                 display: grid;
                 grid-template-columns:
-                    repeat(auto-fit, minmax(180px,1fr));
+                    repeat(auto-fit, minmax(180px, 1fr));
                 gap: 10px;
             }
 
@@ -437,9 +436,9 @@
 
 <body>
 
-    <!-- =====================================
+    <!-- ==================================
          BARRE SUPÉRIEURE
-    ===================================== -->
+    ================================== -->
 
     <header class="navbar navbar-dark topbar px-4 py-3">
 
@@ -470,9 +469,9 @@
 
     <div class="app-layout">
 
-        <!-- =====================================
+        <!-- ==================================
              MENU LATÉRAL
-        ===================================== -->
+        ================================== -->
 
         <aside class="sidebar">
 
@@ -533,7 +532,8 @@
                         <i class="bi bi-wallet2"></i>
                         Mensualité moyenne
                     </div>
-                    <p class="stat-value" id="statsMensualite">—</p>
+                    <p class="stat-value"
+                       id="statsMensualite">—</p>
                 </div>
 
                 <div class="stat-card">
@@ -555,9 +555,9 @@
 
         </aside>
 
-        <!-- =====================================
+        <!-- ==================================
              CONTENU PRINCIPAL
-        ===================================== -->
+        ================================== -->
 
         <main class="main-content" id="accueil">
 
@@ -574,10 +574,6 @@
                 </p>
 
             </div>
-
-            <!-- =================================
-                 FORMULAIRE ET RÉSULTATS
-            ================================= -->
 
             <div class="row g-4" id="simulation">
 
@@ -599,7 +595,6 @@
                             <form id="simulationForm">
 
                                 <div class="mb-3">
-
                                     <label for="bien" class="form-label">
                                         Bien à financer *
                                     </label>
@@ -612,11 +607,9 @@
                                         maxlength="150"
                                         required
                                     >
-
                                 </div>
 
                                 <div class="mb-3">
-
                                     <label for="prixAchat" class="form-label">
                                         Prix d'achat (€) *
                                     </label>
@@ -631,11 +624,9 @@
                                         step="0.01"
                                         required
                                     >
-
                                 </div>
 
                                 <div class="mb-3">
-
                                     <label for="marge" class="form-label">
                                         Marge commerciale (€)
                                     </label>
@@ -652,11 +643,9 @@
                                         Marge automatique de 7,5 %
                                         définie par l'établissement.
                                     </small>
-
                                 </div>
 
                                 <div class="mb-3">
-
                                     <label for="duree" class="form-label">
                                         Durée (mois) *
                                     </label>
@@ -671,11 +660,9 @@
                                         step="1"
                                         required
                                     >
-
                                 </div>
 
                                 <div class="mb-4">
-
                                     <label for="apport" class="form-label">
                                         Apport initial (€)
                                     </label>
@@ -688,14 +675,14 @@
                                         min="0"
                                         step="0.01"
                                     >
-
                                 </div>
 
-                                <div id="messageStatut"
-                                     class="alert d-none"
-                                     role="status"
-                                     aria-live="polite">
-                                </div>
+                                <div
+                                    id="messageStatut"
+                                    class="alert d-none"
+                                    role="status"
+                                    aria-live="polite"
+                                ></div>
 
                                 <div class="d-flex flex-wrap gap-2">
 
@@ -754,9 +741,7 @@
                                             Prix d'achat
                                         </p>
                                         <p class="result-value"
-                                           id="resultPrix">
-                                            —
-                                        </p>
+                                           id="resultPrix">—</p>
                                     </div>
                                 </div>
 
@@ -766,9 +751,7 @@
                                             Marge commerciale fixe
                                         </p>
                                         <p class="result-value"
-                                           id="resultMarge">
-                                            —
-                                        </p>
+                                           id="resultMarge">—</p>
                                     </div>
                                 </div>
 
@@ -778,9 +761,7 @@
                                             Prix total de revente
                                         </p>
                                         <p class="result-value"
-                                           id="resultTotal">
-                                            —
-                                        </p>
+                                           id="resultTotal">—</p>
                                     </div>
                                 </div>
 
@@ -790,9 +771,7 @@
                                             Mensualité estimée
                                         </p>
                                         <p class="result-value"
-                                           id="resultMensualite">
-                                            —
-                                        </p>
+                                           id="resultMensualite">—</p>
                                     </div>
                                 </div>
 
@@ -825,9 +804,9 @@
 
             </div>
 
-            <!-- =================================
+            <!-- ==================================
                  HISTORIQUE MYSQL
-            ================================= -->
+            ================================== -->
 
             <section class="dashboard-card" id="historique">
 
@@ -870,8 +849,10 @@
 
                             <div class="col-md-7">
 
-                                <label for="rechercheBien"
-                                       class="form-label">
+                                <label
+                                    for="rechercheBien"
+                                    class="form-label"
+                                >
                                     <i class="bi bi-search me-1"></i>
                                     Rechercher un bien
                                 </label>
@@ -887,8 +868,10 @@
 
                             <div class="col-md-5">
 
-                                <label for="filtreDuree"
-                                       class="form-label">
+                                <label
+                                    for="filtreDuree"
+                                    class="form-label"
+                                >
                                     <i class="bi bi-funnel me-1"></i>
                                     Filtrer par durée
                                 </label>
@@ -920,8 +903,6 @@
                         </small>
 
                     </div>
-
-                    <!-- NOUVEAU : MESSAGE APRÈS ACTION -->
 
                     <div
                         id="messageActionHistorique"
@@ -957,8 +938,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody id="tableauHistorique">
-                            </tbody>
+                            <tbody id="tableauHistorique"></tbody>
 
                         </table>
 
@@ -978,15 +958,17 @@
 
     </div>
 
-    <!-- =====================================
+    <!-- ==================================
          MODALE : VOIR LES DÉTAILS
-    ===================================== -->
+    ================================== -->
 
-    <div class="modal fade"
-         id="modalDetails"
-         tabindex="-1"
-         aria-labelledby="titreModalDetails"
-         aria-hidden="true">
+    <div
+        class="modal fade"
+        id="modalDetails"
+        tabindex="-1"
+        aria-labelledby="titreModalDetails"
+        aria-hidden="true"
+    >
 
         <div class="modal-dialog modal-lg modal-dialog-centered">
 
@@ -994,8 +976,10 @@
 
                 <div class="modal-header modal-header-bankflex">
 
-                    <h5 class="modal-title fw-bold"
-                        id="titreModalDetails">
+                    <h5
+                        class="modal-title fw-bold"
+                        id="titreModalDetails"
+                    >
                         Détails de la simulation
                     </h5>
 
@@ -1014,7 +998,6 @@
                         id="messageDetails"
                         class="alert alert-info"
                         role="status"
-                        aria-live="polite"
                     >
                         Chargement des détails...
                     </div>
@@ -1110,8 +1093,8 @@
                         </div>
 
                         <p class="text-secondary small mt-3 mb-0">
-                            Simulation indicative réalisée à partir
-                            de données fictives.
+                            Simulation indicative utilisant
+                            des données fictives.
                         </p>
 
                     </div>
@@ -1136,10 +1119,9 @@
 
     </div>
 
-    <!-- =====================================
-         NOUVEAU : MODALE DE CONFIRMATION
-         DE SUPPRESSION
-    ===================================== -->
+    <!-- ==================================
+         MODALE : CONFIRMER LA SUPPRESSION
+    ================================== -->
 
     <div
         class="modal fade"
@@ -1238,23 +1220,283 @@
 
     </div>
 
-    <!-- =====================================
+    <!-- ==================================
+         NOUVEAU : MODALE DE MODIFICATION
+    ================================== -->
+
+    <div
+        class="modal fade"
+        id="modalModification"
+        tabindex="-1"
+        aria-labelledby="titreModalModification"
+        aria-hidden="true"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+    >
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <!-- EN-TÊTE -->
+
+                <div class="modal-header modal-header-bankflex">
+
+                    <h5
+                        class="modal-title fw-bold"
+                        id="titreModalModification"
+                    >
+                        Modifier une simulation
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        id="btnFermerModification"
+                        data-bs-dismiss="modal"
+                        aria-label="Fermer"
+                    ></button>
+
+                </div>
+
+                <!-- MESSAGE DE CHARGEMENT OU D'ERREUR -->
+
+                <div
+                    id="messageModification"
+                    class="alert alert-info m-4"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Chargement de la simulation...
+                </div>
+
+                <!-- FORMULAIRE DE MODIFICATION -->
+
+                <form
+                    id="formulaireModification"
+                    class="d-none"
+                >
+
+                    <div class="modal-body px-4">
+
+                        <div class="row g-3">
+
+                            <!-- BIEN -->
+
+                            <div class="col-12">
+
+                                <label
+                                    for="modifierBien"
+                                    class="form-label"
+                                >
+                                    Bien à financer *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="modifierBien"
+                                    maxlength="150"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- PRIX -->
+
+                            <div class="col-md-6">
+
+                                <label
+                                    for="modifierPrix"
+                                    class="form-label"
+                                >
+                                    Prix d'achat (€) *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="modifierPrix"
+                                    min="0.01"
+                                    max="1000000000"
+                                    step="0.01"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- MARGE AUTOMATIQUE -->
+
+                            <div class="col-md-6">
+
+                                <label
+                                    for="modifierMarge"
+                                    class="form-label"
+                                >
+                                    Marge commerciale (€)
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control marge-auto"
+                                    id="modifierMarge"
+                                    readonly
+                                >
+
+                                <small class="text-secondary">
+                                    Marge fixe de 7,5 %
+                                </small>
+
+                            </div>
+
+                            <!-- DURÉE -->
+
+                            <div class="col-md-6">
+
+                                <label
+                                    for="modifierDuree"
+                                    class="form-label"
+                                >
+                                    Durée (mois) *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="modifierDuree"
+                                    min="1"
+                                    max="360"
+                                    step="1"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- APPORT -->
+
+                            <div class="col-md-6">
+
+                                <label
+                                    for="modifierApport"
+                                    class="form-label"
+                                >
+                                    Apport initial (€)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="modifierApport"
+                                    min="0"
+                                    step="0.01"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <!-- APERÇU DES MONTANTS -->
+
+                        <div class="modification-resume mt-4">
+
+                            <h6 class="fw-bold mb-3">
+                                <i class="bi bi-calculator me-2"></i>
+                                Nouveau calcul estimé
+                            </h6>
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+
+                                    <p class="modification-resume-label">
+                                        Prix total de revente
+                                    </p>
+
+                                    <div
+                                        class="modification-resume-valeur"
+                                        id="modifierPrixTotal"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <p class="modification-resume-label">
+                                        Nouvelle mensualité
+                                    </p>
+
+                                    <div
+                                        class="modification-resume-valeur"
+                                        id="modifierMensualite"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-secondary small mt-3 mb-0">
+                            La marge de 7,5 % est recalculée
+                            automatiquement. Les nouvelles données
+                            remplaceront les anciennes dans MySQL.
+                        </p>
+
+                    </div>
+
+                    <!-- BOUTONS DU FORMULAIRE -->
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="btnAnnulerModification"
+                            data-bs-dismiss="modal"
+                        >
+                            Annuler
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-bankflex"
+                            id="btnEnregistrerModification"
+                        >
+                            <i class="bi bi-floppy me-2"></i>
+                            Enregistrer les modifications
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==================================
          BOOTSTRAP JAVASCRIPT
-    ===================================== -->
+    ================================== -->
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
 
-    <!-- =====================================
+    <!-- ==================================
          JAVASCRIPT BANKFLEX
-    ===================================== -->
+    ================================== -->
 
     <script>
 
-        // =====================================
+        // ==================================
         // 1. CONFIGURATION
-        // =====================================
+        // ==================================
 
         const TAUX_MARGE = 0.075;
 
@@ -1319,7 +1561,7 @@
         const filtreDuree =
             document.getElementById("filtreDuree");
 
-        // Modale des détails
+        // Fenêtre de détails
 
         const modalDetailsElement =
             document.getElementById("modalDetails");
@@ -1333,7 +1575,7 @@
         const contenuDetails =
             document.getElementById("contenuDetails");
 
-        // NOUVEAU : modale de suppression
+        // Fenêtre de suppression
 
         const modalSuppressionElement =
             document.getElementById("modalSuppression");
@@ -1366,32 +1608,99 @@
                 "btnFermerSuppression"
             );
 
-        // Mémoire temporaire
+        // ==================================
+        // NOUVEAU : ÉLÉMENTS DE MODIFICATION
+        // ==================================
+
+        const modalModificationElement =
+            document.getElementById("modalModification");
+
+        const modalModification =
+            new bootstrap.Modal(modalModificationElement);
+
+        const formulaireModification =
+            document.getElementById(
+                "formulaireModification"
+            );
+
+        const messageModification =
+            document.getElementById(
+                "messageModification"
+            );
+
+        const modifierBien =
+            document.getElementById("modifierBien");
+
+        const modifierPrix =
+            document.getElementById("modifierPrix");
+
+        const modifierMarge =
+            document.getElementById("modifierMarge");
+
+        const modifierDuree =
+            document.getElementById("modifierDuree");
+
+        const modifierApport =
+            document.getElementById("modifierApport");
+
+        const modifierPrixTotal =
+            document.getElementById(
+                "modifierPrixTotal"
+            );
+
+        const modifierMensualite =
+            document.getElementById(
+                "modifierMensualite"
+            );
+
+        const btnEnregistrerModification =
+            document.getElementById(
+                "btnEnregistrerModification"
+            );
+
+        const btnAnnulerModification =
+            document.getElementById(
+                "btnAnnulerModification"
+            );
+
+        const btnFermerModification =
+            document.getElementById(
+                "btnFermerModification"
+            );
+
+        // ==================================
+        // VARIABLES TEMPORAIRES
+        // ==================================
 
         let simulationsCache = [];
 
         let enregistrementEnCours = false;
 
-        // Simulation sélectionnée pour suppression
-
         let simulationASupprimer = null;
 
         let suppressionEnCours = false;
 
-        const formatEuro =
-            new Intl.NumberFormat("fr-FR", {
+        // NOUVEAU : ID de la simulation à modifier
+
+        let simulationAModifier = null;
+
+        let modificationEnCours = false;
+
+        const formatEuro = new Intl.NumberFormat(
+            "fr-FR",
+            {
                 style: "currency",
                 currency: "EUR"
-            });
+            }
+        );
 
-        // =====================================
+        // ==================================
         // 2. FONCTIONS UTILITAIRES
-        // =====================================
+        // ==================================
 
         function afficherMessage(message, type) {
 
             messageStatut.textContent = message;
-
             messageStatut.className =
                 `alert alert-${type}`;
         }
@@ -1399,14 +1708,12 @@
         function effacerMessage() {
 
             messageStatut.textContent = "";
-
             messageStatut.className = "alert d-none";
         }
 
         function afficherMessageAction(message, type) {
 
             messageActionHistorique.textContent = message;
-
             messageActionHistorique.className =
                 `alert alert-${type}`;
         }
@@ -1414,7 +1721,6 @@
         function effacerMessageAction() {
 
             messageActionHistorique.textContent = "";
-
             messageActionHistorique.className =
                 "alert d-none";
         }
@@ -1472,9 +1778,9 @@
                 .trim();
         }
 
-        // =====================================
+        // ==================================
         // 3. CALCUL DE LA SIMULATION
-        // =====================================
+        // ==================================
 
         function calculerSimulation() {
 
@@ -1555,9 +1861,8 @@
                 `${formatMontant(total / 100)}. ` +
                 `Après un apport de ` +
                 `${formatMontant(apport / 100)}, ` +
-                `le paiement est réparti sur ` +
-                `${duree} mois, soit une mensualité ` +
-                `estimée de ` +
+                `le paiement est réparti sur ${duree} mois, ` +
+                `soit une mensualité estimée de ` +
                 `${formatMontant(mensualite / 100)}.`;
 
             return {
@@ -1591,7 +1896,6 @@
                     document.getElementById(
                         id
                     ).textContent = "—";
-
                 });
 
                 document.getElementById(
@@ -1601,9 +1905,9 @@
             }
         }
 
-        // =====================================
+        // ==================================
         // 4. STATISTIQUES MYSQL
-        // =====================================
+        // ==================================
 
         async function chargerStatistiques() {
 
@@ -1674,9 +1978,9 @@
             }
         }
 
-        // =====================================
+        // ==================================
         // 5. FILTRER ET AFFICHER L'HISTORIQUE
-        // =====================================
+        // ==================================
 
         function afficherHistoriqueFiltre() {
 
@@ -1788,27 +2092,20 @@
                         if (index === 6) {
 
                             const badge =
-                                document.createElement(
-                                    "span"
-                                );
+                                document.createElement("span");
 
                             badge.className =
                                 "badge-mensualite";
 
                             badge.textContent = valeur;
 
-                            cellule.replaceChildren(
-                                badge
-                            );
+                            cellule.replaceChildren(badge);
                         }
 
                         ligne.appendChild(cellule);
-
                     });
 
-                    // =================================
-                    // NOUVEAU : COLONNE ACTIONS
-                    // =================================
+                    // COLONNE ACTIONS
 
                     const celluleActions =
                         document.createElement("td");
@@ -1833,13 +2130,40 @@
 
                     boutonVoir.setAttribute(
                         "aria-label",
-                        `Voir les détails de la simulation ${simulation.id}`
+                        `Voir la simulation ${simulation.id}`
                     );
 
                     boutonVoir.addEventListener(
                         "click",
                         () => {
-                            afficherDetails(
+                            afficherDetails(simulation.id);
+                        }
+                    );
+
+                    // ==================================
+                    // NOUVEAU : BOUTON MODIFIER
+                    // ==================================
+
+                    const boutonModifier =
+                        document.createElement("button");
+
+                    boutonModifier.type = "button";
+
+                    boutonModifier.className =
+                        "btn btn-sm btn-outline-warning";
+
+                    boutonModifier.textContent =
+                        "Modifier";
+
+                    boutonModifier.setAttribute(
+                        "aria-label",
+                        `Modifier la simulation ${simulation.id}`
+                    );
+
+                    boutonModifier.addEventListener(
+                        "click",
+                        () => {
+                            ouvrirModification(
                                 simulation.id
                             );
                         }
@@ -1872,8 +2196,14 @@
                         }
                     );
 
+                    // Ordre des boutons
+
                     groupeActions.appendChild(
                         boutonVoir
+                    );
+
+                    groupeActions.appendChild(
+                        boutonModifier
                     );
 
                     groupeActions.appendChild(
@@ -1891,7 +2221,6 @@
                     tableauHistorique.appendChild(
                         ligne
                     );
-
                 });
             }
 
@@ -1900,9 +2229,9 @@
                 `${simulationsCache.length} simulations récentes`;
         }
 
-        // =====================================
-        // 6. CHARGER L'HISTORIQUE DEPUIS MYSQL
-        // =====================================
+        // ==================================
+        // 6. CHARGER L'HISTORIQUE MYSQL
+        // ==================================
 
         async function chargerHistorique() {
 
@@ -1972,9 +2301,9 @@
             }
         }
 
-        // =====================================
+        // ==================================
         // 7. VOIR LES DÉTAILS
-        // =====================================
+        // ==================================
 
         async function afficherDetails(id) {
 
@@ -2013,7 +2342,6 @@
                     resultat.simulation;
 
                 if (!simulation) {
-
                     throw new Error(
                         "Simulation introuvable."
                     );
@@ -2089,27 +2417,21 @@
             }
         }
 
-        // =====================================
-        // 8. NOUVEAU : OUVRIR LA CONFIRMATION
-        // =====================================
+        // ==================================
+        // 8. OUVRIR LA SUPPRESSION
+        // ==================================
 
         function ouvrirConfirmationSuppression(simulation) {
-
-            // Mémoriser la simulation sélectionnée
 
             simulationASupprimer = {
                 id: simulation.id,
                 bien: simulation.bien
             };
 
-            // Réinitialiser les messages
-
             messageErreurSuppression.textContent = "";
 
             messageErreurSuppression.className =
                 "alert alert-danger d-none";
-
-            // Afficher le bien et son ID
 
             texteConfirmationSuppression.textContent =
                 `Vous allez supprimer la simulation ` +
@@ -2117,14 +2439,12 @@
                 `"${simulation.bien}". ` +
                 `Voulez-vous continuer ?`;
 
-            // Ouvrir la fenêtre de confirmation
-
             modalSuppression.show();
         }
 
-        // =====================================
-        // 9. NOUVEAU : SUPPRIMER DANS MYSQL
-        // =====================================
+        // ==================================
+        // 9. CONFIRMER LA SUPPRESSION
+        // ==================================
 
         async function confirmerSuppression() {
 
@@ -2140,8 +2460,6 @@
 
             suppressionEnCours = true;
 
-            // Désactiver les boutons pendant l'opération
-
             btnConfirmerSuppression.disabled = true;
             btnAnnulerSuppression.disabled = true;
             btnFermerSuppression.disabled = true;
@@ -2153,8 +2471,6 @@
                 "Suppression...";
 
             try {
-
-                // Appel de notre API DELETE
 
                 const reponse = await fetch(
                     `/api/simulations/${id}`,
@@ -2173,19 +2489,13 @@
                     );
                 }
 
-                // Fermer la fenêtre de confirmation
-
                 modalSuppression.hide();
-
-                // Afficher le message de réussite
 
                 afficherMessageAction(
                     `La simulation n° ${id} ` +
                     `a été supprimée avec succès.`,
                     "success"
                 );
-
-                // Mettre à jour l'historique et les statistiques
 
                 await Promise.all([
                     chargerHistorique(),
@@ -2200,6 +2510,7 @@
                 messageErreurSuppression.textContent =
                     erreur.message ||
                     "Une erreur est survenue.";
+
             } finally {
 
                 suppressionEnCours = false;
@@ -2213,9 +2524,335 @@
             }
         }
 
-        // =====================================
-        // 10. BOUTON CALCULER
-        // =====================================
+        // ==================================
+        // 10. NOUVEAU : OUVRIR MODIFICATION
+        // ==================================
+
+        async function ouvrirModification(id) {
+
+            if (modificationEnCours) {
+                return;
+            }
+
+            // Mémoriser l'identifiant sélectionné
+            simulationAModifier = id;
+
+            // Cacher le formulaire pendant le chargement
+            formulaireModification.classList.add(
+                "d-none"
+            );
+
+            messageModification.className =
+                "alert alert-info m-4";
+
+            messageModification.textContent =
+                "Chargement de la simulation...";
+
+            document.getElementById(
+                "titreModalModification"
+            ).textContent =
+                `Modifier la simulation n° ${id}`;
+
+            // Ouvrir la fenêtre
+            modalModification.show();
+
+            try {
+
+                // Récupérer les données actuelles depuis MySQL
+                const reponse = await fetch(
+                    `/api/simulations/${id}`
+                );
+
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+                    throw new Error(
+                        resultat.message ||
+                        "Impossible de charger la simulation."
+                    );
+                }
+
+                // Éviter d'afficher une réponse devenue obsolète
+                if (simulationAModifier !== id) {
+                    return;
+                }
+
+                const simulation = resultat.simulation;
+
+                if (!simulation) {
+                    throw new Error(
+                        "Simulation introuvable."
+                    );
+                }
+
+                // Préremplir le formulaire
+                modifierBien.value =
+                    simulation.bien;
+
+                modifierPrix.value =
+                    Number(
+                        simulation.prix_achat
+                    ).toFixed(2);
+
+                modifierDuree.value =
+                    simulation.duree_mois;
+
+                modifierApport.value =
+                    Number(
+                        simulation.apport_initial
+                    ).toFixed(2);
+
+                // Afficher les calculs actualisés
+                actualiserApercuModification();
+
+                // Montrer le formulaire
+                formulaireModification.classList.remove(
+                    "d-none"
+                );
+
+            } catch (erreur) {
+
+                if (simulationAModifier !== id) {
+                    return;
+                }
+
+                messageModification.className =
+                    "alert alert-danger m-4";
+
+                messageModification.textContent =
+                    erreur.message ||
+                    "Impossible de charger la simulation.";
+            }
+        }
+
+        // ==================================
+        // 11. NOUVEAU : CALCUL DE MODIFICATION
+        // ==================================
+
+        function calculerModification() {
+
+            const bien =
+                modifierBien.value.trim();
+
+            const prix =
+                enCentimes(modifierPrix.value);
+
+            const apport =
+                enCentimes(
+                    modifierApport.value || "0"
+                );
+
+            const duree =
+                Number(modifierDuree.value);
+
+            // Vérifier toutes les données
+            if (
+                !formulaireModification.checkValidity() ||
+                !bien ||
+                prix === null ||
+                prix <= 0 ||
+                prix > 100000000000 ||
+                apport === null ||
+                apport < 0 ||
+                !Number.isInteger(duree) ||
+                duree < 1 ||
+                duree > 360
+            ) {
+                return null;
+            }
+
+            // La marge reste définie par BankFlex
+            const marge = Math.round(
+                prix * TAUX_MARGE
+            );
+
+            const total = prix + marge;
+
+            if (apport > total) {
+                return null;
+            }
+
+            const mensualite = Math.round(
+                (total - apport) / duree
+            );
+
+            return {
+                donnees: {
+                    bien: bien,
+                    prix_achat:
+                        (prix / 100).toFixed(2),
+                    duree_mois: duree,
+                    apport_initial:
+                        (apport / 100).toFixed(2)
+                },
+                marge: marge,
+                total: total,
+                mensualite: mensualite
+            };
+        }
+
+        function actualiserApercuModification() {
+
+            const calcul = calculerModification();
+
+            btnEnregistrerModification.disabled =
+                modificationEnCours || !calcul;
+
+            if (!calcul) {
+
+                modifierMarge.value = "";
+
+                modifierPrixTotal.textContent = "—";
+
+                modifierMensualite.textContent = "—";
+
+                if (!modificationEnCours) {
+
+                    messageModification.className =
+                        "alert alert-warning m-4";
+
+                    messageModification.textContent =
+                        "Veuillez saisir des valeurs valides. " +
+                        "L'apport ne doit pas dépasser le prix total.";
+                }
+
+                return;
+            }
+
+            // Aperçu immédiat des nouveaux montants
+            modifierMarge.value =
+                formatMontant(
+                    calcul.marge / 100
+                );
+
+            modifierPrixTotal.textContent =
+                formatMontant(
+                    calcul.total / 100
+                );
+
+            modifierMensualite.textContent =
+                formatMontant(
+                    calcul.mensualite / 100
+                );
+
+            if (!modificationEnCours) {
+                messageModification.className =
+                    "d-none";
+            }
+        }
+
+        // ==================================
+        // 12. NOUVEAU : ENREGISTRER MODIFICATION
+        // ==================================
+
+        async function enregistrerModification(event) {
+
+            event.preventDefault();
+
+            if (
+                modificationEnCours ||
+                simulationAModifier === null
+            ) {
+                return;
+            }
+
+            const calcul = calculerModification();
+
+            if (!calcul) {
+
+                messageModification.className =
+                    "alert alert-danger m-4";
+
+                messageModification.textContent =
+                    "Veuillez corriger les informations.";
+
+                return;
+            }
+
+            const id = simulationAModifier;
+
+            modificationEnCours = true;
+
+            // Empêcher une deuxième validation
+            btnEnregistrerModification.disabled = true;
+            btnAnnulerModification.disabled = true;
+            btnFermerModification.disabled = true;
+
+            const texteOriginal =
+                btnEnregistrerModification.innerHTML;
+
+            btnEnregistrerModification.textContent =
+                "Enregistrement...";
+
+            try {
+
+                // Appel de notre API PUT
+                const reponse = await fetch(
+                    `/api/simulations/${id}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(
+                            calcul.donnees
+                        )
+                    }
+                );
+
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+
+                    throw new Error(
+                        resultat.message ||
+                        "Impossible de modifier la simulation."
+                    );
+                }
+
+                // Fermer la fenêtre
+                modalModification.hide();
+
+                // Informer l'utilisateur
+                afficherMessageAction(
+                    `La simulation n° ${id} ` +
+                    `a été modifiée avec succès.`,
+                    "success"
+                );
+
+                // Actualiser les données MySQL
+                await Promise.all([
+                    chargerHistorique(),
+                    chargerStatistiques()
+                ]);
+
+            } catch (erreur) {
+
+                messageModification.className =
+                    "alert alert-danger m-4";
+
+                messageModification.textContent =
+                    erreur.message ||
+                    "Erreur pendant la modification.";
+
+            } finally {
+
+                modificationEnCours = false;
+
+                btnEnregistrerModification.innerHTML =
+                    texteOriginal;
+
+                btnAnnulerModification.disabled = false;
+                btnFermerModification.disabled = false;
+
+                btnEnregistrerModification.disabled =
+                    !calculerModification();
+            }
+        }
+
+        // ==================================
+        // 13. BOUTON CALCULER
+        // ==================================
 
         formulaire.addEventListener(
             "submit",
@@ -2256,9 +2893,9 @@
             );
         });
 
-        // =====================================
-        // 11. BOUTON ENREGISTRER
-        // =====================================
+        // ==================================
+        // 14. BOUTON ENREGISTRER
+        // ==================================
 
         btnEnregistrer.addEventListener(
             "click",
@@ -2354,9 +2991,9 @@
             }
         );
 
-        // =====================================
-        // 12. ÉVÉNEMENTS RECHERCHE ET FILTRES
-        // =====================================
+        // ==================================
+        // 15. RECHERCHE ET FILTRES
+        // ==================================
 
         rechercheBien.addEventListener(
             "input",
@@ -2368,16 +3005,14 @@
             afficherHistoriqueFiltre
         );
 
-        // =====================================
-        // 13. NOUVEAU : CONFIRMATION DE DELETE
-        // =====================================
+        // ==================================
+        // 16. SUPPRESSION
+        // ==================================
 
         btnConfirmerSuppression.addEventListener(
             "click",
             confirmerSuppression
         );
-
-        // Oublier la sélection après fermeture
 
         modalSuppressionElement.addEventListener(
             "hidden.bs.modal",
@@ -2389,9 +3024,44 @@
             }
         );
 
-        // =====================================
-        // 14. BOUTON ACTUALISER
-        // =====================================
+        // ==================================
+        // 17. NOUVEAU : ÉVÉNEMENTS MODIFICATION
+        // ==================================
+
+        // Recalculer pendant la saisie
+        [
+            modifierBien,
+            modifierPrix,
+            modifierDuree,
+            modifierApport
+        ].forEach(champ => {
+
+            champ.addEventListener(
+                "input",
+                actualiserApercuModification
+            );
+        });
+
+        // Enregistrer par PUT
+        formulaireModification.addEventListener(
+            "submit",
+            enregistrerModification
+        );
+
+        // Nettoyer la sélection après fermeture
+        modalModificationElement.addEventListener(
+            "hidden.bs.modal",
+            function() {
+
+                if (!modificationEnCours) {
+                    simulationAModifier = null;
+                }
+            }
+        );
+
+        // ==================================
+        // 18. ACTUALISER
+        // ==================================
 
         btnActualiser.addEventListener(
             "click",
@@ -2404,9 +3074,9 @@
             }
         );
 
-        // =====================================
-        // 15. INITIALISATION
-        // =====================================
+        // ==================================
+        // 19. INITIALISATION
+        // ==================================
 
         actualiserSimulation();
 
