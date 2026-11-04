@@ -15,7 +15,6 @@ const path = require("path");
 const mysql = require("mysql2/promise");
 
 const app = express();
-
 const PORT = Number(process.env.PORT) || 3000;
 
 // ============================================
@@ -72,7 +71,7 @@ function convertirEnEuros(centimes) {
 }
 
 // ============================================
-// 5. API POST - ENREGISTRER
+// 5. API POST - CRÉER UNE SIMULATION
 // ============================================
 
 app.post("/api/simulations", async (req, res) => {
@@ -120,10 +119,7 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        const marge = Math.round(
-            prix * TAUX_MARGE
-        );
-
+        const marge = Math.round(prix * TAUX_MARGE);
         const prixTotal = prix + marge;
 
         if (
@@ -314,14 +310,13 @@ app.get("/api/simulations/:id", async (req, res) => {
 });
 
 // ============================================
-// 8. NOUVELLE API PUT - MODIFIER PAR ID
+// 8. API PUT - MODIFIER PAR ID
 // ============================================
 
 app.put("/api/simulations/:id", async (req, res) => {
 
     try {
 
-        // 1. Vérifier l'identifiant
         const idTexte = req.params.id;
         const id = Number(idTexte);
 
@@ -335,7 +330,6 @@ app.put("/api/simulations/:id", async (req, res) => {
             });
         }
 
-        // 2. Récupérer les nouvelles informations
         const {
             bien,
             prix_achat,
@@ -347,7 +341,6 @@ app.put("/api/simulations/:id", async (req, res) => {
         const apport = convertirEnCentimes(apport_initial);
         const duree = Number(duree_mois);
 
-        // 3. Valider les champs
         if (
             typeof bien !== "string" ||
             bien.trim().length === 0 ||
@@ -378,9 +371,7 @@ app.put("/api/simulations/:id", async (req, res) => {
             });
         }
 
-        // 4. Recalculer les montants côté serveur
         const marge = Math.round(prix * TAUX_MARGE);
-
         const prixTotal = prix + marge;
 
         if (
@@ -399,7 +390,6 @@ app.put("/api/simulations/:id", async (req, res) => {
             montantRestant / duree
         );
 
-        // 5. Modifier la simulation dans MySQL
         const requeteModification = `
             UPDATE simulations
             SET
@@ -429,7 +419,6 @@ app.put("/api/simulations/:id", async (req, res) => {
             valeurs
         );
 
-        // 6. Relire la simulation après modification
         const requeteLecture = `
             SELECT
                 id,
@@ -450,14 +439,12 @@ app.put("/api/simulations/:id", async (req, res) => {
             [id]
         );
 
-        // Une simulation inexistante retourne 404
         if (simulations.length === 0) {
             return res.status(404).json({
                 message: "Simulation introuvable."
             });
         }
 
-        // 7. Retourner les valeurs enregistrées
         res.status(200).json({
             message: "Simulation modifiée avec succès.",
             simulation: simulations[0]
@@ -532,12 +519,22 @@ app.delete("/api/simulations/:id", async (req, res) => {
 });
 
 // ============================================
-// 10. API GET - STATISTIQUES
+// 10. API GET - STATISTIQUES ET DURÉES
 // ============================================
 
 app.get("/api/statistiques", async (req, res) => {
 
     try {
+
+        /*
+         * Nous conservons les trois statistiques
+         * déjà utilisées par le dashboard.
+         *
+         * Nous ajoutons trois groupes de durées :
+         * - jusqu'à 12 mois
+         * - de 13 à 36 mois
+         * - plus de 36 mois
+         */
 
         const requete = `
             SELECT
@@ -551,26 +548,73 @@ app.get("/api/statistiques", async (req, res) => {
                 COALESCE(
                     ROUND(AVG(marge_commerciale), 2),
                     0
-                ) AS marge_moyenne
+                ) AS marge_moyenne,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN duree_mois <= 12 THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS duree_courte,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN duree_mois BETWEEN 13 AND 36 THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS duree_moyenne,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN duree_mois > 36 THEN 1
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS duree_longue
 
             FROM simulations
         `;
 
         const [resultat] = await db.query(requete);
 
-        const statistiques = resultat[0];
+        const stats = resultat[0];
 
         res.status(200).json({
+
             message: "Statistiques récupérées avec succès.",
+
             statistiques: {
+
+                // Indicateurs déjà présents
                 nombre_simulations:
-                    Number(statistiques.nombre_simulations),
+                    Number(stats.nombre_simulations),
 
                 mensualite_moyenne:
-                    Number(statistiques.mensualite_moyenne),
+                    Number(stats.mensualite_moyenne),
 
                 marge_moyenne:
-                    Number(statistiques.marge_moyenne)
+                    Number(stats.marge_moyenne),
+
+                // NOUVEAU : données du futur graphique
+                repartition_durees: {
+                    jusqua_12_mois:
+                        Number(stats.duree_courte),
+
+                    de_13_a_36_mois:
+                        Number(stats.duree_moyenne),
+
+                    plus_de_36_mois:
+                        Number(stats.duree_longue)
+                }
+
             }
         });
 
