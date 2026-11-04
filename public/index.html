@@ -21,18 +21,18 @@
 
     <style>
         body {
-            background-color: #f4f7fc;
             margin: 0;
+            background-color: #f4f7fc;
             font-family: Arial, sans-serif;
         }
 
-        /* Barre de navigation */
+        /* Barre supérieure */
         .topbar {
             background-color: #102a50;
             min-height: 76px;
         }
 
-        /* Structure de la page */
+        /* Organisation de l'application */
         .app-layout {
             display: flex;
             min-height: calc(100vh - 76px);
@@ -82,7 +82,7 @@
             opacity: 0.85;
         }
 
-        /* Contenu principal */
+        /* Contenu */
         .main-content {
             flex: 1;
             min-width: 0;
@@ -125,7 +125,6 @@
             box-shadow: 0 0 0 3px rgba(50, 102, 172, 0.12);
         }
 
-        /* Marge non modifiable */
         .marge-auto {
             background-color: #edf4ff !important;
             color: #183b70;
@@ -155,6 +154,11 @@
             padding: 11px 22px;
             border-radius: 8px;
             font-weight: 600;
+        }
+
+        .btn-outline-bankflex:hover {
+            background-color: #edf4ff;
+            color: #102a50;
         }
 
         /* Résultats */
@@ -188,7 +192,7 @@
             color: white;
         }
 
-        /* Version mobile */
+        /* Mobile */
         @media (max-width: 767px) {
             .app-layout {
                 flex-direction: column;
@@ -222,7 +226,7 @@
 
 <body>
 
-    <!-- HEADER -->
+    <!-- BARRE DE NAVIGATION -->
     <header class="navbar navbar-dark topbar px-4 py-3">
         <div class="container-fluid">
 
@@ -291,12 +295,14 @@
                 </div>
 
             </nav>
+
         </aside>
 
-        <!-- CONTENU -->
+        <!-- CONTENU PRINCIPAL -->
         <main class="main-content" id="accueil">
 
             <div class="mb-4">
+
                 <h2 class="fw-bold">
                     <i class="bi bi-calculator me-2 text-primary"></i>
                     Simulateur de financement
@@ -306,6 +312,7 @@
                     Simulez le financement d'un bien avec une
                     marge commerciale fixe et transparente.
                 </p>
+
             </div>
 
             <div class="row g-4">
@@ -328,6 +335,7 @@
 
                                 <!-- Bien -->
                                 <div class="mb-3">
+
                                     <label for="bien" class="form-label">
                                         Bien à financer *
                                     </label>
@@ -337,12 +345,15 @@
                                         id="bien"
                                         class="form-control"
                                         value="Voiture d'occasion"
+                                        maxlength="150"
                                         required
                                     >
+
                                 </div>
 
                                 <!-- Prix -->
                                 <div class="mb-3">
+
                                     <label for="prixAchat" class="form-label">
                                         Prix d'achat (€) *
                                     </label>
@@ -353,13 +364,16 @@
                                         class="form-control"
                                         value="12000"
                                         min="0.01"
+                                        max="1000000000"
                                         step="0.01"
                                         required
                                     >
+
                                 </div>
 
                                 <!-- Marge automatique -->
                                 <div class="mb-3">
+
                                     <label for="marge" class="form-label">
                                         Marge commerciale (€)
                                     </label>
@@ -368,7 +382,6 @@
                                         type="text"
                                         id="marge"
                                         class="form-control marge-auto"
-                                        value="900,00 €"
                                         readonly
                                     >
 
@@ -377,10 +390,12 @@
                                         Calcul automatique selon la politique
                                         commerciale de l'établissement (7,5 %).
                                     </small>
+
                                 </div>
 
                                 <!-- Durée -->
                                 <div class="mb-3">
+
                                     <label for="duree" class="form-label">
                                         Durée (mois) *
                                     </label>
@@ -391,13 +406,16 @@
                                         class="form-control"
                                         value="30"
                                         min="1"
+                                        max="360"
                                         step="1"
                                         required
                                     >
+
                                 </div>
 
                                 <!-- Apport -->
                                 <div class="mb-4">
+
                                     <label for="apport" class="form-label">
                                         Apport initial (€)
                                     </label>
@@ -410,13 +428,15 @@
                                         min="0"
                                         step="0.01"
                                     >
+
                                 </div>
 
-                                <!-- Message de validation -->
+                                <!-- Messages -->
                                 <div
-                                    id="messageErreur"
-                                    class="alert alert-danger d-none"
-                                    role="alert"
+                                    id="messageStatut"
+                                    class="alert d-none"
+                                    role="status"
+                                    aria-live="polite"
                                 ></div>
 
                                 <!-- Boutons -->
@@ -432,9 +452,8 @@
 
                                     <button
                                         type="button"
+                                        id="btnEnregistrer"
                                         class="btn btn-outline-bankflex"
-                                        disabled
-                                        title="Disponible après l'ajout de MySQL"
                                     >
                                         <i class="bi bi-floppy me-2"></i>
                                         Enregistrer
@@ -443,13 +462,14 @@
                                 </div>
 
                                 <p class="text-secondary small mt-3 mb-0">
-                                    Simulation indicative utilisant des
-                                    données fictives.
+                                    Simulation indicative utilisant
+                                    des données fictives.
                                 </p>
 
                             </form>
 
                         </div>
+
                     </section>
 
                 </div>
@@ -470,47 +490,66 @@
 
                             <div class="row g-3">
 
+                                <!-- Prix d'achat -->
                                 <div class="col-md-6">
                                     <div class="result-box">
+
                                         <p class="result-label">
                                             Prix d'achat
                                         </p>
+
                                         <p class="result-value" id="resultPrix">
-                                            12 000,00 €
+                                            —
                                         </p>
+
                                     </div>
                                 </div>
 
+                                <!-- Marge -->
                                 <div class="col-md-6">
                                     <div class="result-box">
+
                                         <p class="result-label">
                                             Marge commerciale fixe
                                         </p>
+
                                         <p class="result-value" id="resultMarge">
-                                            900,00 €
+                                            —
                                         </p>
+
                                     </div>
                                 </div>
 
+                                <!-- Total -->
                                 <div class="col-md-6">
                                     <div class="result-box">
+
                                         <p class="result-label">
                                             Prix total de revente
                                         </p>
+
                                         <p class="result-value" id="resultTotal">
-                                            12 900,00 €
+                                            —
                                         </p>
+
                                     </div>
                                 </div>
 
+                                <!-- Mensualité -->
                                 <div class="col-md-6">
                                     <div class="result-box monthly-box">
+
                                         <p class="result-label">
                                             Mensualité estimée
                                         </p>
-                                        <p class="result-value" id="resultMensualite">
-                                            430,00 €
+
+                                        <p
+                                            class="result-value"
+                                            id="resultMensualite"
+                                        >
+                                            —
                                         </p>
+
                                     </div>
                                 </div>
 
@@ -525,22 +564,19 @@
                                 </h6>
 
                                 <p id="synthese" class="mb-0">
-                                    Pour un bien de 12 000,00 €,
-                                    la marge commerciale est de 900,00 €.
-                                    Le prix total est de 12 900,00 €,
-                                    soit 30 mensualités estimées
-                                    de 430,00 €.
+                                    Renseignez les champs du formulaire
+                                    pour calculer votre simulation.
                                 </p>
 
                             </div>
 
                             <p class="text-secondary small mt-3 mb-0">
-                                Le montant de la dernière échéance
-                                pourra être ajusté pour tenir compte
-                                des arrondis.
+                                La dernière échéance peut être ajustée
+                                pour tenir compte des arrondis.
                             </p>
 
                         </div>
+
                     </section>
 
                 </div>
@@ -548,23 +584,25 @@
             </div>
 
         </main>
+
     </div>
 
     <!-- JAVASCRIPT -->
     <script>
 
-        // Politique commerciale fictive de BankFlex
+        // Politique commerciale de démonstration
         const TAUX_MARGE = 0.075;
 
-        // Récupération des éléments HTML
+        // Éléments du formulaire
         const formulaire = document.getElementById("simulationForm");
+        const bienInput = document.getElementById("bien");
         const prixInput = document.getElementById("prixAchat");
         const dureeInput = document.getElementById("duree");
         const apportInput = document.getElementById("apport");
-        const bienInput = document.getElementById("bien");
-
         const margeInput = document.getElementById("marge");
-        const messageErreur = document.getElementById("messageErreur");
+
+        const btnEnregistrer = document.getElementById("btnEnregistrer");
+        const messageStatut = document.getElementById("messageStatut");
 
         // Format monétaire français
         const formatEuro = new Intl.NumberFormat("fr-FR", {
@@ -572,125 +610,284 @@
             currency: "EUR"
         });
 
-        // Arrondi aux centimes
-        function arrondir(valeur) {
-            return Math.round((valeur + Number.EPSILON) * 100) / 100;
+        // Afficher un message
+        function afficherMessage(message, type) {
+
+            messageStatut.textContent = message;
+
+            messageStatut.className =
+                `alert alert-${type}`;
+
         }
 
-        // Affichage des erreurs
-        function afficherErreur(message) {
-            messageErreur.textContent = message;
-            messageErreur.classList.remove("d-none");
+        // Effacer les messages
+        function effacerMessage() {
+
+            messageStatut.textContent = "";
+            messageStatut.className = "alert d-none";
+
         }
 
-        function masquerErreur() {
-            messageErreur.textContent = "";
-            messageErreur.classList.add("d-none");
+        // Convertir un montant en centimes
+        function enCentimes(valeur) {
+
+            const texte = String(valeur).trim();
+
+            if (!/^\d+(\.\d{1,2})?$/.test(texte)) {
+                return null;
+            }
+
+            const [euros, decimales = ""] = texte.split(".");
+
+            const centimes =
+                Number(euros) * 100 +
+                Number(decimales.padEnd(2, "0"));
+
+            return Number.isSafeInteger(centimes)
+                ? centimes
+                : null;
+
         }
 
-        // Fonction principale
+        // Convertir les centimes en euros
+        function enEuros(centimes) {
+
+            return centimes / 100;
+
+        }
+
+        // Calculer la simulation
         function calculerSimulation() {
 
-            const prix = Number(prixInput.value);
+            const bien = bienInput.value.trim();
+            const prix = enCentimes(prixInput.value);
+            const apport = enCentimes(apportInput.value || "0");
             const duree = Number(dureeInput.value);
-            const apport = Number(apportInput.value || 0);
 
-            // Vérifier les valeurs
+            // Validation
             if (
-                prixInput.value === "" ||
-                !Number.isFinite(prix) ||
-                prix <= 0
-            ) {
-                afficherErreur("Veuillez saisir un prix d'achat valide.");
-                return;
-            }
-
-            if (
-                dureeInput.value === "" ||
-                !Number.isInteger(duree) ||
-                duree <= 0
-            ) {
-                afficherErreur("Veuillez saisir une durée valide en mois.");
-                return;
-            }
-
-            if (
-                !Number.isFinite(apport) ||
+                !formulaire.checkValidity() ||
+                !bien ||
+                prix === null ||
+                prix <= 0 ||
+                prix > 100000000000 ||
+                apport === null ||
                 apport < 0 ||
-                apportInput.value === ""
+                !Number.isInteger(duree) ||
+                duree < 1 ||
+                duree > 360
             ) {
-                afficherErreur("Veuillez saisir un apport initial valide.");
-                return;
+                return null;
             }
 
-            // Calcul de la marge commerciale
-            const marge = arrondir(prix * TAUX_MARGE);
+            // Marge commerciale calculée en centimes
+            const marge = Math.round(
+                prix * TAUX_MARGE
+            );
 
-            // Prix total de revente
-            const prixTotal = arrondir(prix + marge);
+            // Total de revente
+            const total = prix + marge;
 
-            if (apport > prixTotal) {
-                afficherErreur(
-                    "L'apport ne peut pas dépasser le prix total de revente."
-                );
-                return;
+            if (apport > total) {
+                return null;
             }
-
-            masquerErreur();
-
-            // Somme restant à payer
-            const montantRestant = arrondir(prixTotal - apport);
 
             // Mensualité estimée
-            const mensualite = arrondir(montantRestant / duree);
+            const mensualite = Math.round(
+                (total - apport) / duree
+            );
 
-            // Afficher la marge dans le formulaire
-            margeInput.value = formatEuro.format(marge);
+            // Mettre à jour la marge non modifiable
+            margeInput.value = formatEuro.format(
+                enEuros(marge)
+            );
 
-            // Afficher les résultats
+            // Mettre à jour les cartes
             document.getElementById("resultPrix").textContent =
-                formatEuro.format(prix);
+                formatEuro.format(enEuros(prix));
 
             document.getElementById("resultMarge").textContent =
-                formatEuro.format(marge);
+                formatEuro.format(enEuros(marge));
 
             document.getElementById("resultTotal").textContent =
-                formatEuro.format(prixTotal);
+                formatEuro.format(enEuros(total));
 
             document.getElementById("resultMensualite").textContent =
-                formatEuro.format(mensualite);
+                formatEuro.format(enEuros(mensualite));
 
-            // Afficher la synthèse
-            const bien = bienInput.value.trim() || "Bien à financer";
-
+            // Synthèse
             document.getElementById("synthese").textContent =
                 `Pour "${bien}", le prix d'achat est de ` +
-                `${formatEuro.format(prix)}. ` +
-                `La marge commerciale fixe est de ` +
-                `${formatEuro.format(marge)}. ` +
+                `${formatEuro.format(enEuros(prix))}. ` +
+                `La marge commerciale est de ` +
+                `${formatEuro.format(enEuros(marge))}. ` +
                 `Le prix total de revente est de ` +
-                `${formatEuro.format(prixTotal)}. ` +
-                `Après un apport de ${formatEuro.format(apport)}, ` +
-                `le montant restant est réparti sur ${duree} mois, ` +
+                `${formatEuro.format(enEuros(total))}. ` +
+                `Après un apport de ` +
+                `${formatEuro.format(enEuros(apport))}, ` +
+                `le paiement est réparti sur ${duree} mois, ` +
                 `soit une mensualité estimée de ` +
-                `${formatEuro.format(mensualite)}.`;
+                `${formatEuro.format(enEuros(mensualite))}.`;
+
+            // Données utilisées par l'API
+            return {
+                bien: bien,
+                prix_achat: (prix / 100).toFixed(2),
+                duree_mois: duree,
+                apport_initial: (apport / 100).toFixed(2)
+            };
+
         }
 
-        // Calcul au clic sur le bouton
+        // Réinitialiser les résultats si la saisie est invalide
+        function actualiserSimulation() {
+
+            effacerMessage();
+
+            const simulation = calculerSimulation();
+
+            btnEnregistrer.disabled = !simulation;
+
+            if (!simulation) {
+
+                margeInput.value = "";
+
+                [
+                    "resultPrix",
+                    "resultMarge",
+                    "resultTotal",
+                    "resultMensualite"
+                ].forEach(id => {
+                    document.getElementById(id).textContent = "—";
+                });
+
+                document.getElementById("synthese").textContent =
+                    "Veuillez renseigner des valeurs valides.";
+
+            }
+
+        }
+
+        // Calcul au clic
         formulaire.addEventListener("submit", function(event) {
+
             event.preventDefault();
-            calculerSimulation();
+
+            actualiserSimulation();
+
+            if (!btnEnregistrer.disabled) {
+
+                afficherMessage(
+                    "Simulation calculée. Vous pouvez l'enregistrer.",
+                    "info"
+                );
+
+            } else {
+
+                afficherMessage(
+                    "Veuillez corriger les informations du formulaire.",
+                    "danger"
+                );
+
+            }
+
         });
 
-        // Recalcul automatique lors de la saisie
-        [prixInput, dureeInput, apportInput, bienInput].forEach(
-            function(champ) {
-                champ.addEventListener("input", calculerSimulation);
-            }
-        );
+        // Recalcul pendant la saisie
+        [
+            bienInput,
+            prixInput,
+            dureeInput,
+            apportInput
+        ].forEach(champ => {
 
-        // Calcul initial
-        calculerSimulation();
+            champ.addEventListener("input", actualiserSimulation);
+
+        });
+
+        // ENREGISTRER DANS MYSQL
+        btnEnregistrer.addEventListener("click", async function() {
+
+            // Vérifier les valeurs une dernière fois
+            const simulation = calculerSimulation();
+
+            if (!simulation) {
+
+                afficherMessage(
+                    "Impossible d'enregistrer : données invalides.",
+                    "danger"
+                );
+
+                return;
+            }
+
+            // Empêcher plusieurs clics pendant l'enregistrement
+            btnEnregistrer.disabled = true;
+
+            const texteOriginal = btnEnregistrer.innerHTML;
+
+            btnEnregistrer.textContent = "Enregistrement...";
+
+            try {
+
+                // Envoyer la simulation au backend
+                const reponse = await fetch("/api/simulations", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(simulation)
+
+                });
+
+                // Lire la réponse du serveur
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+
+                    throw new Error(
+                        resultat.message ||
+                        "Erreur lors de l'enregistrement."
+                    );
+
+                }
+
+                // Confirmation
+                afficherMessage(
+                    `Simulation n°${resultat.simulation.id} ` +
+                    `enregistrée avec succès dans MySQL !`,
+                    "success"
+                );
+
+                console.log(
+                    "Simulation enregistrée :",
+                    resultat.simulation
+                );
+
+            } catch (erreur) {
+
+                afficherMessage(
+                    erreur.message ||
+                    "Connexion au serveur impossible.",
+                    "danger"
+                );
+
+            } finally {
+
+                btnEnregistrer.innerHTML = texteOriginal;
+
+                btnEnregistrer.disabled =
+                    !calculerSimulation();
+
+            }
+
+        });
+
+        // Calcul initial au chargement
+        actualiserSimulation();
 
     </script>
 
