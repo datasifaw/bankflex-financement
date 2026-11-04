@@ -34,12 +34,12 @@ app.use(express.static(
     path.join(__dirname, "public")
 ));
 
-// 6. Politique commerciale de BankFlex
-// Marge fixe de 7,5 % du prix d'achat
+// 6. Politique commerciale
 const TAUX_MARGE = 0.075;
 
-// Conversion d'un montant en centimes
+// Convertir un montant en centimes
 function convertirEnCentimes(valeur) {
+
     const texte = String(valeur ?? "").trim();
 
     if (!/^\d+(\.\d{1,2})?$/.test(texte)) {
@@ -57,17 +57,19 @@ function convertirEnCentimes(valeur) {
         : null;
 }
 
-// Conversion des centimes en euros
+// Convertir les centimes en euros
 function convertirEnEuros(centimes) {
     return (centimes / 100).toFixed(2);
 }
 
-// 7. API : enregistrer une simulation
+// ============================================
+// API POST - ENREGISTRER UNE SIMULATION
+// ============================================
+
 app.post("/api/simulations", async (req, res) => {
 
     try {
 
-        // Informations envoyées par le client
         const {
             bien,
             prix_achat,
@@ -75,11 +77,11 @@ app.post("/api/simulations", async (req, res) => {
             apport_initial = 0
         } = req.body || {};
 
-        // Conversion et validation
         const prix = convertirEnCentimes(prix_achat);
         const apport = convertirEnCentimes(apport_initial);
         const duree = Number(duree_mois);
 
+        // Validation du nom du bien
         if (
             typeof bien !== "string" ||
             bien.trim().length === 0 ||
@@ -90,6 +92,7 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
+        // Validation du prix
         if (
             prix === null ||
             prix <= 0 ||
@@ -100,6 +103,7 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
+        // Validation de la durée
         if (
             !Number.isInteger(duree) ||
             duree < 1 ||
@@ -110,12 +114,15 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calcul de la marge à 7,5 %
-        const marge = Math.round(prix * 75 / 1000);
+        // Calcul de la marge commerciale
+        const marge = Math.round(
+            prix * TAUX_MARGE
+        );
 
         // Prix total de revente
         const prixTotal = prix + marge;
 
+        // Validation de l'apport
         if (
             apport === null ||
             apport < 0 ||
@@ -126,17 +133,16 @@ app.post("/api/simulations", async (req, res) => {
             });
         }
 
-        // Calcul de la mensualité
+        // Calcul des mensualités
         const montantRestant = prixTotal - apport;
         const mensualite = Math.round(
             montantRestant / duree
         );
 
-        // Ajustement de la dernière échéance
         const derniereEcheance =
             montantRestant - mensualite * (duree - 1);
 
-        // 8. Enregistrer dans MySQL
+        // Requête SQL
         const requete = `
             INSERT INTO simulations (
                 bien,
@@ -165,7 +171,7 @@ app.post("/api/simulations", async (req, res) => {
             valeurs
         );
 
-        // 9. Réponse de notre API
+        // Réponse JSON
         res.status(201).json({
             message: "Simulation enregistrée avec succès.",
             simulation: {
@@ -196,7 +202,58 @@ app.post("/api/simulations", async (req, res) => {
     }
 });
 
-// 10. Démarrer BankFlex
+// ============================================
+// API GET - HISTORIQUE DES SIMULATIONS
+// ============================================
+
+app.get("/api/simulations", async (req, res) => {
+
+    try {
+
+        // Récupérer les 20 dernières simulations
+        const requete = `
+            SELECT
+                id,
+                bien,
+                prix_achat,
+                marge_commerciale,
+                prix_total,
+                apport_initial,
+                duree_mois,
+                mensualite,
+                date_creation
+            FROM simulations
+            ORDER BY date_creation DESC, id DESC
+            LIMIT 20
+        `;
+
+        // Exécuter la requête SQL
+        const [simulations] = await db.query(requete);
+
+        // Retourner les données au format JSON
+        res.status(200).json({
+            message: "Historique récupéré avec succès.",
+            total: simulations.length,
+            simulations: simulations
+        });
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur de récupération :",
+            erreur.code || "Erreur inconnue"
+        );
+
+        res.status(500).json({
+            message: "Impossible de récupérer l'historique."
+        });
+    }
+});
+
+// ============================================
+// DÉMARRAGE DU SERVEUR
+// ============================================
+
 async function demarrerServeur() {
 
     try {
@@ -211,9 +268,11 @@ async function demarrerServeur() {
         console.log("=================================");
 
         app.listen(PORT, () => {
+
             console.log(" BankFlex - Serveur démarré !");
             console.log(` http://localhost:${PORT}`);
             console.log("=================================");
+
         });
 
     } catch (erreur) {
