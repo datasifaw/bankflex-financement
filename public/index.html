@@ -4,7 +4,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>BankFlex - Financement à prix fixe</title>
 
     <!-- Bootstrap 5 -->
@@ -20,29 +22,36 @@
     >
 
     <style>
+        /* ===============================
+           STYLE GÉNÉRAL
+        =============================== */
+
         body {
             margin: 0;
             background: #f4f7fc;
             font-family: Arial, sans-serif;
         }
 
-        /* BARRE SUPÉRIEURE */
         .topbar {
             background: #102a50;
             min-height: 76px;
         }
 
-        /* STRUCTURE PRINCIPALE */
         .app-layout {
             display: flex;
             min-height: calc(100vh - 76px);
         }
 
-        /* MENU LATÉRAL */
+        /* ===============================
+           MENU LATÉRAL
+        =============================== */
+
         .sidebar {
             width: 250px;
             flex-shrink: 0;
-            background: linear-gradient(180deg, #102a50, #091d3b);
+            background: linear-gradient(
+                180deg, #102a50, #091d3b
+            );
             padding: 20px 12px;
         }
 
@@ -51,17 +60,17 @@
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 10px 15px 15px;
+            margin: 10px 15px;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
             gap: 15px;
-            color: #e1e9f5;
             padding: 13px 16px;
             margin-bottom: 6px;
             border-radius: 9px;
+            color: #e1e9f5;
             text-decoration: none;
         }
 
@@ -80,14 +89,16 @@
             color: white;
         }
 
-        /* STATISTIQUES */
+        /* ===============================
+           STATISTIQUES
+        =============================== */
+
         .sidebar-stats {
             margin-top: 30px;
         }
 
         .stat-card {
             background: #253f66;
-            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
             padding: 17px;
             margin-bottom: 12px;
@@ -120,14 +131,16 @@
             margin: 8px 4px;
         }
 
-        /* CONTENU */
+        /* ===============================
+           CONTENU ET CARTES
+        =============================== */
+
         .main-content {
             flex: 1;
             min-width: 0;
             padding: 30px;
         }
 
-        /* CARTES */
         .dashboard-card {
             background: white;
             border: 1px solid #e4eaf3;
@@ -145,7 +158,10 @@
             padding: 24px;
         }
 
-        /* FORMULAIRE */
+        /* ===============================
+           FORMULAIRE
+        =============================== */
+
         .form-label {
             color: #263b58;
             font-weight: 600;
@@ -171,7 +187,10 @@
             font-weight: 700;
         }
 
-        /* BOUTONS */
+        /* ===============================
+           BOUTONS
+        =============================== */
+
         .btn-bankflex {
             background: #183b70;
             border: 1px solid #183b70;
@@ -200,7 +219,10 @@
             color: #102a50;
         }
 
-        /* RÉSULTATS */
+        /* ===============================
+           RÉSULTATS
+        =============================== */
+
         .result-box {
             background: #f1f6fe;
             border: 1px solid #dce8f8;
@@ -219,7 +241,6 @@
             color: #102a50;
             font-size: 25px;
             font-weight: 700;
-            margin: 0;
         }
 
         .monthly-box {
@@ -231,7 +252,10 @@
             color: white;
         }
 
-        /* RECHERCHE ET FILTRES */
+        /* ===============================
+           RECHERCHE ET FILTRES
+        =============================== */
+
         .filtres-historique {
             background: #f8faff;
             border: 1px solid #e4eaf3;
@@ -240,14 +264,12 @@
             margin-bottom: 22px;
         }
 
-        .filtres-historique .form-label {
-            font-size: 13px;
-        }
+        /* ===============================
+           HISTORIQUE
+        =============================== */
 
-        /* TABLEAU MYSQL */
         .historique-table {
             width: 100%;
-            margin-bottom: 0;
             font-size: 14px;
         }
 
@@ -282,7 +304,56 @@
             white-space: nowrap;
         }
 
-        /* VERSION MOBILE */
+        /* ===============================
+           NOUVEAU : FENÊTRE DE DÉTAILS
+        =============================== */
+
+        .details-card {
+            background: #f5f8fd;
+            border: 1px solid #e4eaf3;
+            border-radius: 10px;
+            padding: 16px;
+            height: 100%;
+        }
+
+        .details-label {
+            color: #687b95;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .details-value {
+            color: #183b70;
+            font-size: 18px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .details-recap {
+            background: #183b70;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .details-recap .details-label,
+        .details-recap .details-value {
+            color: white;
+        }
+
+        .modal-header {
+            background: #102a50;
+            color: white;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1) grayscale(100%);
+        }
+
+        /* ===============================
+           RESPONSIVE
+        =============================== */
+
         @media (max-width: 767px) {
             .app-layout {
                 flex-direction: column;
@@ -298,15 +369,10 @@
                 gap: 5px;
             }
 
-            .sidebar-link {
-                font-size: 14px;
-                padding: 10px;
-            }
-
             .sidebar-stats {
                 display: grid;
                 grid-template-columns:
-                    repeat(auto-fit, minmax(180px,1fr));
+                    repeat(auto-fit, minmax(180px, 1fr));
                 gap: 10px;
             }
 
@@ -336,15 +402,16 @@
 
 <body>
 
-    <!-- HEADER -->
+    <!-- ===============================
+         BARRE SUPÉRIEURE
+    =============================== -->
+
     <header class="navbar navbar-dark topbar px-4 py-3">
         <div class="container-fluid">
 
             <div class="d-flex align-items-center gap-3">
-                <i
-                    class="bi bi-bar-chart-fill fs-3"
-                    style="color: #60a5fa;"
-                ></i>
+                <i class="bi bi-bar-chart-fill fs-3"
+                   style="color: #60a5fa;"></i>
 
                 <span class="navbar-brand fw-bold fs-4 mb-0">
                     BankFlex
@@ -364,7 +431,10 @@
 
     <div class="app-layout">
 
-        <!-- MENU LATÉRAL -->
+        <!-- ===============================
+             MENU LATÉRAL
+        =============================== -->
+
         <aside class="sidebar">
 
             <p class="sidebar-title">Navigation</p>
@@ -403,7 +473,7 @@
 
             </nav>
 
-            <!-- STATISTIQUES -->
+            <!-- STATISTIQUES MYSQL -->
             <section class="sidebar-stats">
 
                 <p class="sidebar-title">
@@ -434,19 +504,18 @@
                     <p class="stat-value" id="statsMarge">—</p>
                 </div>
 
-                <p
-                    class="stats-etat"
-                    id="statsEtat"
-                    role="status"
-                >
+                <p class="stats-etat" id="statsEtat"
+                   role="status" aria-live="polite">
                     Chargement des statistiques...
                 </p>
 
             </section>
-
         </aside>
 
-        <!-- CONTENU PRINCIPAL -->
+        <!-- ===============================
+             CONTENU PRINCIPAL
+        =============================== -->
+
         <main class="main-content" id="accueil">
 
             <div class="mb-4">
@@ -461,10 +530,12 @@
                 </p>
             </div>
 
+            <!-- SIMULATION -->
             <div class="row g-4" id="simulation">
 
                 <!-- FORMULAIRE -->
                 <div class="col-xl-5">
+
                     <section class="dashboard-card">
 
                         <div class="card-heading">
@@ -475,12 +546,14 @@
                         </div>
 
                         <div class="card-content">
+
                             <form id="simulationForm">
 
                                 <div class="mb-3">
                                     <label for="bien" class="form-label">
                                         Bien à financer *
                                     </label>
+
                                     <input
                                         type="text"
                                         id="bien"
@@ -495,6 +568,7 @@
                                     <label for="prixAchat" class="form-label">
                                         Prix d'achat (€) *
                                     </label>
+
                                     <input
                                         type="number"
                                         id="prixAchat"
@@ -511,12 +585,14 @@
                                     <label for="marge" class="form-label">
                                         Marge commerciale (€)
                                     </label>
+
                                     <input
                                         type="text"
                                         id="marge"
                                         class="form-control marge-auto"
                                         readonly
                                     >
+
                                     <small class="text-secondary">
                                         <i class="bi bi-lock-fill me-1"></i>
                                         Marge automatique de 7,5 %
@@ -528,6 +604,7 @@
                                     <label for="duree" class="form-label">
                                         Durée (mois) *
                                     </label>
+
                                     <input
                                         type="number"
                                         id="duree"
@@ -544,6 +621,7 @@
                                     <label for="apport" class="form-label">
                                         Apport initial (€)
                                     </label>
+
                                     <input
                                         type="number"
                                         id="apport"
@@ -554,45 +632,43 @@
                                     >
                                 </div>
 
-                                <div
-                                    id="messageStatut"
-                                    class="alert d-none"
-                                    role="status"
-                                    aria-live="polite"
-                                ></div>
+                                <div id="messageStatut"
+                                     class="alert d-none"
+                                     role="status"
+                                     aria-live="polite">
+                                </div>
 
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button
-                                        type="submit"
-                                        class="btn btn-bankflex"
-                                    >
+
+                                    <button type="submit"
+                                            class="btn btn-bankflex">
                                         <i class="bi bi-calculator me-2"></i>
                                         Calculer
                                     </button>
 
-                                    <button
-                                        type="button"
-                                        id="btnEnregistrer"
-                                        class="btn btn-outline-bankflex"
-                                    >
+                                    <button type="button"
+                                            id="btnEnregistrer"
+                                            class="btn btn-outline-bankflex">
                                         <i class="bi bi-floppy me-2"></i>
                                         Enregistrer
                                     </button>
+
                                 </div>
 
                                 <p class="text-secondary small mt-3 mb-0">
-                                    Simulation indicative utilisant
-                                    des données fictives.
+                                    Simulation indicative avec des
+                                    données fictives.
                                 </p>
 
                             </form>
-                        </div>
 
+                        </div>
                     </section>
                 </div>
 
                 <!-- RÉSULTATS -->
                 <div class="col-xl-7">
+
                     <section class="dashboard-card">
 
                         <div class="card-heading">
@@ -603,6 +679,7 @@
                         </div>
 
                         <div class="card-content">
+
                             <div class="row g-3">
 
                                 <div class="col-md-6">
@@ -643,10 +720,8 @@
                                         <p class="result-label">
                                             Mensualité estimée
                                         </p>
-                                        <p
-                                            class="result-value"
-                                            id="resultMensualite"
-                                        >
+                                        <p class="result-value"
+                                           id="resultMensualite">
                                             —
                                         </p>
                                     </div>
@@ -659,6 +734,7 @@
                                     <i class="bi bi-info-circle me-2"></i>
                                     Synthèse du financement
                                 </h6>
+
                                 <p id="synthese" class="mb-0">
                                     Renseignez les champs pour
                                     calculer votre simulation.
@@ -666,56 +742,54 @@
                             </div>
 
                             <p class="text-secondary small mt-3 mb-0">
-                                La dernière échéance pourra être ajustée
+                                La dernière échéance peut être ajustée
                                 pour tenir compte des arrondis.
                             </p>
-                        </div>
 
+                        </div>
                     </section>
                 </div>
-
             </div>
 
-            <!-- HISTORIQUE -->
+            <!-- ===============================
+                 HISTORIQUE
+            =============================== -->
+
             <section class="dashboard-card" id="historique">
 
                 <div class="card-heading d-flex flex-wrap
-                    align-items-center justify-content-between gap-3">
+                            align-items-center
+                            justify-content-between gap-3">
 
                     <div>
                         <h5 class="fw-bold mb-1">
                             <i class="bi bi-clock-history text-primary me-2"></i>
                             Simulations récentes
                         </h5>
+
                         <small class="text-secondary">
-                            Les 20 dernières simulations
-                            enregistrées dans MySQL
+                            Les 20 dernières simulations enregistrées
+                            dans MySQL
                         </small>
                     </div>
 
-                    <button
-                        type="button"
-                        id="btnActualiser"
-                        class="btn btn-outline-bankflex"
-                    >
+                    <button type="button"
+                            id="btnActualiser"
+                            class="btn btn-outline-bankflex">
                         <i class="bi bi-arrow-clockwise me-2"></i>
                         Actualiser
                     </button>
-
                 </div>
 
                 <div class="card-content">
 
-                    <!-- NOUVEAU : RECHERCHE ET FILTRES -->
+                    <!-- RECHERCHE ET FILTRES -->
                     <div class="filtres-historique">
-
                         <div class="row g-3">
 
                             <div class="col-md-7">
-                                <label
-                                    for="rechercheBien"
-                                    class="form-label"
-                                >
+                                <label for="rechercheBien"
+                                       class="form-label">
                                     <i class="bi bi-search me-1"></i>
                                     Rechercher un bien
                                 </label>
@@ -729,18 +803,14 @@
                             </div>
 
                             <div class="col-md-5">
-                                <label
-                                    for="filtreDuree"
-                                    class="form-label"
-                                >
+                                <label for="filtreDuree"
+                                       class="form-label">
                                     <i class="bi bi-funnel me-1"></i>
                                     Filtrer par durée
                                 </label>
 
-                                <select
-                                    id="filtreDuree"
-                                    class="form-select"
-                                >
+                                <select id="filtreDuree"
+                                        class="form-select">
                                     <option value="toutes">
                                         Toutes les durées
                                     </option>
@@ -761,15 +831,12 @@
                         <small class="text-secondary d-block mt-2">
                             Recherche parmi les 20 dernières simulations.
                         </small>
-
                     </div>
 
-                    <div
-                        id="messageHistorique"
-                        class="alert alert-info"
-                        role="status"
-                        aria-live="polite"
-                    >
+                    <div id="messageHistorique"
+                         class="alert alert-info"
+                         role="status"
+                         aria-live="polite">
                         Chargement de l'historique...
                     </div>
 
@@ -787,52 +854,231 @@
                                     <th>Durée</th>
                                     <th>Mensualité</th>
                                     <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
 
-                            <tbody id="tableauHistorique"></tbody>
+                            <tbody id="tableauHistorique">
+                            </tbody>
 
                         </table>
-
                     </div>
 
-                    <p
-                        id="nombreSimulations"
-                        class="small text-secondary mt-3 mb-0"
-                        aria-live="polite"
-                    ></p>
+                    <p id="nombreSimulations"
+                       class="small text-secondary mt-3 mb-0"
+                       aria-live="polite">
+                    </p>
 
                 </div>
-
             </section>
 
         </main>
-
     </div>
 
-    <!-- JAVASCRIPT -->
+    <!-- ===============================
+         NOUVEAU : FENÊTRE MODALE DÉTAILS
+    =============================== -->
+
+    <div class="modal fade"
+         id="modalDetails"
+         tabindex="-1"
+         aria-labelledby="titreModalDetails"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <!-- EN-TÊTE -->
+                <div class="modal-header">
+
+                    <h5 class="modal-title fw-bold"
+                        id="titreModalDetails">
+
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        Détails de la simulation
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fermer">
+                    </button>
+
+                </div>
+
+                <!-- CONTENU -->
+                <div class="modal-body p-4">
+
+                    <div id="messageDetails"
+                         class="alert alert-info"
+                         role="status"
+                         aria-live="polite">
+                        Chargement des détails...
+                    </div>
+
+                    <div id="contenuDetails" class="d-none">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <div class="details-card">
+                                    <p class="details-label">
+                                        Bien financé
+                                    </p>
+                                    <div class="details-value"
+                                         id="detailBien">—</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="details-card">
+                                    <p class="details-label">
+                                        Date d'enregistrement
+                                    </p>
+                                    <div class="details-value"
+                                         id="detailDate">—</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="details-card">
+                                    <p class="details-label">
+                                        Prix d'achat
+                                    </p>
+                                    <div class="details-value"
+                                         id="detailPrix">—</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="details-card">
+                                    <p class="details-label">
+                                        Marge commerciale
+                                    </p>
+                                    <div class="details-value"
+                                         id="detailMarge">—</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="details-card">
+                                    <p class="details-label">
+                                        Apport initial
+                                    </p>
+                                    <div class="details-value"
+                                         id="detailApport">—</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="details-card">
+                                    <p class="details-label">
+                                        Durée du financement
+                                    </p>
+                                    <div class="details-value"
+                                         id="detailDuree">—</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- RÉCAPITULATIF -->
+                        <div class="details-recap mt-4">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+                                    <p class="details-label">
+                                        Prix total de revente
+                                    </p>
+                                    <div class="details-value fs-4"
+                                         id="detailTotal">
+                                        —
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p class="details-label">
+                                        Mensualité estimée
+                                    </p>
+                                    <div class="details-value fs-4"
+                                         id="detailMensualite">
+                                        —
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <p class="text-secondary small mt-3 mb-0">
+                            Simulation indicative réalisée
+                            à partir de données fictives.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- PIED DE FENÊTRE -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Fermer
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- ===============================
+         JAVASCRIPT BANKFLEX
+    =============================== -->
+
     <script>
 
-        // ========================================
-        // CONFIGURATION
-        // ========================================
+        // ====================================
+        // 1. CONFIGURATION
+        // ====================================
 
         const TAUX_MARGE = 0.075;
 
-        const formulaire = document.getElementById("simulationForm");
+        const formulaire =
+            document.getElementById("simulationForm");
+
         const bienInput = document.getElementById("bien");
         const prixInput = document.getElementById("prixAchat");
         const dureeInput = document.getElementById("duree");
         const apportInput = document.getElementById("apport");
         const margeInput = document.getElementById("marge");
 
-        const btnEnregistrer = document.getElementById("btnEnregistrer");
-        const btnActualiser = document.getElementById("btnActualiser");
+        const btnEnregistrer =
+            document.getElementById("btnEnregistrer");
 
-        const messageStatut = document.getElementById("messageStatut");
-        const messageHistorique = document.getElementById("messageHistorique");
-        const tableauHistorique = document.getElementById("tableauHistorique");
-        const nombreSimulations = document.getElementById("nombreSimulations");
+        const btnActualiser =
+            document.getElementById("btnActualiser");
+
+        const messageStatut =
+            document.getElementById("messageStatut");
+
+        const messageHistorique =
+            document.getElementById("messageHistorique");
+
+        const tableauHistorique =
+            document.getElementById("tableauHistorique");
+
+        const nombreSimulations =
+            document.getElementById("nombreSimulations");
 
         // Statistiques
         const statsTotal = document.getElementById("statsTotal");
@@ -840,13 +1086,27 @@
         const statsMarge = document.getElementById("statsMarge");
         const statsEtat = document.getElementById("statsEtat");
 
-        // NOUVEAU : Recherche et filtres
-        const rechercheBien = document.getElementById("rechercheBien");
-        const filtreDuree = document.getElementById("filtreDuree");
+        // Filtres
+        const rechercheBien =
+            document.getElementById("rechercheBien");
 
-        // Mémoire temporaire des simulations récupérées
+        const filtreDuree =
+            document.getElementById("filtreDuree");
+
+        // Fenêtre de détails
+        const modalDetailsElement =
+            document.getElementById("modalDetails");
+
+        const modalDetails =
+            new bootstrap.Modal(modalDetailsElement);
+
+        const messageDetails =
+            document.getElementById("messageDetails");
+
+        const contenuDetails =
+            document.getElementById("contenuDetails");
+
         let simulationsCache = [];
-
         let enregistrementEnCours = false;
 
         const formatEuro = new Intl.NumberFormat("fr-FR", {
@@ -854,13 +1114,14 @@
             currency: "EUR"
         });
 
-        // ========================================
-        // FONCTIONS UTILITAIRES
-        // ========================================
+        // ====================================
+        // 2. FONCTIONS UTILITAIRES
+        // ====================================
 
         function afficherMessage(message, type) {
             messageStatut.textContent = message;
-            messageStatut.className = `alert alert-${type}`;
+            messageStatut.className =
+                `alert alert-${type}`;
         }
 
         function effacerMessage() {
@@ -876,7 +1137,8 @@
                 return null;
             }
 
-            const [euros, decimales = ""] = texte.split(".");
+            const [euros, decimales = ""] =
+                texte.split(".");
 
             const centimes =
                 Number(euros) * 100 +
@@ -888,6 +1150,7 @@
         }
 
         function formatMontant(valeur) {
+
             const nombre = Number(valeur);
 
             return Number.isFinite(nombre)
@@ -896,16 +1159,18 @@
         }
 
         function formatDate(valeur) {
+
             if (!valeur) return "—";
 
             const date = new Date(valeur);
 
-            if (Number.isNaN(date.getTime())) return "—";
+            if (Number.isNaN(date.getTime())) {
+                return "—";
+            }
 
             return date.toLocaleDateString("fr-FR");
         }
 
-        // Normaliser le texte pour faciliter la recherche
         function normaliser(texte) {
 
             return String(texte || "")
@@ -915,15 +1180,17 @@
                 .trim();
         }
 
-        // ========================================
-        // CALCUL DE LA SIMULATION
-        // ========================================
+        // ====================================
+        // 3. CALCUL DE LA SIMULATION
+        // ====================================
 
         function calculerSimulation() {
 
             const bien = bienInput.value.trim();
             const prix = enCentimes(prixInput.value);
-            const apport = enCentimes(apportInput.value || "0");
+            const apport = enCentimes(
+                apportInput.value || "0"
+            );
             const duree = Number(dureeInput.value);
 
             if (
@@ -941,16 +1208,22 @@
                 return null;
             }
 
-            const marge = Math.round(prix * TAUX_MARGE);
+            const marge = Math.round(
+                prix * 75 / 1000
+            );
+
             const total = prix + marge;
 
-            if (apport > total) return null;
+            if (apport > total) {
+                return null;
+            }
 
             const mensualite = Math.round(
                 (total - apport) / duree
             );
 
-            margeInput.value = formatMontant(marge / 100);
+            margeInput.value =
+                formatMontant(marge / 100);
 
             document.getElementById("resultPrix").textContent =
                 formatMontant(prix / 100);
@@ -971,7 +1244,8 @@
                 `${formatMontant(marge / 100)}. ` +
                 `Le prix total de revente est de ` +
                 `${formatMontant(total / 100)}. ` +
-                `Après un apport de ${formatMontant(apport / 100)}, ` +
+                `Après un apport de ` +
+                `${formatMontant(apport / 100)}, ` +
                 `le paiement est réparti sur ${duree} mois, ` +
                 `soit une mensualité estimée de ` +
                 `${formatMontant(mensualite / 100)}.`;
@@ -1003,7 +1277,8 @@
                     "resultTotal",
                     "resultMensualite"
                 ].forEach(id => {
-                    document.getElementById(id).textContent = "—";
+                    document.getElementById(id).textContent =
+                        "—";
                 });
 
                 document.getElementById("synthese").textContent =
@@ -1011,9 +1286,9 @@
             }
         }
 
-        // ========================================
-        // STATISTIQUES MYSQL
-        // ========================================
+        // ====================================
+        // 4. STATISTIQUES MYSQL
+        // ====================================
 
         async function chargerStatistiques() {
 
@@ -1022,12 +1297,15 @@
 
             try {
 
-                const reponse = await fetch("/api/statistiques");
+                const reponse =
+                    await fetch("/api/statistiques");
+
                 const resultat = await reponse.json();
 
                 if (!reponse.ok) {
                     throw new Error(
-                        resultat.message || "Erreur de récupération."
+                        resultat.message ||
+                        "Erreur de récupération."
                     );
                 }
 
@@ -1039,7 +1317,9 @@
                     !Number.isFinite(stats.mensualite_moyenne) ||
                     !Number.isFinite(stats.marge_moyenne)
                 ) {
-                    throw new Error("Statistiques invalides.");
+                    throw new Error(
+                        "Statistiques invalides."
+                    );
                 }
 
                 statsTotal.textContent =
@@ -1063,27 +1343,29 @@
             }
         }
 
-        // ========================================
-        // NOUVEAU : FILTRER L'HISTORIQUE
-        // ========================================
+        // ====================================
+        // 5. FILTRER L'HISTORIQUE
+        // ====================================
 
         function afficherHistoriqueFiltre() {
 
-            const recherche = normaliser(rechercheBien.value);
+            const recherche =
+                normaliser(rechercheBien.value);
+
             const dureeChoisie = filtreDuree.value;
 
-            // Filtrer les simulations déjà chargées
-            const simulationsFiltrees = simulationsCache.filter(
-                simulation => {
+            const simulationsFiltrees =
+                simulationsCache.filter(simulation => {
 
-                    const nomBien = normaliser(simulation.bien);
-                    const duree = Number(simulation.duree_mois);
+                    const nomBien =
+                        normaliser(simulation.bien);
 
-                    // Filtre de recherche
+                    const duree =
+                        Number(simulation.duree_mois);
+
                     const correspondNom =
                         nomBien.includes(recherche);
 
-                    // Filtre de durée
                     let correspondDuree = true;
 
                     if (dureeChoisie === "courte") {
@@ -1100,19 +1382,16 @@
                     }
 
                     return correspondNom && correspondDuree;
-                }
-            );
+                });
 
-            // Vider le tableau avant le nouvel affichage
             tableauHistorique.replaceChildren();
 
-            // Si aucun résultat ne correspond aux filtres
             if (simulationsFiltrees.length === 0) {
 
                 const ligne = document.createElement("tr");
                 const cellule = document.createElement("td");
 
-                cellule.colSpan = 8;
+                cellule.colSpan = 9;
                 cellule.className =
                     "text-center text-secondary py-4";
 
@@ -1124,7 +1403,6 @@
 
             } else {
 
-                // Afficher les simulations filtrées
                 simulationsFiltrees.forEach(simulation => {
 
                     const ligne = document.createElement("tr");
@@ -1142,7 +1420,8 @@
 
                     colonnes.forEach((valeur, index) => {
 
-                        const cellule = document.createElement("td");
+                        const cellule =
+                            document.createElement("td");
 
                         cellule.textContent = valeur ?? "—";
 
@@ -1152,7 +1431,8 @@
 
                         if (index === 6) {
 
-                            const badge = document.createElement("span");
+                            const badge =
+                                document.createElement("span");
 
                             badge.className = "badge-mensualite";
                             badge.textContent = valeur;
@@ -1163,36 +1443,65 @@
                         ligne.appendChild(cellule);
                     });
 
+                    // NOUVEAU : BOUTON VOIR
+                    const celluleActions =
+                        document.createElement("td");
+
+                    const boutonVoir =
+                        document.createElement("button");
+
+                    boutonVoir.type = "button";
+                    boutonVoir.className =
+                        "btn btn-sm btn-outline-primary";
+
+                    boutonVoir.textContent = "Voir";
+
+                    boutonVoir.setAttribute(
+                        "aria-label",
+                        `Voir les détails de la simulation ${simulation.id}`
+                    );
+
+                    boutonVoir.addEventListener("click", () => {
+                        afficherDetails(simulation.id);
+                    });
+
+                    celluleActions.appendChild(boutonVoir);
+                    ligne.appendChild(celluleActions);
+
                     tableauHistorique.appendChild(ligne);
                 });
             }
 
-            // Indiquer combien de résultats sont affichés
             nombreSimulations.textContent =
                 `${simulationsFiltrees.length} résultat(s) sur ` +
                 `${simulationsCache.length} simulations récentes`;
         }
 
-        // ========================================
-        // RÉCUPÉRER L'HISTORIQUE MYSQL
-        // ========================================
+        // ====================================
+        // 6. CHARGER L'HISTORIQUE MYSQL
+        // ====================================
 
         async function chargerHistorique() {
 
             btnActualiser.disabled = true;
 
-            messageHistorique.className = "alert alert-info";
+            messageHistorique.className =
+                "alert alert-info";
+
             messageHistorique.textContent =
                 "Chargement des simulations...";
 
             try {
 
-                const reponse = await fetch("/api/simulations");
+                const reponse =
+                    await fetch("/api/simulations");
+
                 const resultat = await reponse.json();
 
                 if (!reponse.ok) {
                     throw new Error(
-                        resultat.message || "Erreur de récupération."
+                        resultat.message ||
+                        "Erreur de récupération."
                     );
                 }
 
@@ -1202,10 +1511,8 @@
                     );
                 }
 
-                // Garder les 20 dernières simulations en mémoire
                 simulationsCache = resultat.simulations;
 
-                // Gérer une base vide
                 if (simulationsCache.length === 0) {
 
                     messageHistorique.className =
@@ -1219,12 +1526,12 @@
                     messageHistorique.className = "d-none";
                 }
 
-                // Réappliquer les filtres actuels
                 afficherHistoriqueFiltre();
 
             } catch (erreur) {
 
-                messageHistorique.className = "alert alert-danger";
+                messageHistorique.className =
+                    "alert alert-danger";
 
                 messageHistorique.textContent =
                     "Impossible de charger l'historique : " +
@@ -1236,21 +1543,108 @@
             }
         }
 
-        // ========================================
-        // BOUTON CALCULER
-        // ========================================
+        // ====================================
+        // 7. NOUVEAU : AFFICHER LES DÉTAILS
+        // ====================================
+
+        async function afficherDetails(id) {
+
+            // Réinitialiser la fenêtre
+            contenuDetails.classList.add("d-none");
+
+            messageDetails.className = "alert alert-info";
+            messageDetails.textContent =
+                "Chargement des détails...";
+
+            document.getElementById("titreModalDetails").textContent =
+                `Détails de la simulation n° ${id}`;
+
+            // Ouvrir la fenêtre Bootstrap
+            modalDetails.show();
+
+            try {
+
+                // Appel de notre API GET par ID
+                const reponse = await fetch(
+                    `/api/simulations/${id}`
+                );
+
+                const resultat = await reponse.json();
+
+                if (!reponse.ok) {
+                    throw new Error(
+                        resultat.message ||
+                        "Impossible de charger les détails."
+                    );
+                }
+
+                const simulation = resultat.simulation;
+
+                if (!simulation) {
+                    throw new Error(
+                        "Simulation introuvable."
+                    );
+                }
+
+                // Afficher les informations récupérées
+                document.getElementById("detailBien").textContent =
+                    simulation.bien;
+
+                document.getElementById("detailDate").textContent =
+                    formatDate(simulation.date_creation);
+
+                document.getElementById("detailPrix").textContent =
+                    formatMontant(simulation.prix_achat);
+
+                document.getElementById("detailMarge").textContent =
+                    formatMontant(simulation.marge_commerciale);
+
+                document.getElementById("detailApport").textContent =
+                    formatMontant(simulation.apport_initial);
+
+                document.getElementById("detailDuree").textContent =
+                    `${simulation.duree_mois} mois`;
+
+                document.getElementById("detailTotal").textContent =
+                    formatMontant(simulation.prix_total);
+
+                document.getElementById("detailMensualite").textContent =
+                    formatMontant(simulation.mensualite);
+
+                // Afficher le contenu
+                messageDetails.className = "d-none";
+                contenuDetails.classList.remove("d-none");
+
+            } catch (erreur) {
+
+                messageDetails.className =
+                    "alert alert-danger";
+
+                messageDetails.textContent =
+                    erreur.message ||
+                    "Une erreur est survenue.";
+            }
+        }
+
+        // ====================================
+        // 8. BOUTON CALCULER
+        // ====================================
 
         formulaire.addEventListener("submit", function(event) {
 
             event.preventDefault();
+
             actualiserSimulation();
 
             if (calculerSimulation()) {
+
                 afficherMessage(
                     "Simulation calculée. Vous pouvez l'enregistrer.",
                     "info"
                 );
+
             } else {
+
                 afficherMessage(
                     "Veuillez corriger les informations.",
                     "danger"
@@ -1264,12 +1658,16 @@
             dureeInput,
             apportInput
         ].forEach(champ => {
-            champ.addEventListener("input", actualiserSimulation);
+
+            champ.addEventListener(
+                "input",
+                actualiserSimulation
+            );
         });
 
-        // ========================================
-        // BOUTON ENREGISTRER
-        // ========================================
+        // ====================================
+        // 9. BOUTON ENREGISTRER
+        // ====================================
 
         btnEnregistrer.addEventListener("click", async function() {
 
@@ -1278,7 +1676,12 @@
             const simulation = calculerSimulation();
 
             if (!simulation) {
-                afficherMessage("Données invalides.", "danger");
+
+                afficherMessage(
+                    "Données invalides.",
+                    "danger"
+                );
+
                 return;
             }
 
@@ -1286,15 +1689,20 @@
             btnEnregistrer.disabled = true;
 
             const texteOriginal = btnEnregistrer.innerHTML;
-            btnEnregistrer.textContent = "Enregistrement...";
+
+            btnEnregistrer.textContent =
+                "Enregistrement...";
 
             try {
 
                 const reponse = await fetch("/api/simulations", {
+
                     method: "POST",
+
                     headers: {
                         "Content-Type": "application/json"
                     },
+
                     body: JSON.stringify(simulation)
                 });
 
@@ -1302,7 +1710,8 @@
 
                 if (!reponse.ok) {
                     throw new Error(
-                        resultat.message || "Erreur d'enregistrement."
+                        resultat.message ||
+                        "Erreur d'enregistrement."
                     );
                 }
 
@@ -1312,7 +1721,6 @@
                     "success"
                 );
 
-                // Actualiser le tableau et les statistiques
                 await Promise.all([
                     chargerHistorique(),
                     chargerStatistiques()
@@ -1329,30 +1737,31 @@
             } finally {
 
                 enregistrementEnCours = false;
+
                 btnEnregistrer.innerHTML = texteOriginal;
-                btnEnregistrer.disabled = !calculerSimulation();
+
+                btnEnregistrer.disabled =
+                    !calculerSimulation();
             }
         });
 
-        // ========================================
-        // NOUVEAU : ÉVÉNEMENTS DES FILTRES
-        // ========================================
+        // ====================================
+        // 10. RECHERCHE ET FILTRES
+        // ====================================
 
-        // Recherche immédiate pendant la saisie
         rechercheBien.addEventListener(
             "input",
             afficherHistoriqueFiltre
         );
 
-        // Filtrage quand la durée change
         filtreDuree.addEventListener(
             "change",
             afficherHistoriqueFiltre
         );
 
-        // ========================================
-        // BOUTON ACTUALISER
-        // ========================================
+        // ====================================
+        // 11. ACTUALISATION
+        // ====================================
 
         btnActualiser.addEventListener("click", async function() {
 
@@ -1362,9 +1771,9 @@
             ]);
         });
 
-        // ========================================
-        // INITIALISATION BANKFLEX
-        // ========================================
+        // ====================================
+        // 12. INITIALISATION
+        // ====================================
 
         actualiserSimulation();
         chargerHistorique();
