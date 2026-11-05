@@ -519,7 +519,7 @@ app.delete("/api/simulations/:id", async (req, res) => {
 });
 
 // ============================================
-// 10. API GET - STATISTIQUES ET DURÉES
+// 10. API GET - STATISTIQUES, DURÉES ET MONTANTS
 // ============================================
 
 app.get("/api/statistiques", async (req, res) => {
@@ -530,10 +530,12 @@ app.get("/api/statistiques", async (req, res) => {
          * Nous conservons les trois statistiques
          * déjà utilisées par le dashboard.
          *
-         * Nous ajoutons trois groupes de durées :
-         * - jusqu'à 12 mois
-         * - de 13 à 36 mois
-         * - plus de 36 mois
+         * Nous conservons également les trois groupes
+         * de durées pour notre premier graphique.
+         *
+         * NOUVEAU : nous calculons les montants cumulés
+         * des achats, des marges et des reventes pour
+         * préparer un deuxième graphique.
          */
 
         const requete = `
@@ -549,6 +551,21 @@ app.get("/api/statistiques", async (req, res) => {
                     ROUND(AVG(marge_commerciale), 2),
                     0
                 ) AS marge_moyenne,
+
+                COALESCE(
+                    ROUND(SUM(prix_achat), 2),
+                    0
+                ) AS total_achats,
+
+                COALESCE(
+                    ROUND(SUM(marge_commerciale), 2),
+                    0
+                ) AS total_marges,
+
+                COALESCE(
+                    ROUND(SUM(prix_total), 2),
+                    0
+                ) AS total_reventes,
 
                 COALESCE(
                     SUM(
@@ -603,7 +620,7 @@ app.get("/api/statistiques", async (req, res) => {
                 marge_moyenne:
                     Number(stats.marge_moyenne),
 
-                // NOUVEAU : données du futur graphique
+                // Répartition par durée
                 repartition_durees: {
                     jusqua_12_mois:
                         Number(stats.duree_courte),
@@ -613,6 +630,18 @@ app.get("/api/statistiques", async (req, res) => {
 
                     plus_de_36_mois:
                         Number(stats.duree_longue)
+                },
+
+                // NOUVEAU : données du deuxième graphique
+                montants_financiers: {
+                    total_achats:
+                        Number(stats.total_achats),
+
+                    total_marges:
+                        Number(stats.total_marges),
+
+                    total_reventes:
+                        Number(stats.total_reventes)
                 }
 
             }

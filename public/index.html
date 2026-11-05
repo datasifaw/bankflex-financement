@@ -868,6 +868,46 @@
             </section>
 
             <!-- ==================================
+                 NOUVEAU : GRAPHIQUE FINANCIER
+            ================================== -->
+
+            <section class="dashboard-card" id="analyse-financiere">
+
+                <div class="card-heading">
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-cash-stack text-primary me-2"></i>
+                        Analyse des montants financiers
+                    </h5>
+                    <small class="text-secondary">
+                        Totaux cumulés de toutes les simulations MySQL
+                    </small>
+                </div>
+
+                <div class="card-content">
+
+                    <p id="graphiqueMontantsEtat"
+                       class="graphique-etat mb-3"
+                       role="status"
+                       aria-live="polite">
+                        Chargement des montants financiers...
+                    </p>
+
+                    <div class="graphique-zone d-none" id="graphiqueMontantsZone">
+                        <canvas id="graphiqueMontantsCanvas"
+                                role="img"
+                                aria-label="Comparaison en euros des montants cumulés des achats, des marges commerciales et des reventes">
+                        </canvas>
+                    </div>
+
+                    <p id="graphiqueMontantsResume"
+                       class="graphique-resume mt-3 mb-0"
+                       aria-live="polite"></p>
+
+                </div>
+
+            </section>
+
+            <!-- ==================================
                  HISTORIQUE MYSQL
             ================================== -->
 
@@ -1638,6 +1678,20 @@
         const graphiqueResume =
             document.getElementById("graphiqueResume");
 
+        // Nouveau graphique financier
+
+        const graphiqueMontantsZone =
+            document.getElementById("graphiqueMontantsZone");
+
+        const graphiqueMontantsCanvas =
+            document.getElementById("graphiqueMontantsCanvas");
+
+        const graphiqueMontantsEtat =
+            document.getElementById("graphiqueMontantsEtat");
+
+        const graphiqueMontantsResume =
+            document.getElementById("graphiqueMontantsResume");
+
         // Recherche et filtres
 
         const rechercheBien =
@@ -1759,8 +1813,9 @@
 
         let simulationsCache = [];
 
-        // Instance Chart.js réutilisée lors des actualisations
+        // Instances Chart.js réutilisées lors des actualisations
         let graphiqueDurees = null;
+        let graphiqueMontants = null;
 
         let enregistrementEnCours = false;
 
@@ -2104,6 +2159,123 @@
                 "simulation(s) au total.";
         }
 
+        // ==================================
+        // NOUVEAU : GRAPHIQUE DES MONTANTS CUMULÉS
+        // ==================================
+
+        function afficherGraphiqueMontants(montants, nombreSimulations) {
+
+            const valeurs = montants && [
+                montants.total_achats,
+                montants.total_marges,
+                montants.total_reventes
+            ];
+
+            // Éviter les données absentes, négatives ou non numériques.
+            if (
+                !Array.isArray(valeurs) ||
+                valeurs.some(valeur =>
+                    !Number.isFinite(valeur) || valeur < 0
+                ) ||
+                Math.abs(
+                    Math.round(valeurs[0] * 100) +
+                    Math.round(valeurs[1] * 100) -
+                    Math.round(valeurs[2] * 100)
+                ) > 1
+            ) {
+                graphiqueMontantsZone.classList.add("d-none");
+                graphiqueMontantsResume.textContent = "";
+                graphiqueMontantsEtat.textContent =
+                    "Montants indisponibles ou invalides. " +
+                    "Vérifiez l'API de l'étape 56.1.";
+                return;
+            }
+
+            const etiquettes = [
+                "Total des achats",
+                "Total des marges",
+                "Total des reventes"
+            ];
+
+            // Ces totaux concernent toute la base et non les 20 lignes récentes.
+            graphiqueMontantsResume.textContent =
+                `Achats : ${formatMontant(valeurs[0])} · ` +
+                `Marges : ${formatMontant(valeurs[1])} · ` +
+                `Reventes : ${formatMontant(valeurs[2])}`;
+
+            if (nombreSimulations === 0) {
+                graphiqueMontantsZone.classList.add("d-none");
+                graphiqueMontantsEtat.textContent =
+                    "Aucune simulation enregistrée pour le moment.";
+                return;
+            }
+
+            if (typeof Chart === "undefined") {
+                graphiqueMontantsZone.classList.add("d-none");
+                graphiqueMontantsEtat.textContent =
+                    "Chart.js est indisponible. Vérifiez votre connexion Internet.";
+                return;
+            }
+
+            graphiqueMontantsZone.classList.remove("d-none");
+
+            if (graphiqueMontants) {
+                // Actualisation lors des ajouts, modifications ou suppressions.
+                graphiqueMontants.data.datasets[0].data = valeurs;
+                graphiqueMontants.update();
+            } else {
+                graphiqueMontants = new Chart(graphiqueMontantsCanvas, {
+                    type: "bar",
+                    data: {
+                        labels: etiquettes,
+                        datasets: [{
+                            label: "Montants cumulés (€)",
+                            data: valeurs,
+                            backgroundColor: [
+                                "#60a5fa",
+                                "#f59e0b",
+                                "#183b70"
+                            ],
+                            borderRadius: 8,
+                            borderSkipped: false,
+                            maxBarThickness: 88
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: contexte =>
+                                        formatMontant(contexte.parsed.y)
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: valeur =>
+                                        Number(valeur).toLocaleString("fr-FR") + " €"
+                                },
+                                grid: { color: "#e9eef6" }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: "#526580" }
+                            }
+                        }
+                    }
+                });
+            }
+
+            graphiqueMontantsEtat.textContent =
+                `Totaux actualisés pour ${nombreSimulations.toLocaleString("fr-FR")} ` +
+                "simulation(s).";
+        }
+
         async function chargerStatistiques() {
 
             statsEtat.textContent =
@@ -2161,9 +2333,14 @@
                 statsEtat.textContent =
                     "Données actualisées depuis MySQL.";
 
-                // La même API alimente les cartes et le graphique.
+                // Une seule API alimente les trois cartes et les deux graphiques.
                 afficherGraphiqueDurees(
                     stats.repartition_durees,
+                    stats.nombre_simulations
+                );
+
+                afficherGraphiqueMontants(
+                    stats.montants_financiers,
                     stats.nombre_simulations
                 );
 
@@ -2176,6 +2353,11 @@
                 graphiqueEtat.textContent =
                     "Impossible d'actualiser le graphique.";
                 graphiqueResume.textContent = "";
+
+                graphiqueMontantsZone.classList.add("d-none");
+                graphiqueMontantsEtat.textContent =
+                    "Impossible d'actualiser les montants financiers.";
+                graphiqueMontantsResume.textContent = "";
 
                 console.error(
                     "Erreur statistiques :",
