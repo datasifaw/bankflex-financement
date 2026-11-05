@@ -1,170 +1,207 @@
-# BankFlex — Simulateur de financement à prix fixe
+# BankFlex — Fixed-Price Financing Simulator
 
-**BankFlex** est une application web pédagogique permettant de simuler l'achat-revente d'un bien avec un **prix de revente fixé dès le départ**. Elle calcule les montants, enregistre les simulations dans MySQL et présente un tableau de bord statistique interactif.
+**BankFlex** is an educational web application for simulating the purchase and resale of an asset at a **total resale price agreed upon in advance**. It calculates payment amounts, stores simulations in MySQL, and displays an interactive statistics dashboard.
 
-> **Projet éducatif :** BankFlex utilise des données fictives. Il ne constitue ni une offre de financement, ni un service financier, ni un modèle contractuel ou réglementaire prêt à être commercialisé. Toute application réelle nécessiterait une analyse juridique et réglementaire adaptée.
+> **Educational project:** BankFlex uses fictional data. It is not a financing offer, a financial service, or a legally compliant contract template. Any real-world financial use would require appropriate legal, regulatory, and security reviews.
 
-## 🖥️ Aperçu de l'application
+## Features
 
-![Aperçu de l'interface BankFlex](images/BankFlex-financement1.png)
-![Aperçu de l'interface BankFlex](images/BankFlex-financement2.png)
-![Aperçu de l'interface BankFlex](images/BankFlex-financement3.png)
+- Create simulations using an asset name, purchase price, payment term, and initial down payment.
+- Calculate a **fixed commercial margin of 7.5% of the purchase price**, applied once to determine the resale price; it is not a recurring interest calculation.
+- Calculate the total resale price, remaining balance after the down payment, and estimated monthly payment, with cent-level rounding.
+- Save simulations in MySQL.
+- View, edit (with automatic recalculation), and delete simulations with confirmation (**CRUD**).
+- Browse the **20 most recent simulations**, search by asset name, and filter by payment term.
+- View dashboard metrics: total number of simulations, average monthly payment, and average commercial margin.
+- Explore two dynamic charts: **simulations by payment term** and **cumulative financial amounts** (purchases, margins, and resales).
+- Use a responsive interface built with Bootstrap. The application interface is in French.
+- Enable a **read-only demo mode** that disables data changes while keeping calculations, history, and charts available.
 
-## Fonctionnalités
+## Screenshots
 
-- Simulation à partir du nom du bien, du prix d'achat, de la durée et de l'apport initial.
-- **Marge commerciale fixe de 7,5 % du prix d'achat**, calculée une fois pour déterminer le prix total de revente ; ce n'est pas un calcul d'intérêts périodiques.
-- Calcul du prix de revente, du montant restant après apport et de la mensualité estimée, avec prise en compte des arrondis au centime.
-- Enregistrement des simulations dans MySQL.
-- Consultation, modification avec recalcul et suppression avec confirmation (**CRUD**).
-- Historique des **20 dernières simulations**, recherche par nom du bien et filtres par durée.
-- Indicateurs : nombre total de simulations, mensualité moyenne et marge moyenne.
-- Deux graphiques dynamiques : **répartition des simulations par durée** et **montants financiers cumulés** (achats, marges, reventes).
-- Interface responsive en français avec Bootstrap.
+![BankFlex screenshot 1](images/BankFlex-financement1.png)
 
-## Technologies
+![BankFlex screenshot 2](images/BankFlex-financement2.png)
 
-| Couche | Technologies |
+![BankFlex screenshot 3](images/BankFlex-financement3.png)
+
+## Tech Stack
+
+| Layer | Technologies |
 |---|---|
-| Interface | HTML5, CSS3, JavaScript, Bootstrap 5, Bootstrap Icons |
-| Graphiques | Chart.js |
-| Serveur et API | Node.js, Express |
-| Base de données | MySQL 8, `mysql2/promise` |
+| Frontend | HTML5, CSS3, JavaScript, Bootstrap 5, Bootstrap Icons |
+| Charts | Chart.js |
+| Backend and API | Node.js, Express |
+| Database | MySQL 8, `mysql2/promise` |
 | Configuration | `dotenv` |
-| Versionnement | Git et GitHub |
+| Version control | Git and GitHub |
 
-Bootstrap et Chart.js sont chargés depuis des CDN : une connexion Internet est nécessaire pour charger ces bibliothèques lors de l'ouverture de l'interface.
+Bootstrap, Bootstrap Icons, and Chart.js are loaded from CDNs, so an internet connection is needed to load these assets.
 
-## Organisation du projet
+## Project Structure
 
 ```text
 bankflex-financement/
 ├── public/
-│   └── index.html          # Interface, simulateur et graphiques
+│   └── index.html          # Interface, simulator, and charts
+├── images/                 # Project screenshots
 ├── sql/
 │   ├── 1_Création base de données MySQL.sql
 │   └── 2_Table simulations.sql
-├── server.js               # Serveur Express et API
-├── package.json            # Dépendances Node.js
-├── package-lock.json       # Versions verrouillées des dépendances
-├── .gitignore              # Exclusions Git
-└── README.md               # Documentation
+├── server.js               # Express server and REST API
+├── package.json            # Node.js dependencies and scripts
+├── package-lock.json       # Locked dependency versions
+├── .gitignore              # Git exclusion rules
+└── README.md               # Project documentation
 ```
 
-Le fichier `.env` et le dossier `node_modules/` sont utilisés localement et ne doivent pas être publiés dans le dépôt.
+The local `.env` file and `node_modules/` directory must not be committed to Git.
 
-## Installation en local
+## Local Installation
 
-### Prérequis
+### Prerequisites
 
-- Node.js et npm (par exemple Node.js 20 ou plus récent).
-- MySQL Server 8 et MySQL Workbench.
-- Un terminal PowerShell dans Visual Studio Code.
+- Node.js and npm (for example, Node.js 20 or newer).
+- MySQL Server 8 and MySQL Workbench (or another MySQL client).
+- A terminal, such as PowerShell in Visual Studio Code.
 
-### 1. Récupérer le projet
+### 1. Clone the repository
 
 ```powershell
 git clone https://github.com/datasifaw/bankflex-financement.git
 cd bankflex-financement
 ```
 
-Si le projet est déjà présent sur l'ordinateur, il suffit d'ouvrir son dossier dans VS Code.
+If you already have the project on your computer, open the existing folder in VS Code instead.
 
-### 2. Installer les dépendances
+### 2. Install dependencies
 
 ```powershell
 npm install
 ```
 
-### 3. Préparer MySQL
+### 3. Set up MySQL
 
-Dans MySQL Workbench, exécuter les scripts SQL du dossier `sql/` **dans cet ordre** :
+Run the SQL scripts in the `sql/` folder in this order:
 
 1. `1_Création base de données MySQL.sql`
 2. `2_Table simulations.sql`
 
-Ils préparent la base `bankflex_db` et la table `simulations`. Configurer un utilisateur MySQL disposant des droits nécessaires sur cette base.
+These scripts initialize the `bankflex_db` database and the `simulations` table. Configure a dedicated MySQL user with the required permissions for that database.
 
-### 4. Configurer les variables d'environnement
+### 4. Configure environment variables
 
-Créer à la racine du projet un fichier nommé `.env` avec les valeurs adaptées à **votre** MySQL local :
+Create a `.env` file in the project root and replace the placeholder password with **your local MySQL password**:
 
 ```dotenv
 PORT=3000
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=bankflex_app
-DB_PASSWORD=VOTRE_MOT_DE_PASSE_LOCAL
+DB_PASSWORD=YOUR_LOCAL_MYSQL_PASSWORD
 DB_NAME=bankflex_db
 ```
 
-`bankflex_app` est le nom de l'utilisateur MySQL configuré pour le projet : si votre utilisateur local porte un autre nom, ajuster `DB_USER`.
+If your MySQL user has a different name, update `DB_USER` accordingly.
 
-**Sécurité :** ne jamais partager ni versionner le fichier `.env` ou un véritable mot de passe. Vérifier qu'il figure dans `.gitignore`.
+**Security:** Never commit `.env`, passwords, or other secrets. Make sure `.env` is excluded by `.gitignore`.
 
-### 5. Démarrer l'application
+### 5. Start the application
 
 ```powershell
-node server.js
+npm start
 ```
 
-Ouvrir ensuite **http://localhost:3000** dans le navigateur. Le serveur doit afficher une confirmation de connexion à MySQL dans le terminal.
+Alternatively, run `node server.js`. Open **http://localhost:3000** in your browser.
 
-**Important :** ouvrir l'application via `http://localhost:3000`, pas directement via `public/index.html` ni par un serveur statique séparé : l'interface appelle l'API Express.
+**Important:** Access the application through the Express server, not by opening `public/index.html` directly or using a separate static file server. The frontend communicates with the backend API.
 
-## Méthode de calcul
+## Calculation Method
 
-Dans BankFlex, la marge de 7,5 % s'applique **une seule fois au prix d'achat**, quelle que soit la durée choisie.
+BankFlex applies the 7.5% commercial margin **once to the purchase price**, regardless of the payment term.
 
 ```text
-Marge commerciale = Prix d'achat × 7,5 %
-Prix total de revente = Prix d'achat + Marge commerciale
-Montant à répartir = Prix total de revente − Apport initial
-Mensualité estimée = Montant à répartir ÷ Nombre de mois
+Commercial margin = Purchase price × 7.5%
+Total resale price = Purchase price + Commercial margin
+Remaining balance = Total resale price − Initial down payment
+Estimated monthly payment = Remaining balance ÷ Number of months
 ```
 
-**Exemple illustratif :** achat à 12 000 €, marge à 900 €, prix de revente à 12 900 €, apport à 3 000 € et durée de 30 mois. Le montant à répartir est de 9 900 €, soit une mensualité estimée de **330 €**.
+**Illustrative example:** A €12,000 purchase results in a €900 commercial margin and a €12,900 resale price. With a €3,000 down payment over 30 months, the remaining €9,900 corresponds to an estimated payment of **€330 per month**.
 
-Les montants sont arrondis au centime. Pour certaines durées, la dernière échéance peut différer légèrement des autres afin que le total corresponde exactement au montant à répartir.
+Amounts are rounded to the nearest cent. The final installment may be adjusted slightly to ensure that the sum of payments equals the remaining balance.
 
-## API REST
+## REST API
 
-| Méthode | Route | Usage |
+| Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/simulations` | Créer une simulation |
-| `GET` | `/api/simulations` | Obtenir les 20 dernières simulations |
-| `GET` | `/api/simulations/:id` | Consulter une simulation |
-| `PUT` | `/api/simulations/:id` | Modifier et recalculer une simulation |
-| `DELETE` | `/api/simulations/:id` | Supprimer une simulation |
-| `GET` | `/api/statistiques` | Lire les indicateurs et les données des graphiques |
+| `POST` | `/api/simulations` | Create a simulation |
+| `GET` | `/api/simulations` | Retrieve the 20 most recent simulations |
+| `GET` | `/api/simulations/:id` | Retrieve a simulation by ID |
+| `PUT` | `/api/simulations/:id` | Update and recalculate a simulation |
+| `DELETE` | `/api/simulations/:id` | Delete a simulation |
+| `GET` | `/api/statistiques` | Retrieve dashboard metrics and chart data |
+| `GET` | `/api/configuration` | Check whether read-only mode is enabled |
 
-**Exemple de données envoyées** à `POST /api/simulations` :
+Example request body for `POST /api/simulations`:
 
 ```json
 {
-  "bien": "Voiture de test",
+  "bien": "Test vehicle",
   "prix_achat": 12000,
   "duree_mois": 30,
   "apport_initial": 3000
 }
 ```
 
-Le taux de marge est défini côté serveur ; le client ne le choisit pas.
+The commercial margin is determined by the server and is not selected by the client. API field names are in French to match the application's existing data model.
 
-L'API de statistiques retourne les indicateurs globaux, un objet `repartition_durees` (jusqu'à 12 mois, 13 à 36 mois, plus de 36 mois) et un objet `montants_financiers` (`total_achats`, `total_marges`, `total_reventes`). Les statistiques portent sur **toutes** les simulations enregistrées, contrairement à l'historique limité aux 20 dernières.
+The statistics endpoint returns overall metrics, a `repartition_durees` object (up to 12 months, 13–36 months, and more than 36 months), and a `montants_financiers` object (`total_achats`, `total_marges`, `total_reventes`). These totals include **all** stored simulations; the history endpoint is limited to the latest 20.
 
-## Vérification rapide
+## Read-Only Demo Mode
 
-1. Ouvrir `http://localhost:3000/api/statistiques` et vérifier que la réponse JSON est affichée.
-2. Dans l'interface, calculer une simulation et vérifier les montants.
-3. Enregistrer la simulation et contrôler sa présence dans l'historique.
-4. Vérifier la mise à jour des deux graphiques.
-5. Tester la consultation, la modification et la suppression d'une simulation de test.
+For a read-only demonstration, set `BANKFLEX_READ_ONLY=true` before starting the server. In PowerShell:
 
-## Limites du projet
+```powershell
+$env:BANKFLEX_READ_ONLY = "true"
+npm start
+```
 
-BankFlex est une démonstration locale à vocation d'apprentissage. L'application ne gère pas les comptes utilisateurs, les autorisations par profil, les contrats, les paiements réels ni le déploiement sécurisé en production. Une utilisation dans un contexte financier réel nécessiterait notamment des contrôles de sécurité, de confidentialité et de conformité supplémentaires.
+Then visit **http://localhost:3000/api/configuration**. The API should return:
 
-## Dépôt du projet
+```json
+{
+  "lecture_seule": true
+}
+```
 
-[GitHub — datasifaw/bankflex-financement](https://github.com/datasifaw/bankflex-financement)
+In this mode, visitors can calculate simulations, view stored records, and explore charts, but requests that create, update, or delete simulations are blocked with HTTP `403 Forbidden`.
+
+The server also enables read-only mode when `NODE_ENV=production` or the `RAILWAY_ENVIRONMENT` variable is present. This protects the demo from unauthenticated write requests; it does **not** provide user authentication or complete production-grade security. Use fictional data only.
+
+To return to normal local mode, stop the server and run:
+
+```powershell
+Remove-Item Env:BANKFLEX_READ_ONLY -ErrorAction SilentlyContinue
+npm start
+```
+
+Make sure production-related environment variables are not set in your local terminal if you expect write operations to be available.
+
+## Quick Verification
+
+1. Open `http://localhost:3000/api/statistiques` and check the JSON response.
+2. Calculate a simulation and verify the purchase price, margin, resale price, and monthly payment.
+3. In normal local mode, save the simulation and find it in the history.
+4. Check that both charts reflect the stored data.
+5. Test viewing, editing, and deleting a sample simulation.
+6. In read-only mode, confirm that write operations return `403 Forbidden`.
+
+## Project Scope and Limitations
+
+BankFlex is a learning project designed to run locally. It does not include user accounts, role-based access control, real contracts, real payment processing, or a production-ready public deployment. Additional security, privacy, and regulatory work would be required for any real-world financial service.
+
+## Release and Repository
+
+- **Latest V1 release:** [BankFlex v1.0.0](https://github.com/datasifaw/bankflex-financement/releases/tag/v1.0.0)
+- **Source code:** [datasifaw/bankflex-financement](https://github.com/datasifaw/bankflex-financement)
