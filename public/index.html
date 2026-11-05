@@ -385,6 +385,25 @@
             font-weight: 700;
         }
 
+        /* GRAPHIQUE DE RÉPARTITION DES DURÉES */
+
+        .graphique-zone {
+            position: relative;
+            width: 100%;
+            height: 340px;
+        }
+
+        .graphique-resume {
+            color: #526580;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .graphique-etat {
+            color: #526580;
+            font-size: 14px;
+        }
+
         /* VERSION MOBILE */
 
         @media (max-width: 767px) {
@@ -429,6 +448,10 @@
 
             .card-content {
                 padding: 16px;
+            }
+
+            .graphique-zone {
+                height: 290px;
             }
         }
     </style>
@@ -499,10 +522,10 @@
                     Biens
                 </div>
 
-                <div class="sidebar-link">
+                <a href="#rapports" class="sidebar-link">
                     <i class="bi bi-bar-chart"></i>
                     Rapports
-                </div>
+                </a>
 
                 <div class="sidebar-link">
                     <i class="bi bi-gear"></i>
@@ -803,6 +826,46 @@
                 </div>
 
             </div>
+
+            <!-- ==================================
+                 GRAPHIQUE DYNAMIQUE DES DURÉES
+            ================================== -->
+
+            <section class="dashboard-card" id="rapports">
+
+                <div class="card-heading">
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-bar-chart-fill text-primary me-2"></i>
+                        Répartition des simulations par durée
+                    </h5>
+                    <small class="text-secondary">
+                        Toutes les simulations enregistrées dans MySQL
+                    </small>
+                </div>
+
+                <div class="card-content">
+
+                    <p id="graphiqueEtat"
+                       class="graphique-etat mb-3"
+                       role="status"
+                       aria-live="polite">
+                        Chargement du graphique...
+                    </p>
+
+                    <div class="graphique-zone d-none" id="graphiqueZone">
+                        <canvas id="graphiqueDurees"
+                                role="img"
+                                aria-label="Nombre de simulations par durée : jusqu'à 12 mois, de 13 à 36 mois, et plus de 36 mois">
+                        </canvas>
+                    </div>
+
+                    <p id="graphiqueResume"
+                       class="graphique-resume mt-3 mb-0"
+                       aria-live="polite"></p>
+
+                </div>
+
+            </section>
 
             <!-- ==================================
                  HISTORIQUE MYSQL
@@ -1489,6 +1552,14 @@
     </script>
 
     <!-- ==================================
+         CHART.JS : GRAPHIQUES INTERACTIFS
+    ================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js">
+    </script>
+
+    <!-- ==================================
          JAVASCRIPT BANKFLEX
     ================================== -->
 
@@ -1552,6 +1623,20 @@
 
         const statsEtat =
             document.getElementById("statsEtat");
+
+        // Graphique des durées
+
+        const graphiqueZone =
+            document.getElementById("graphiqueZone");
+
+        const graphiqueCanvas =
+            document.getElementById("graphiqueDurees");
+
+        const graphiqueEtat =
+            document.getElementById("graphiqueEtat");
+
+        const graphiqueResume =
+            document.getElementById("graphiqueResume");
 
         // Recherche et filtres
 
@@ -1673,6 +1758,9 @@
         // ==================================
 
         let simulationsCache = [];
+
+        // Instance Chart.js réutilisée lors des actualisations
+        let graphiqueDurees = null;
 
         let enregistrementEnCours = false;
 
@@ -1906,8 +1994,115 @@
         }
 
         // ==================================
-        // 4. STATISTIQUES MYSQL
+        // 4. GRAPHIQUE ET STATISTIQUES MYSQL
         // ==================================
+
+        function afficherGraphiqueDurees(repartition, total) {
+
+            const valeurs = repartition && [
+                repartition.jusqua_12_mois,
+                repartition.de_13_a_36_mois,
+                repartition.plus_de_36_mois
+            ];
+
+            if (
+                !Array.isArray(valeurs) ||
+                valeurs.some(valeur =>
+                    !Number.isSafeInteger(valeur) || valeur < 0
+                ) ||
+                valeurs.reduce((somme, valeur) => somme + valeur, 0) !== total
+            ) {
+                graphiqueZone.classList.add("d-none");
+                graphiqueResume.textContent = "";
+                graphiqueEtat.textContent =
+                    "Les données du graphique sont invalides.";
+                return;
+            }
+
+            const etiquettes = [
+                "Jusqu'à 12 mois",
+                "13 à 36 mois",
+                "Plus de 36 mois"
+            ];
+
+            // Résumé texte : accessible même sans affichage du graphique.
+            graphiqueResume.textContent =
+                `${etiquettes[0]} : ${valeurs[0]} · ` +
+                `${etiquettes[1]} : ${valeurs[1]} · ` +
+                `${etiquettes[2]} : ${valeurs[2]}`;
+
+            if (total === 0) {
+                graphiqueZone.classList.add("d-none");
+                graphiqueEtat.textContent =
+                    "Aucune simulation enregistrée pour le moment.";
+                return;
+            }
+
+            if (typeof Chart === "undefined") {
+                graphiqueZone.classList.add("d-none");
+                graphiqueEtat.textContent =
+                    "Chart.js est indisponible. Vérifiez votre connexion Internet.";
+                return;
+            }
+
+            graphiqueZone.classList.remove("d-none");
+
+            if (graphiqueDurees) {
+                // Mise à jour sans recréer le graphique : utile après CRUD.
+                graphiqueDurees.data.datasets[0].data = valeurs;
+                graphiqueDurees.update();
+            } else {
+                graphiqueDurees = new Chart(graphiqueCanvas, {
+                    type: "bar",
+                    data: {
+                        labels: etiquettes,
+                        datasets: [{
+                            label: "Nombre de simulations",
+                            data: valeurs,
+                            backgroundColor: [
+                                "#60a5fa",
+                                "#3266ac",
+                                "#183b70"
+                            ],
+                            borderRadius: 8,
+                            borderSkipped: false,
+                            maxBarThickness: 88
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: contexte =>
+                                        `${contexte.parsed.y} simulation(s)`
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1
+                                },
+                                grid: { color: "#e9eef6" }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: "#526580" }
+                            }
+                        }
+                    }
+                });
+            }
+
+            graphiqueEtat.textContent =
+                `Graphique actualisé : ${total.toLocaleString("fr-FR")} ` +
+                "simulation(s) au total.";
+        }
 
         async function chargerStatistiques() {
 
@@ -1966,10 +2161,21 @@
                 statsEtat.textContent =
                     "Données actualisées depuis MySQL.";
 
+                // La même API alimente les cartes et le graphique.
+                afficherGraphiqueDurees(
+                    stats.repartition_durees,
+                    stats.nombre_simulations
+                );
+
             } catch (erreur) {
 
                 statsEtat.textContent =
                     "Impossible de charger les statistiques.";
+
+                graphiqueZone.classList.add("d-none");
+                graphiqueEtat.textContent =
+                    "Impossible d'actualiser le graphique.";
+                graphiqueResume.textContent = "";
 
                 console.error(
                     "Erreur statistiques :",
