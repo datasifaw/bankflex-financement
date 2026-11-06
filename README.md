@@ -1,4 +1,4 @@
-# BankFlex — Fixed-Price Financing Simulator   
+# BankFlex — Fixed-Price Financing Simulator:
 
 **BankFlex** is an educational web application for simulating the purchase and resale of an asset at a **total resale price agreed upon in advance**. It calculates payment amounts, stores simulations in MySQL, and displays an interactive statistics dashboard.
 
